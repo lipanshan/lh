@@ -1,0 +1,190 @@
+#app{
+    height: 100%;
+    position: fixed;
+    width: 100%;
+    background: url('../img/login-bg.png') no-repeat;
+    background-size: 100% auto;
+    background-position: center;
+}
+.hidden{
+    display: none;
+}
+#app .window{
+    height: 520px;
+    width: 760px;
+    position: fixed;
+    margin: auto;
+    left: 0;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    background: #fff;
+    border-radius: 15px;
+    padding: 40px 60px;
+}
+#app .window>p:first-child{
+    font-size: 20px;
+    line-height: 20px;
+    color: #FF7272;
+    margin-bottom: 30px;
+}
+#app .window>ul{
+    width: 100%;
+    height: 36px;
+    line-height: 36px;
+    border-bottom: 2px solid #D0D0D0;
+    margin-bottom: 50px;
+}
+#app .window>ul li{
+    float: left;
+    margin-right: 59px;
+    font-size: 18px;
+    color: #999;
+    position: relative;
+    cursor: pointer;
+}
+
+
+#app .window>ul li.cur::before{
+    position: absolute;
+    bottom: 0;
+    left: 8px;
+    width: calc(100% - 16px);
+    height: 3px;
+    background: #FF7272;
+    content: " ";    
+}
+#app .window>ul li.cur{
+    color: #FF7272;
+}
+#app .window>.one>div{
+    width: 100%;
+    height: 50px;
+    border: 1px solid #999;
+    border-radius: 4px;
+    margin-bottom: 30px;
+}
+#app .window>.one>div>img{
+    float: left;
+    height: 22px;
+    width: 20px;
+    margin:14px 20px;
+}
+#app .window>.one>div>input{
+    height: 48px;
+    border: none;
+    line-height: 48px;
+    text-decoration: none;
+    box-sizing: border-box;
+    outline: none;
+    float: left;
+    padding: 0;
+}
+#app .window>.one>div:nth-child(2){
+    background: #E5E5E5;
+    border: 1px solid #e5e5e5;
+    font-size: 16px;
+    line-height: 48px;
+    color: #aaa;
+    text-align: center;
+    position: relative;
+}
+/* #app .window>.one>div:nth-child(2)>div{
+    width: 120px;
+    height: 48px;
+    background: #fff;
+    overflow: hidden;
+    position: absolute;
+    top: 0;
+    left: 0;
+} */
+#app .verify-wrap .drag-btn{
+    height: 50px;
+    width: 120px;
+    background-size: 22px 22px;
+    background: #fff no-repeat;
+    background-image: url('../img/slide.png');
+    background-position: center;
+    border: 1px solid #CCCCCC;
+}
+#app .verify-wrap .drag-progress{
+    height: 50px;
+}
+#app .verify-wrap .fix-tips, .verify-msg{
+    line-height: 50px;
+    height: 50px;
+}
+#app .verify-wrap .verify-msg{
+    height: 50px;
+}
+#app .window>.one>div:nth-child(2)>div>img{
+    height: 22px;
+    width: 20px;
+    display: block;
+    margin: 14px auto;
+}
+#app .window>.one>div:nth-child(3)>div{
+    float: right;
+    height: 20px;
+    line-height: 20px;
+    font-size: 18px;
+    color: #FF7272;
+    width: 137px;
+    border-left: 1px solid #999;
+    margin-top: 15px;
+    text-align: center;
+}
+#app .window>.one>div:nth-child(4){
+    background: #FF7272;
+    height:50px;
+    color: #fff;
+    line-height: 50px;
+    text-align: center;
+    font-size: 18px;
+    border-radius: 4px;
+    margin-bottom: 15px;
+}
+#app .window>.one>p:nth-child(5){
+    height: 16px;
+    text-align: center;
+    width: 100%;
+}
+#app .window>.one>p:nth-child(5)>input{
+    height: 14px;
+    width: 14px;
+}
+#app .window>.one>p:nth-child(5)>span{
+    font-size: 16px;
+    line-height: 16px;
+    color: #666;
+}
+#app .window>.one>p:nth-child(5)>span>a{
+    color: #677DDA;
+}
+
+.two{
+    height: auto;
+    width: 100%;
+    overflow: hidden;
+}
+.two>p{
+    font-size: 18px;
+    line-height: 18px;
+    width: 100%;
+    text-align: center;
+    color: #424A5E;
+}
+.two>img{
+    display: block;
+    margin: 0 auto;
+    height: 265px;
+    width: 265px;
+}
+
+
+
+
+
+
+
+

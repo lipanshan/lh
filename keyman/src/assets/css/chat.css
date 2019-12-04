@@ -1,0 +1,299 @@
+.chat {
+    float: left;
+    width: calc(100% - 200px);
+    height: auto;
+}
+
+.chat .head {
+    height: 60px;
+    width: 100%;
+    background: #fff;
+    box-shadow: 1px 1px 10px #A5A5A5;
+}
+
+.chat .head>div {
+    width: 1160px;
+    line-height: 60px;
+    height: 60px;
+    margin: 0 auto;
+}
+
+.chat .head>div>img {
+    float: left;
+    height: 15px;
+    width: 13px;
+    margin: 23px 0;
+}
+
+.chat .head>div>span {
+    float: left;
+    line-height: 60px;
+    font-size: 16px;
+    color: #414A60;
+    margin-left: 8px;
+}
+
+.chat-content{
+    width: 1240px;
+    height: auto;
+    margin: 0 auto;
+    padding: 13px 0;
+}
+.chat-content>ul{
+    height: 40px;
+    width: 100%;
+    overflow: hidden;
+}
+.chat-content>ul>li{
+    float: left;
+    width: 100px;
+    height: 40px;
+    margin-right: 10px;
+    border-radius: 10px;
+    line-height: 40px;
+    text-align: center;
+    font-size: 18px;
+    color: #B2AFBC;
+    background: #fff;
+}
+.chat-content>ul>li.cur{
+    color: #ff7272;
+    background:#fff;
+}
+.chat-window{
+    margin-top: 13px;
+    width: 100%;
+    height: 800px;
+    background: #fff;
+}
+.chat-window>div{
+    float: left;   
+    height: 100%;
+}
+.chat-window>div:first-child{
+    width: 322px;
+    position: relative;
+}
+.chat-window>div{
+    width: calc(100% - 322px);
+}
+.chat-window>div:first-child::before{
+    content: " ";
+    position: absolute;
+    height: 740px;
+    width: 2px;
+    background: #CCCCCC;
+    right: 0;
+    top: 30px;
+}
+.chat-window>div:first-child>p{
+    height: 45px;
+    width: 100%;
+    padding-left: 20px;
+    line-height: 45px;
+}
+.chat-window>div:first-child>p>img{
+    height: 17px;
+    width: 17px;
+}
+.chat-window>div:first-child>ul{
+    height: calc(100% - 45px);
+    width: 100%;
+}
+.chat-window>div:first-child>ul li{
+    height: 80px;
+    width: 100%;
+    padding: 15px 20px;
+    position: relative;
+}
+.chat-window>div:first-child>ul li.cur{
+    background: #F2F5FA;
+}
+.chat-window>div:first-child>ul li.cur>div>p{
+    color: #666;
+}
+
+.chat-window>div:first-child>ul li.cur::after{
+    position: absolute;
+    height: 40px;
+    width: 2px;
+    background: #ff7272;
+    left: 0;
+    top: 20px;
+    content: " ";
+}
+
+.chat-window>div:first-child>ul li>img{
+    height: 50px;
+    width: 50px;
+    float: left;
+    border-radius: 50%;
+}
+.chat-window>div:first-child>ul li>div{
+    width: calc(100% - 50px);
+    height: 100%;
+    float: left;
+    padding-left: 10px;
+}
+.chat-window>div:first-child>ul li>div>p{
+    font-size: 14px;
+    color: #999;
+}
+.chat-window>div:first-child>ul li>div>p:first-child{
+    font-size: 16px;
+    line-height: 16px;
+    color: #333;
+    margin-bottom: 9px;
+}
+.chat-window>div:nth-child(2)>div:first-child{
+    height: 588px;
+    width: 100%;
+    padding: 50px 58px;
+}
+.work-info{
+    width: 100%;
+    height: auto;
+    overflow: hidden;
+    padding-bottom: 30px;
+    border-bottom: 1.5px solid #ccc;
+}
+.work-info>img{
+    float: left;
+    height: 70px;
+    width: 70px;
+    margin-right: 20px;
+    border-radius: 50%;
+}
+.work-info>div:nth-child(2){
+    width: 467px;
+    height: 70px;
+    padding: 12px 0;
+    float: left;
+}
+.work-info>div:nth-child(2)>p{
+    font-size: 16px;
+    color: #666;
+    line-height: 16px;
+}
+.work-info>div:nth-child(2)>p:first-child{
+    font-size: 20px;color: #333;
+    line-height: 20px;
+    margin-bottom: 10px;
+}
+.work-info>div:nth-child(2)>p:first-child>span{
+    color: #ff7272;
+    font-weight: 700;
+    font-size: 20px;
+}
+.contact{
+    width: 100%;
+    height: 437px;
+}
+.contact .time{
+    width: 100%;
+    text-align: center;
+    line-height: 50px;
+    margin-bottom: 4px;
+}
+.contact .boss{
+    overflow: hidden;
+    height: auto;
+    margin-bottom: 12px;
+    width: 652px;
+}
+.contact .boss>img{
+    height: 50px;
+    width: 50px;
+    border-radius: 50%;
+    float: left;
+    margin-right: 20px;
+    border-radius: 50%;
+}
+.contact .boss>div{
+    width: auto;
+    max-width: 580px;
+    height: auto;
+    padding: 10px 20px;
+    line-height: 30px;
+    background: #F2F5FA;
+    border-radius: 25px 25px 25px 0 ;
+    float: left;
+}
+.contact .me{
+    overflow: hidden;
+    width: 100%;
+}
+.contact .me>div{
+    width: auto;
+    height: auto;
+    padding: 10px 20px;
+    font-size: 16px;
+    float: right;
+    line-height: 20px;
+    background: #ff7272;
+    color: #fff;
+    border-radius: 20px 20px 0 20px;
+}
+
+
+.send{
+    height: 210px;
+    width: 100%;
+    border-top: 1.5px solid #ccc;
+}
+.send>p:first-child{
+    height: 45px;
+    width: 100%;
+    padding: 10px 40px;
+}
+.send>p:first-child>img{
+    float: left;
+    height: 25px;
+    width: 29px;
+    margin-right: 24px;
+}
+.send>p:first-child>span{
+    float: right;
+}
+.send>p:first-child>img:first-child{
+    width: 14px;
+}
+.send>p:first-child>span>img{
+    float: left;
+    margin-top: 5px;
+    margin-right: 5px;
+}
+.send>p:first-child>span>span{
+    font-size: 18px;
+    float: left;
+}
+
+.send textarea{
+    width: calc(100% - 80px);
+    margin: 0 auto;
+    height: 100px;
+    border: none;
+    text-decoration: none;
+    display: block;
+    resize: none;
+}
+.send .btn{
+    width: 100%;
+    padding-right: 40px;
+}
+.send .btn>div{
+    width: 85px;
+    height: 38px;
+    float: right;
+    line-height: 36px;
+    border: 1px solid #999999;
+    color: #666;
+    border-radius: 19px;
+    text-align: center;
+    font-size: 16px;
+}
+
+
+.sx span{
+    color: #999;
+}

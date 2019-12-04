@@ -1,18 +1,32 @@
 <template>
   <div class="home">
-    <img alt="Vue logo" src="../assets/logo.png">
-    <HelloWorld msg="Welcome to Your Vue.js App"/>
+    <HeaderMenu></HeaderMenu>
+    <router-view></router-view>
+    <Footer />
   </div>
 </template>
 
 <script>
-// @ is an alias to /src
-import HelloWorld from '@/components/HelloWorld.vue'
-
+import HeaderMenu from '@/components/HeadMenu'
+import Footer from '@/components/Footer'
 export default {
-  name: 'home',
+  name: 'Home',
+  data() {
+    return {}
+  },
+  mounted: function() {},
+  methods: {},
+
   components: {
-    HelloWorld
+    HeaderMenu,
+    Footer
   }
 }
 </script>
+
+<style lang="scss">
+@import '../assets/css/index.css';
+.router-link-exact-active {
+  color: #F06358 !important;
+}
+</style>

@@ -1,6 +1,7 @@
 import Vue from 'vue'
 import VueRouter from 'vue-router'
-import Home from '../views/Home.vue'
+import Home from '@/views/Home'
+import HomePage from '@/views/HomePage'
 
 Vue.use(VueRouter)
 
@@ -8,20 +9,103 @@ const routes = [
   {
     path: '/',
     name: 'home',
-    component: Home
+    component: Home,
+    children: [
+      {
+        path: '',
+        component: HomePage
+      },
+      {
+        path: 'parttime',
+        name: 'PartTime',
+        component: () => import('@/views/PartTime')
+      },
+      {
+        path: 'fulltime',
+        name: 'FullTime',
+        component: () => import('@/views/FullTime')
+      },
+      {
+        path: 'headhunt',
+        name: 'HeadHunt',
+        component: () => import('@/views/HeadHunt')
+      },
+      {
+        path: 'app',
+        name: 'AppPage',
+        component: () => import('@/views/AppPage')
+      },
+      {
+        path: 'consult',
+        name: 'Consult',
+        component: () => import('@/views/Consult')
+      },
+      {
+        path: 'resumeinfo',
+        name: 'ResumeInfo',
+        component: () => import('@/views/ResumeInfo')
+      }
+    ]
   },
   {
-    path: '/about',
-    name: 'about',
-    // route level code-splitting
-    // this generates a separate chunk (about.[hash].js) for this route
-    // which is lazy-loaded when the route is visited.
-    component: () => import(/* webpackChunkName: "about" */ '../views/About.vue')
+    path: '/login',
+    name: 'Login',
+    component: () => import('@/views/Login')
+  },
+  {
+    path: '/user',
+    component: () => import('@/views/Layout'),
+    children: [
+      {
+        path: '',
+        component: () => import('@/views/MyPost')
+      },
+      {
+        path: 'jobwant',
+        name: 'jobwant',
+        component: () => import('@/views/JobWant')
+      },
+      {
+        path: 'searchremuse',
+        name: 'serachremuse',
+        component: () => import('@/views/SearchResume')
+      },
+      {
+        path: 'mydelivery',
+        name: 'mydelivery',
+        component: () => import('@/views/MyDelivery')
+      },
+      {
+        path: 'myresume',
+        name: 'myresume',
+        component: () => import('@/views/MyResume')
+      },
+      {
+        path: 'jobchart',
+        name: 'jobchart',
+        component: () => import('@/views/JobChart')
+      },
+      {
+        path: 'mypeoplebank',
+        name: 'mypeoplebank',
+        component: () => import('@/views/MyPeopleBank')
+      },
+      {
+        path: 'companyinfo',
+        name: 'companyinfo',
+        component: () => import('@/views/CompanyInfo')
+      },
+      {
+        path: 'myaccount',
+        name: 'myaccount',
+        component: () => import('@/views/MyAccount')
+      }
+    ]
   }
 ]
 
 const router = new VueRouter({
-  mode: 'history',
+  mode: 'hash',
   base: process.env.BASE_URL,
   routes
 })

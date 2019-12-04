@@ -1,0 +1,219 @@
+.hidden{
+    display: none;
+}
+.company{
+    width: 1240px;
+    height: auto;
+    background: #fff;
+    margin: 40px auto;
+}
+.company>ul{
+    height: 50px;
+    width: 100%;
+    background: #49444B;
+    overflow: hidden;
+}
+.company>ul li{
+    width: 220px;
+    height: 50px;
+    line-height: 50px;
+    text-align: center;
+    float: left;
+    color: #fff;
+}
+.company>ul li.cur{
+    background: #FE7271;
+}
+.company>.jb{
+    padding: 30px 70px;
+}
+.company>.jb>p:first-child{
+    font-size: 18px;
+    line-height: 20px;
+    margin-bottom: 9px;
+    color: #24272E;
+}
+.company>.jb>p:nth-child(2){
+    font-size: 12px;
+    line-height: 14px;
+    color: #9FA3B0;
+    margin-bottom: 18px;
+}
+.company>.jb>div{
+    height: 40px;
+    width: 100%;
+    margin-bottom: 14px;
+}
+.company>.jb>div>span{
+    float: left;
+    line-height: 40px;
+    font-size: 16px;
+}
+.company>.jb>div:nth-child(4){
+    height: 84px;
+}
+.company>.jb>div:nth-child(4)>img{
+    float: left;
+    height: 84px;
+    width: 84px;
+    margin-left: 16px;
+}
+
+
+.company>.jb>div>span:nth-child(3){
+    padding-left:32px;
+    font-size: 14px;
+    color: #FE7271;
+    text-decoration: underline;
+}
+.company>.jb>div>span:nth-child(3):hover{
+    cursor: pointer;
+}
+
+.company>.jb>div>input{
+    border:1px solid #E3E7ED;
+    float: left;
+    height: 40px;
+    width: 570px;
+    margin-left: 16px;
+}
+
+.company>.jb>.btn{
+    font-size: 14px;
+    line-height: 40px;
+    text-align: center;
+    width: 197px;
+    color: #fff;
+    background: #FE7271;
+    margin-left: 80px;
+}
+.company>.js{
+    height: 358px;
+    width: 100%;
+    padding: 30px 70px;
+}
+.company>.js p:first-child,
+.company>.xc p:first-child,
+.company>.fl p:first-child{
+    font-size: 18px;
+    line-height: 20px;
+    margin-bottom: 9px;
+    color: #24272E;
+}
+.company>.js p:nth-child(2),
+.company>.xc p:nth-child(2),
+.company>.fl p:nth-child(2){
+    font-size: 12px;
+    line-height: 14px;
+    color: #9FA3B0;
+    margin-bottom: 18px;
+}
+.company>.js textarea{
+    height: 170px;
+    width: 100%;
+    resize: none;
+    outline: none;
+    border:1px solid #E3E7ED;
+    margin-bottom: 20px;
+}
+.company>.js div{
+    float: right;
+    width: 100px;
+    height: 40px;
+    text-align: center;
+    background: #FE7271;
+    color: #fff;
+    line-height: 40px;
+}
+
+
+.company>.fl{
+    height: 462px;
+    width: 100%;
+    padding: 30px 70px;
+}
+.company>.fl>div{
+    height: 40px;
+    width: 100%;
+    margin-bottom: 14px;
+}
+.company>.fl>div span{
+    line-height: 40px;
+    font-size: 16px;
+    margin-right: 16px;
+    float: left;
+}
+.company>.fl>div input{
+    height: 40px;
+    border: 1px solid #E3E7ED;
+    width: 400px;
+    float: left;
+    margin-right: 11px;
+}
+.company>.fl>div .btn{
+    font-size: 14px;
+    height: 30px;
+    width: 100px;
+    text-align: center;
+    line-height: 30px;
+    margin-top: 5px;
+    background: #FE7271;
+    color: #fff;
+    float: left;
+}
+.company>.fl>div:nth-child(5){
+    height: 170px;
+    width: 100%;
+    padding: 18px 20px;
+    border: 1px solid #E3E7ED;
+}
+.company>.fl>div:nth-child(5) span{
+    padding: 0 20px;
+    line-height: 30px;
+    height: 30px;
+    background: #FE7271;
+    width: auto;
+    color: #fff;
+    border-radius: 15px;
+}
+.company>.fl>.btn{
+    float: right;
+    width: 100px;
+    height: 40px;
+    text-align: center;
+    background: #FE7271;
+    color: #fff;
+    line-height: 40px;
+}
+.company>.xc{
+    height: 522px;
+    width: 100%;
+    padding: 30px 27px;
+}
+.company>.xc img{
+    width: 270px;
+    height: 167px;
+    float: left;
+    margin-right: 34px;
+    margin-bottom: 30px;
+}
+.company>.xc img:nth-child(4),
+.company>.xc img:nth-child(8){
+    margin-right: 0;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

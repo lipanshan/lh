@@ -1,0 +1,226 @@
+.hr-info{
+    height: auto;
+    width: 1240px;
+    margin: 40px auto;
+    background: #fff;
+}
+.hr-info>.head{
+    height: 50px;
+    width: 100%;
+    background: #49444B;
+}
+.hr-info>.head>div{
+    height: 100%;
+    width: 220px;
+    float: left;
+    text-align: center;
+    line-height: 50px;
+    color: #fff;
+}
+.hr-info>.head>div.cur{
+    background: #FE7271;
+}
+.hr-info>.page-detail{
+    height: auto;
+    width: 100%;
+}
+.hr-info>.page-detail1>.select{
+    border-bottom: 1px solid #E3E7ED;
+    height: 57px;
+}
+.hr-info>.page-detail1>.select>span,
+.hr-info>.page-detail1>.select>div{
+    float: left;
+}
+.hr-info>.page-detail1>.select>span{
+    font-size: 18px;
+    line-height: 30px;
+    margin-top: 26px;
+}
+.hr-info>.page-detail1>.select>span:first-child{
+    color: #FE7271;
+    margin-left: 70px;
+    border-bottom: 1px solid #FE7271;
+    margin-right: 35px;
+}
+.hr-info>.page-detail1>.select>span:nth-child(2){
+    margin-right: 460px;
+}
+.hr-info>.page-detail1>.select>div{
+    height: 30px;
+    width: 180px;
+    border: 1px solid #E3E7ED;
+    margin-top: 23px;
+    margin-right: 10px;
+    padding-left: 10px;
+    line-height: 30px;
+    position: relative;
+    color:#9FA3B0;
+    font-size: 14px;
+}
+.hr-info>.page-detail1>.select>div>img{
+    position: absolute;
+    top: 13px;
+    right: 9px;
+}
+.hr-info>.page-detail1>.select>div:hover{
+    cursor: pointer;
+}   
+
+
+.hr-info>.page-detail1>.select .set{
+    border: none;
+    height: 24px;
+    width: 100px;
+    padding: 0;
+    border-radius: 15px;
+    background: #FF7272;
+    color: #fff;
+    font-size: 14px;
+    text-align: center;
+    line-height: 24px;
+    margin-left: 10px;
+    margin-top: 26px;
+}
+.hr-info>.page-detail1>div:nth-child(2){
+    position: relative;
+    padding: 10px;
+    overflow: hidden;
+}
+.hr-info>.page-detail1>div:nth-child(2)>div{
+    width: 300px;
+    height: auto;
+    float: left;
+    padding-top: 13px;
+}
+.hr-info>.page-detail1>div:nth-child(2)>div>div{
+    height: 40px;
+    margin-bottom: 18px;
+    width: 100%;
+}
+.hr-info>.page-detail1>div:nth-child(2)>div>div>span{
+    float: left;
+    width: 110px;
+    height: 40px;
+    line-height: 40px;
+    text-align: right;
+    font-size: 16px;
+    padding-right: 15px;
+    color: #495060;
+}
+.hr-info>.page-detail1>div:nth-child(2)>div>div>input{
+    float: left;
+    width: 190px;
+    height: 40px;
+    border: 1px solid #DCDCDC;
+    line-height: 40px;
+}
+.hr-info>.page-detail1>div:nth-child(2)>div:nth-child(3){
+    width: 180px;
+    float: right;
+    height: auto;
+    margin-right: 107px;
+}
+.hr-info>.page-detail1>div:nth-child(2)>div:nth-child(3)>div{
+    font-size: 14px;
+    height: 28px;
+    width: 100px;
+    line-height: 28px;
+    text-align: center;
+    color: #fff;
+    background: #FF7272;
+    margin: 0 auto;
+    border-radius: 14px;
+}
+
+.hr-info>.page-detail1>div:nth-child(2)>div:nth-child(3)>div:hover{
+    cursor: pointer;
+}   
+.hr-info>.page-detail1>div:nth-child(2)>div:nth-child(3)>img{
+    width: 150px;
+    height: 150px;
+    margin:19px auto 10px;
+    display: block;
+}
+.hr-info>.page-detail1>div:nth-child(2)>div:nth-child(3)>img:hover{
+    cursor: pointer;
+}
+
+.hr-info>.page-detail2{
+    padding: 33px 70px;
+    margin-top: 1px;
+    overflow: hidden;
+}   
+.hr-info>.page-detail2>div>div{
+    float: left;
+    width: 480px;
+    height: 40px;
+    margin-right: 59px;
+    margin-bottom: 14px;
+}
+.hr-info>.page-detail2>div>div>span{
+    float: left;
+    margin-right: 15px;
+    line-height: 40px;
+    font-size: 16px;
+}
+.hr-info>.page-detail2>div>div>input{
+    font-size: 16px;
+    line-height: 40px;
+    width: 400px;
+    height: 40px;
+    float: left;
+    border: 1px solid #E3E7ED;
+    color: #495060;
+}
+.hr-info>.page-detail2>div>div>div{
+    float: left;
+    height: 40px;
+    width: 180px;
+    line-height: 38px;
+    border: 1px solid #E3E7ED;
+    padding-left: 10px;
+    position: relative;
+    color: #9FA3B0;
+}
+.hr-info>.page-detail2>div>div>div:nth-child(2){
+    margin-right: 40px;
+}
+
+.hr-info>.page-detail2>div>div>div>img{
+    position: absolute;
+    width: 11px;
+    height: 6px;
+    right: 10px;
+    top: 17px;
+}
+
+.hr-info>.page-detail2 textarea{
+    height: 170px;
+    width: 1100px;
+    border: 1px solid #E3E7ED;
+    resize: none;
+    padding-left: 11px;
+    font-size: 14px;
+    line-height: 22px;
+    color: #9FA3B0;
+    margin-bottom: 20px;
+}
+.hr-info>.page-detail2 p{
+    font-size: 14px;
+    width: auto;
+    float: right;
+    height: 14px;
+    line-height: 14px;
+}
+.hr-info>.page-detail2 p>img{
+    float: left;
+    width: 14px;
+    height: 14px;
+    margin-right: 2px;
+}
+.hr-info>.page-detail2 p>span{
+    color: #9FA3B0;
+}
+
+

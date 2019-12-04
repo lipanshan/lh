@@ -9,7 +9,16 @@ module.exports = {
   ],
   rules: {
     'no-console': process.env.NODE_ENV === 'production' ? 'error' : 'off',
-    'no-debugger': process.env.NODE_ENV === 'production' ? 'error' : 'off'
+    'no-debugger': process.env.NODE_ENV === 'production' ? 'error' : 'off',
+    'eol-last': 'off',
+    'space-before-function-paren': 'off',
+    'eqeqeq': 'off',
+    'vue/require-v-for-key': 'off',
+    'vue/no-parsing-error': 'off',
+    'no-undef': 'off',
+    'spaced-comment': 'off',
+    'no-redeclare': 'off',
+    'no-unused-vars': 'off'
   },
   parserOptions: {
     parser: 'babel-eslint'

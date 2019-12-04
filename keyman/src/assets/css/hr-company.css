@@ -1,0 +1,23 @@
+.company-info{
+    height: auto;
+    width: 1240px;
+    margin: 40px auto;
+}
+.company-info>.head{
+    height: 50px;
+    width: 100%;
+    background: #49444B;
+}
+.company-info>.head>div{
+    height: 100%;
+    width: 220px;
+    float: left;
+    text-align: center;
+    line-height: 50px;
+    color: #fff;
+}
+.company-info>.head>div.cur{
+    background: #FE7271;
+}
+.company-info>.company-detail{
+    padding: 30px 70px;
