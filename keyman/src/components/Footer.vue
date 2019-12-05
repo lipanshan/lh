@@ -53,6 +53,11 @@ export default {
 @import '../assets/css/index.css';
 .footer {
   width: 100%;
-  min-width: 1200px;
+  min-width: 1462px;
+  .footer-box {
+    margin: auto;
+    width: 1462px;
+    text-align: left;
+  }
 }
 </style>

@@ -6,21 +6,21 @@
         <img src="../assets/img/3.png" alt />
         <p>姓名/昵称</p>
       </div>
-      <router-link to="/user/jobwant" tag="div">
+      <router-link to="/user/searchremuse" tag="div">
         <span class="img jobwant"></span>
-        <span>求职</span>
+        <span>搜简历</span>
       </router-link>
       <router-link to="/user/jobchart" tag="div">
         <span class="img chart"></span>
         <span>职聊</span>
       </router-link>
-      <router-link to="/user/mydelivery" tag="div">
+      <router-link to="/user/mypost" tag="div">
         <span class="img myliver"></span>
-        <span>我的投递</span>
+        <span>我的职位</span>
       </router-link>
-      <router-link to="/user/myresume" tag="div" class="active">
+      <router-link to="/user/mypeoplebank" tag="div" class="active">
         <span class="img myresume"></span>
-        <span>我的简历</span>
+        <span>我的人才库</span>
       </router-link>
       <div class="line"></div>
       <router-link to="/user/myaccount" tag="div">
@@ -43,7 +43,7 @@ export default {
   props: {
     title: {
       type: String,
-      default: '我的简历'
+      default: '人才库'
     }
   }
 }

@@ -20,7 +20,7 @@
       <div>
         <img src="../assets/img/safe.png" alt />
         <input type="text" />
-        <div>获取验证码</div>
+        <div @click="sendMsg">获取验证码</div>
       </div>
       <div>登录/注册</div>
       <p>
@@ -46,7 +46,8 @@ export default {
   data() {
     return {
       phone: null,
-      code: null
+      code: null,
+      sendMsgFlag: false
     }
   },
   mounted: function() {
@@ -55,10 +56,13 @@ export default {
     var slideVerify = new SlideVerify('#verify-wrap', {
       wrapWidth: '100%', //设置 容器的宽度 ，默认为 350 ，也可不用设，你自己css 定义好也可以，插件里面会取一次这个 容器的宽度
       initText: '按住滑块拖动到最右侧', //设置  初始的 显示文字
-      sucessText: '验证通过' //设置 验证通过 显示的文字
-      // getSucessState: function (res) {
-      //     //当验证完成的时候 会 返回 res 值 true，只留了这个应该够用了
-      // }
+      sucessText: '验证通过', //设置 验证通过 显示的文字
+      getSucessState: function(res) {
+        if (res) {
+          that.sendMsgFlag = true
+        }
+        //当验证完成的时候 会 返回 res 值 true，只留了这个应该够用了
+      }
     })
   },
   methods: {
@@ -76,8 +80,8 @@ export default {
         $('.one').hide()
       }
     },
-    sendMsg: function() {
-      if (res) {
+    sendMsg () {
+      if (this.sendMsgFlag) {
         $.ajax({
           url: url + 'api/apidate/send_phone_message',
           // async: false,
@@ -88,7 +92,7 @@ export default {
           // contentType: "application/json",
           // jsonpCallback: "jsonpCallback",
           data: {
-            phone_number: that.phone,
+            phone_number: this.phone,
             templateCode: 'SMS_167370581',
             status: 1
           },
