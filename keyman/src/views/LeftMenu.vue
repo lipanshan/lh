@@ -3,8 +3,8 @@
     <div class="menu-title">{{title}}</div>
     <div class="menu-list">
       <div class="user-avatar">
-        <img src="../assets/img/3.png" alt />
-        <p>姓名/昵称</p>
+        <img :src="avatar" alt />
+        <p>{{nickname}}</p>
       </div>
       <router-link to="/user/searchremuse" tag="div">
         <span class="img jobwant"></span>
@@ -44,6 +44,14 @@ export default {
     title: {
       type: String,
       default: '人才库'
+    },
+    avatar: {
+      type: String,
+      default: ''
+    },
+    nickname: {
+      typee: String,
+      default: ''
     }
   }
 }

@@ -6,47 +6,47 @@ import HomePage from '@/views/HomePage'
 Vue.use(VueRouter)
 
 const routes = [
-  // {
-  //   path: '/',
-  //   name: 'home',
-  //   component: Home,
-  //   children: [
-  //     {
-  //       path: '',
-  //       component: HomePage
-  //     },
-  //     {
-  //       path: 'parttime',
-  //       name: 'PartTime',
-  //       component: () => import('@/views/PartTime')
-  //     },
-  //     {
-  //       path: 'fulltime',
-  //       name: 'FullTime',
-  //       component: () => import('@/views/FullTime')
-  //     },
-  //     {
-  //       path: 'headhunt',
-  //       name: 'HeadHunt',
-  //       component: () => import('@/views/HeadHunt')
-  //     },
-  //     {
-  //       path: 'app',
-  //       name: 'AppPage',
-  //       component: () => import('@/views/AppPage')
-  //     },
-  //     {
-  //       path: 'consult',
-  //       name: 'Consult',
-  //       component: () => import('@/views/Consult')
-  //     },
-  //     {
-  //       path: 'resumeinfo',
-  //       name: 'ResumeInfo',
-  //       component: () => import('@/views/ResumeInfo')
-  //     }
-  //   ]
-  // },
+  {
+    path: '/',
+    name: 'home',
+    component: Home,
+    children: [
+      {
+        path: '',
+        component: HomePage
+      },
+      {
+        path: 'parttime',
+        name: 'PartTime',
+        component: () => import('@/views/PartTime')
+      },
+      {
+        path: 'fulltime',
+        name: 'FullTime',
+        component: () => import('@/views/FullTime')
+      },
+      {
+        path: 'headhunt',
+        name: 'HeadHunt',
+        component: () => import('@/views/HeadHunt')
+      },
+      {
+        path: 'app',
+        name: 'AppPage',
+        component: () => import('@/views/AppPage')
+      },
+      {
+        path: 'consult',
+        name: 'Consult',
+        component: () => import('@/views/Consult')
+      },
+      {
+        path: 'resumeinfo',
+        name: 'ResumeInfo',
+        component: () => import('@/views/ResumeInfo')
+      }
+    ]
+  },
   {
     path: '/login',
     name: 'Login',

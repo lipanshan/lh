@@ -1,10 +1,10 @@
 module.exports = {
+  publicPath: './',
+  productionSourceMap: false,
   chainWebpack: config => {
     config.externals({
       jquery: 'jQuery',
-      bootstrap: 'bootstrap',
-      Vue: 'vue',
-      Router: 'vue-router'
+      bootstrap: 'bootstrap'
     })
   }
 }

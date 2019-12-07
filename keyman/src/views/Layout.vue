@@ -7,9 +7,14 @@
           <div class="content">
             <span class="icon" :class="name"></span>
             <p class="title">{{name | filterName}}</p>
+            <el-select class="chart-post-list" v-show="name === 'jobchart'" v-model="postList">
+              <el-option label="职位1" value="1"></el-option>
+              <el-option label="职位3" value="2"></el-option>
+              <el-option label="职位2" value="3"></el-option>
+            </el-select>
           </div>
         </div>
-        <router-view></router-view>
+        <router-view :jobchart="postList"></router-view>
       </div>
     </div>
     <Footer></Footer>
@@ -23,6 +28,7 @@ export default {
   name: 'Layout',
   data() {
     return {
+      postList: []
     }
   },
   computed: {
@@ -106,6 +112,19 @@ export default {
             font-size: 16px;
             line-height: 26px;
             color: #414a60ff;
+          }
+          & > .chart-post-list {
+            margin-top: 14px;
+            .el-input__inner {
+              margin-left: 30px;
+              width: 200px;
+              border-radius: 0;
+              line-height: 34px;
+              height: 34px;
+            }
+            .el-input__icon {
+              line-height: 34px;
+            }
           }
         }
       }
