@@ -169,10 +169,15 @@
             <div class="half-box">
               <div class="half">
                 <el-form-item prop="industry">
-                  <el-input v-model="registerHRData.industry" placeholder="*公司行业"></el-input>
-                  <!-- <el-select v-model="registerHRData.industry" placeholder="*选择公司行业">
-                    <el-option label="IT" value="1"></el-option>
-                  </el-select>-->
+                  <!-- <el-input v-model="registerHRData.industry" placeholder="*公司行业"></el-input> -->
+                  <el-select v-model="registerHRData.industry" placeholder="*选择公司行业">
+                    <el-option
+                      v-for="item in industryList"
+                      :label="item.name"
+                      :value="item.id"
+                      :key="item.id"
+                    ></el-option>
+                  </el-select>
                 </el-form-item>
               </div>
               <div class="half">
@@ -268,7 +273,20 @@
                   <el-input v-model="registerHHData.code" placeholder="邀请码"></el-input>
                 </el-form-item>
                 <el-form-item prop="zy_industry">
-                  <el-input v-model="registerHHData.zy_industry" placeholder="*职业行业，最多5项"></el-input>
+                  <!-- <el-input v-model="registerHHData.zy_industry" placeholder="*职业行业，最多5项"></el-input> -->
+                  <el-select
+                    v-model="registerHHData.zy_industry"
+                    :multiple-limit="5"
+                    multiple
+                    placeholder="*职业行业，最多5项"
+                  >
+                    <el-option
+                      v-for="item in industryList"
+                      :label="item.name"
+                      :value="item.id"
+                      :key="item.id"
+                    ></el-option>
+                  </el-select>
                 </el-form-item>
               </div>
               <div class="right">
@@ -282,7 +300,23 @@
                   <el-input v-model="registerHHData.op_years" placeholder="*职业年限"></el-input>
                 </el-form-item>
                 <el-form-item prop="city">
-                  <el-input v-model="registerHHData.city" placeholder="*所在地"></el-input>
+                  <el-cascader
+                    v-model="registerHHData.city"
+                    placeholder="*选择所在地"
+                    :options="addressList"
+                    :props="{
+                      value: 'name',
+                      label: 'name',
+                      children: 'data_list'
+                    }"
+                    value="name"
+                    label="name"
+                    children="data_list"
+                  >
+                    <template slot-scope="{ node, data }">
+                      <span>{{ data.name }}</span>
+                    </template>
+                  </el-cascader>
                 </el-form-item>
               </div>
             </div>
@@ -351,10 +385,15 @@
             <div class="half-box">
               <div class="half">
                 <el-form-item prop="industry">
-                  <el-input v-model="registerHHData.industry" placeholder="*公司行业"></el-input>
-                  <!-- <el-select v-model="registerHHData.industry" placeholder="*选择公司行业">
-                    <el-option label="IT" value="1"></el-option>
-                  </el-select>-->
+                  <!-- <el-input v-model="registerHHData.industry" placeholder="*公司行业"></el-input> -->
+                  <el-select v-model="registerHHData.industry" placeholder="*选择公司行业">
+                    <el-option
+                      v-for="item in industryList"
+                      :label="item.name"
+                      :value="item.id"
+                      :key="item.id"
+                    ></el-option>
+                  </el-select>
                 </el-form-item>
               </div>
               <div class="half">
@@ -478,7 +517,7 @@
                   action="#"
                   :limit="1"
                   :show-file-list="false"
-                  :http-request="onBeforeUploadResume"
+                  :before-upload="onBeforeUploadResume"
                 >
                   <div class="upload-resume-btns">上传简历</div>
                 </el-upload>
@@ -559,7 +598,7 @@
             <div class="box">
               <el-form-item prop="qiwxz">
                 <!-- <el-select v-model="resigerJobSee.qiwxz" placeholder="*选择期望月薪"></el-select> -->
-                <el-input v-model="resigerJobSee.qiwxz" placeholder="*期望月薪"></el-input>
+                <el-input v-model.number="resigerJobSee.qiwxz" maxlength="9" placeholder="*期望月薪"></el-input>
               </el-form-item>
               <!-- <el-form-item>
                 <el-select v-model="resigerJobSee.hopewages2" placeholder="*选择期望月薪"></el-select>
@@ -568,15 +607,33 @@
             <el-form-item prop="industry">
               <!-- <el-input v-model="resigerJobSee.industry" placeholder="*期望的行业"></el-input> -->
               <el-select v-model="resigerJobSee.industry" placeholder="*选择期望的行业">
-                <el-option label="ddd" value="1"></el-option>
+                <el-option
+                  v-for="item in industryList"
+                  :key="item.id"
+                  :label="item.name"
+                  :value="item.id"
+                ></el-option>
               </el-select>
             </el-form-item>
             <div class="half-box">
               <el-form-item prop="city">
-                <el-input v-model="resigerJobSee.city" placeholder="*期望的工作地点"></el-input>
-                <!-- <el-select v-model="resigerJobSee.city" placeholder="*选择期望的工作地点">
-                  <el-option label="北京" value="1"></el-option>
-                </el-select>-->
+                <el-cascader
+                  v-model="resigerJobSee.city"
+                  placeholder="*选择期望的工作地点"
+                  :options="addressList"
+                  :props="{
+                      value: 'name',
+                      label: 'name',
+                      children: 'data_list'
+                    }"
+                  value="name"
+                  label="name"
+                  children="data_list"
+                >
+                  <template slot-scope="{ node, data }">
+                    <span>{{ data.name }}</span>
+                  </template>
+                </el-cascader>
               </el-form-item>
             </div>
             <el-form-item prop="gertc">
@@ -626,13 +683,13 @@
             </el-form-item>
             <div class="box">
               <el-form-item prop="money">
-                <el-input v-model="resigerJobSee.money" placeholder="*税前月薪"></el-input>
+                <el-input v-model.number="resigerJobSee.money" maxlength="9" placeholder="*税前月薪"></el-input>
               </el-form-item>
               <!-- <el-form-item>
                 <el-select v-model="resigerJobSee.money" placeholder="*选择税前月薪"></el-select>
               </el-form-item>-->
               <el-form-item prop="sh_money">
-                <el-input v-model="resigerJobSee.sh_money" placeholder="*税后月薪"></el-input>
+                <el-input v-model.number="resigerJobSee.sh_money" maxlength="9" placeholder="*税后月薪"></el-input>
               </el-form-item>
               <!-- <el-form-item>
                 <el-select v-model="resigerJobSee.sh_money" placeholder="*选择税后月薪"></el-select>
@@ -641,14 +698,14 @@
             <div class="box">
               <el-form-item prop="starttime">
                 <el-date-picker
-                  value-format="yyyy-MM-dd"
+                  value-format="timestamp"
                   v-model="resigerJobSee.starttime"
                   placeholder="*选择入职时间"
                 ></el-date-picker>
               </el-form-item>
               <el-form-item prop="endtime">
                 <el-date-picker
-                  value-format="yyyy-MM-dd"
+                  value-format="timestamp"
                   v-model="resigerJobSee.endtime"
                   placeholder="*选择入职时间"
                 ></el-date-picker>
@@ -686,8 +743,9 @@ import {
   registerJobseeUser,
   registerHRUser,
   registerHHUser,
-  getAllPost,
-  getAllAddress
+  getAllPost, // 职位
+  getAllAddress, // 地区
+  getAllIndustry // 行业
 } from '../api/api'
 import { mapGetters, mapMutations } from 'vuex'
 const MESSAGE_TEMPETE = 'SMS_166995245'
@@ -713,10 +771,11 @@ export default {
       headimgurl9: '',
       postList: [],
       addressList: [],
+      industryList: [],
       resiger: false,
       resigerHr: false,
       resigerHeadhunt: false,
-      resigerJobSeeker: true,
+      resigerJobSeeker: false,
       registerStep: 'step1',
       registerHHData: {
         member_id: '',
@@ -1061,13 +1120,15 @@ export default {
         money: [
           {
             required: true,
-            message: ''
+            message: '',
+            type: 'number'
           }
         ],
         sh_money: [
           {
             required: true,
-            message: ''
+            message: '',
+            type: 'number'
           }
         ],
         starttime: [
@@ -1091,7 +1152,8 @@ export default {
         qiwxz: [
           {
             required: true,
-            message: ''
+            message: '',
+            type: 'number'
           }
         ],
         gangwei: [
@@ -1139,6 +1201,7 @@ export default {
   created() {
     this.initAddressSelect()
     this.initPostSelect()
+    this.initAllIndustry()
   },
   mounted: function() {
     var that = this
@@ -1197,16 +1260,37 @@ export default {
       this.resiger = false
     },
     initPostSelect() {
-      getAllPost().then((res) => {
+      getAllPost().then(res => {
         if (res.code === 200) {
           this.postList = res.data
         }
       })
     },
     initAddressSelect() {
-      getAllPost().then((res) => {
+      const loop = node => {
+        for (let i = 0; i < node.length; i++) {
+          if (!node[i].data_list) {
+            continue
+          }
+          if (node[i].data_list && !node[i].data_list.length) {
+            node[i].data_list = undefined
+            continue
+          }
+          loop(node[i].data_list)
+        }
+      }
+
+      getAllAddress().then(res => {
         if (res.code === 200) {
+          loop(res.data)
           this.addressList = res.data
+        }
+      })
+    },
+    initAllIndustry() {
+      getAllIndustry().then(res => {
+        if (res.code === 200) {
+          this.industryList = res.data
         }
       })
     },
@@ -1284,8 +1368,9 @@ export default {
     },
     onBeforeUploadResume(file) {
       // 上传简历
-      this.resigerJobSee.profile_file_url = file.file
+      this.resigerJobSee.profile_file_url = file
       this.$message('上传简历成功')
+      return false
     },
     onSubmitJobsee() {
       // 提交注册求职人员
@@ -1302,6 +1387,18 @@ export default {
             0,
             -3
           )
+          this.resigerJobSee.starttime = `${this.resigerJobSee.starttime}`.slice(
+            0,
+            -3
+          )
+          this.resigerJobSee.endtime = `${this.resigerJobSee.endtime}`.slice(
+            0,
+            -3
+          )
+
+          // 对city 字段特殊处理
+          const list = this.resigerJobSee.city
+          this.resigerJobSee.city = list[list.length - 1]
           registerJobseeUser(this.resigerJobSee).then(res => {
             if (res.code === 200) {
               this.syncSetUsetType(2)
@@ -1328,6 +1425,7 @@ export default {
     onBeforeUploadheadimgurl2(file) {
       if (file.size > 1000 * 200) {
         //logo 不能大于200k
+        this.$message.error('logo不能大于200k')
         return false
       }
       this.onPreviewAvatar(file, 'headimgurl2')
@@ -1337,6 +1435,7 @@ export default {
     onBeforeUploadheadimgurl3(file) {
       if (file.size > 1000 * 500) {
         //营业执照 不能大于500k
+        this.$message.error('营业执照不能大于500k')
         return false
       }
       this.onPreviewAvatar(file, 'headimgurl3')
@@ -1398,6 +1497,11 @@ export default {
       this.$refs.registerHHWrap.validate(valid => {
         if (valid) {
           this.registerHHData.member_id = this.getMemberId
+          // 对所在地数据特殊处理
+          const list = this.registerHHData.city
+          this.registerHHData.city = list[list.length - 1]
+          //对职业行业数据特殊处理
+          this.registerHHData.zy_industry = this.registerHHData.zy_industry.join(',')
           registerHHUser(this.registerHHData).then(res => {
             console.log(res)
             if (res.code === 200) {

@@ -47,7 +47,7 @@ export function registerHHUser(data) {
 //岗位候选列表
 
 const POST_URL = 'api/apidate/hot_job'
-const POST_COUNT = 1000
+const POST_COUNT = 10000
 export function getAllPost() {
   return axios.post(POST_URL, { num: POST_COUNT }).then((res) => {
     return Promise.resolve(JSON.parse(res))
@@ -57,7 +57,7 @@ export function getAllPost() {
 //地区候选列表
 
 const ADDRESS_URL = 'api/apidate/province'
-const ADDRESS_COUNT = 1000
+const ADDRESS_COUNT = 10000
 export function getAllAddress() {
   return axios.post(ADDRESS_URL, { num: ADDRESS_COUNT }).then((res) => {
     return Promise.resolve(JSON.parse(res))
@@ -67,9 +67,9 @@ export function getAllAddress() {
 //行业候选列表
 
 const INDUSTRY_URL = 'api/apidate/industry_list'
-const INDUSTRY_COUNT = 1000
+const INDUSTRY_COUNT = 10000
 export function getAllIndustry() {
-  return axios.post(INDUSTRY_URL).then((res) => {
-    return Promise.resolve(res)
+  return axios.post(INDUSTRY_URL, {}).then((res) => {
+    return Promise.resolve(JSON.parse(res))
   })
 }
