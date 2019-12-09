@@ -16,12 +16,17 @@ axios.interceptors.request.use((config) => {
   let dataKey = config.data ? 'data' : config.params ? 'params' : 'data'
   const keys = Object.keys(requestData)
   const data = {}
+  const forData = new FormData()
 
   if (requestData && requestData.uploadFileSign) {
     filesFiledMap = requestData.uploadFileSign.reduce((target, item) => {
       target[`${item}`] = true
+      return target
     }, {})
     for (let i = 0; i < keys.length; i++) {
+      if (keys[i] === 'uploadFileSign') {
+        continue
+      }
       if (filesFiledMap[`${keys[i]}`] === undefined) {
         data[`${keys[i]}`] = requestData[`${keys[i]}`]
       }
@@ -29,6 +34,7 @@ axios.interceptors.request.use((config) => {
     }
     forData.append('data_list', encrypt(JSON.stringify(data)))
     config[`${dataKey}`] = forData
+    // console.log(data)
     return config
   }
 

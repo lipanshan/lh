@@ -20,7 +20,8 @@ module.exports = {
     'no-redeclare': 'off',
     'no-unused-vars': 'off',
     'no-console': 'off',
-    'standard/no-callback-literal': 'off'
+    'standard/no-callback-literal': 'off',
+    'no-unused-expressions': 'off'
   },
   parserOptions: {
     parser: 'babel-eslint'

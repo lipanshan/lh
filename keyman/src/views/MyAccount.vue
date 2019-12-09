@@ -101,6 +101,7 @@
 
 <script>
 import SlideVerify from '../assets/js/jq-slideVerify.js'
+import { mapGetters } from 'vuex'
 export default {
   name: 'MyAccount',
   data() {
@@ -121,6 +122,9 @@ export default {
       },
       imgVcode: false
     }
+  },
+  computed: {
+    ...mapGetters(['getToken', 'getMemberId', 'getUserType'])
   },
   mounted () {
     this.tag === 'tel' && this.initImageVcode()

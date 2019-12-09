@@ -59,6 +59,9 @@ export default {
 </script>
 
 <style lang="scss">
+body {
+  background: #eff1f5ff;
+}
 .layout {
   min-width: 1462px;
   width: 100%;

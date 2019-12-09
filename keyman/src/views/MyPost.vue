@@ -211,7 +211,7 @@
     </div>
 
     <!-- 创建职位 -->
-    <el-dialog :visible.sync="model" width="1240px">
+    <el-dialog :visible.sync="model" :model-append-to-body="false" width="1240px">
       <el-form :model="position" :rules="positionRules" class="create-position">
         <div class="title-wrap">
           <h2>基本信息</h2>
@@ -330,7 +330,7 @@
       </div>
     </el-dialog>
     <!-- 职位详情 -->
-    <el-dialog :visible.sync="detail" width="1240px">
+    <el-dialog :visible.sync="detail" :model-append-to-body="false" width="1240px">
       <div class="detail-box">
         <div class="head">
           <p></p>
@@ -718,7 +718,7 @@ export default {
       pausePost: false,
       order: '',
       model: false,
-      detail: true,
+      detail: false,
       position: {
         name: '',
         type: '',

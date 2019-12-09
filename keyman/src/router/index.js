@@ -56,6 +56,7 @@ const routes = [
     path: '/user',
     component: () => import('@/views/Layout'),
     children: [
+      // 猎头
       {
         path: '',
         component: () => import('@/views/MyPost')
@@ -105,6 +106,9 @@ const routes = [
         name: 'myaccount',
         component: () => import('@/views/MyAccount')
       }
+      // 外部猎头
+      // hr
+      //求职者
     ]
   }
 ]
