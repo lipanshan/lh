@@ -29,28 +29,32 @@ axios.interceptors.request.use((config) => {
       }
       if (filesFiledMap[`${keys[i]}`] === undefined) {
         data[`${keys[i]}`] = requestData[`${keys[i]}`]
+      } else {
+        forData.append(`${keys[i]}`, requestData[`${keys[i]}`])
       }
-      forData.append(`${keys[i]}`, requestData[`${keys[i]}`])
     }
     forData.append('data_list', encrypt(JSON.stringify(data)))
     config[`${dataKey}`] = forData
     // console.log(data)
     return config
   }
-
-  requestData.data_list = encrypt(JSON.stringify(requestData))
-  config[`${dataKey}`] = qs.stringify(config[`${dataKey}`])
-
+  config[`${dataKey}`] = qs.stringify({ data_list: encrypt(JSON.stringify(requestData)) })
   return config
 }, (err) => {
   return Promise.reject(err)
 })
 
 axios.interceptors.response.use((response) => {
+  let res = ''
   if (response && response.data) {
-    return Promise.resolve(decrypt(response.data))
+    res = decrypt(response.data)
+  } else {
+    res = decrypt(response)
   }
-  return Promise.resolve(decrypt(response))
+  if (res.code === 40003) { // token 验证失败
+    window.localStorage.removeItem('keyMan')
+  }
+  return Promise.resolve(res)
 }, (err) => {
   return Promise.reject(err)
 })

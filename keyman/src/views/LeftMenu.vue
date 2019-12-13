@@ -3,31 +3,22 @@
     <div class="menu-title">{{title}}</div>
     <div class="menu-list">
       <div class="user-avatar">
-        <img :src="avatar" alt />
+        <div class="avatar-wrap">
+          <img :src="avatar" alt />
+        </div>
         <p>{{nickname}}</p>
       </div>
       <router-link v-for="menu in menus" :key="menu.path" :to="menu.path" tag="div">
         <span class="img" :class="menu.iconClass"></span>
         <span>{{menu.title}}</span>
       </router-link>
-      <!-- <router-link to="/user/searchremuse" tag="div">
-        <span class="img jobwant"></span>
-        <span>搜简历</span>
-      </router-link>
-      <router-link to="/user/jobchart" tag="div">
-        <span class="img chart"></span>
-        <span>职聊</span>
-      </router-link>
-      <router-link to="/user/mypost" tag="div">
-        <span class="img myliver"></span>
-        <span>我的职位</span>
-      </router-link>
-      <router-link to="/user/mypeoplebank" tag="div" class="active">
-        <span class="img myresume"></span>
-        <span>我的人才库</span>
-      </router-link>-->
       <div class="line"></div>
-      <router-link to="/user/myaccount" tag="div">
+      <!-- hr 特有标签页 -->
+      <router-link v-show="getUserType === '2'" :to="'/user/companyinfo'" tag="div">
+        <span class="img companyinfo"></span>
+        <span>公司资料</span>
+      </router-link>
+      <router-link :to="'/user/myaccount'" tag="div">
         <span class="img myaccount"></span>
         <span>我的账户</span>
       </router-link>
@@ -48,15 +39,7 @@ export default {
   props: {
     title: {
       type: String,
-      default: '人才库'
-    },
-    avatar: {
-      type: String,
-      default: ''
-    },
-    nickname: {
-      typee: String,
-      default: ''
+      default: '关键人才'
     }
   },
   data() {
@@ -85,22 +68,22 @@ export default {
       ],
       menusjb: [
         {
-          path: '/user/searchremuse',
+          path: '/user/jobwant',
           iconClass: 'jobwant',
           title: '求职'
         },
         {
-          path: '/user/jobchart',
+          path: '/user/jobwantchart',
           iconClass: 'chart',
           title: '职聊'
         },
         {
-          path: '/user/mypost',
+          path: '/user/mydelivery',
           iconClass: 'myliver',
           title: '我的投递'
         },
         {
-          path: '/user/mypeoplebank',
+          path: '/user/myresume',
           iconClass: 'myresume',
           title: '我的简历'
         }
@@ -109,10 +92,14 @@ export default {
   },
   computed: {
     menus() {
-      // 根据不同用户类型显示不同的左侧菜单
+      // 根据不同用户类型显示不同的左侧菜单, 1.求职类, 2.猎头/hr
       return /1/.test(this.getUserType) ? this.menusjb : this.menushr
     },
-    ...mapGetters(['getUserType'])
+    ...mapGetters({
+      getUserType: 'getUserType',
+      avatar: 'getAvatar',
+      nickname: 'getNickname'
+    })
   }
 }
 </script>
@@ -139,13 +126,21 @@ export default {
       padding-top: 40px;
       padding-left: 0;
       display: block;
-      & > img {
+      .avatar-wrap {
         margin: 0 auto;
         display: block;
         width: 70px;
         height: 70px;
         border-radius: 50%;
+        background: #fff;
+        & > img {
+          display: block;
+          width: 70px;
+          height: 70px;
+          border-radius: 50%;
+        }
       }
+
       & > p {
         padding-top: 15px;
         font-size: 18px;
@@ -154,9 +149,10 @@ export default {
         font-weight: 600;
         text-align: center;
         white-space: nowrap;
-        text-overflow: hidden;
+        text-overflow: ellipsis;
         width: 100%;
         overflow: hidden;
+        min-height: 44px;
       }
     }
     & > div {
@@ -218,6 +214,10 @@ export default {
           background: url(../assets/img/change_status.png) no-repeat 0 0;
           background-size: 18px 18px;
         }
+        &.companyinfo {
+          background: url(../assets/img/company_info.png) no-repeat center center;
+          background-size: 18px 18px;
+        }
       }
       &.router-link-exact-active {
         background: #6b676e;
@@ -236,7 +236,8 @@ export default {
         }
         & > .img {
           &.searchremuse {
-            background: url(../assets/img/searchremuse_hover.png) no-repeat center 0;
+            background: url(../assets/img/searchremuse_hover.png) no-repeat
+              center 0;
             background-size: 18px 18px;
           }
           &.chart {
@@ -244,16 +245,18 @@ export default {
             background-size: 18px 18px;
           }
           &.mypost {
-            background: url(../assets/img/mypost_hover.png) no-repeat center center;
+            background: url(../assets/img/mypost_hover.png) no-repeat center
+              center;
             background-size: 18px 18px;
           }
           &.myaccount {
-            background: url(../assets/img/myaccount_hover.png) no-repeat center center;
+            background: url(../assets/img/myaccount_hover.png) no-repeat center
+              center;
             background-size: 18px 18px;
           }
           &.mypeoplebank {
-            background: url(../assets/img/mypeoplebank_hover.png) no-repeat center
-              center;
+            background: url(../assets/img/mypeoplebank_hover.png) no-repeat
+              center center;
             background-size: 18px 18px;
           }
           &.jobwant {
@@ -261,7 +264,8 @@ export default {
             background-size: 18px 18px;
           }
           &.myliver {
-            background: url(../assets/img/email2_hover.png) no-repeat center center;
+            background: url(../assets/img/email2_hover.png) no-repeat center
+              center;
             background-size: 18px 18px;
           }
           &.myresume {
@@ -270,6 +274,11 @@ export default {
           }
           &.changstatus {
             background: url(../assets/img/changestatus_hover.png) no-repeat 0 0;
+            background-size: 18px 18px;
+          }
+          &.companyinfo {
+            background: url(../assets/img/company_info_hover.png) no-repeat center
+              center;
             background-size: 18px 18px;
           }
         }

@@ -3,10 +3,21 @@
     <el-form class="my-people-form">
       <div class="search-wrap">
         <el-input v-model="search" placeholder="搜索职位">
-          <el-select v-model="address" class="prepend-select" slot="prepend">
+          <el-cascader
+            v-model="address"
+            class="prepend-select"
+            slot="prepend"
+            :options="addresssList"
+            :props="{
+            value: 'name',
+            label: 'name',
+            children: 'data_list'
+          }"
+          ></el-cascader>
+          <!-- <el-select >
             <el-option label="北京" value="1"></el-option>
             <el-option label="天津" value="2"></el-option>
-          </el-select>
+          </el-select>-->
           <span slot="append" class="search-btn">搜索</span>
         </el-input>
       </div>
@@ -15,108 +26,138 @@
           <h2>学历</h2>
           <div>
             <el-select v-model="education">
-              <el-option label="大专" value="1"></el-option>
+              <el-option label="不限" :value="0"></el-option>
+              <el-option label="初中及以下" :value="1"></el-option>
+              <el-option label="中专/技校" :value="2"></el-option>
+              <el-option label="高中" :value="3"></el-option>
+              <el-option label="大专" :value="4"></el-option>
+              <el-option label="本科" :value="5"></el-option>
+              <el-option label="硕士" :value="6"></el-option>
+              <el-option label="博士" :value="7"></el-option>
             </el-select>
             <span class="li"></span>
             <el-select v-model="education">
-              <el-option label="大专" value="1"></el-option>
+              <el-option label="不限" :value="0"></el-option>
+              <el-option label="初中及以下" :value="1"></el-option>
+              <el-option label="中专/技校" :value="2"></el-option>
+              <el-option label="高中" :value="3"></el-option>
+              <el-option label="大专" :value="4"></el-option>
+              <el-option label="本科" :value="5"></el-option>
+              <el-option label="硕士" :value="6"></el-option>
+              <el-option label="博士" :value="7"></el-option>
             </el-select>
           </div>
         </div>
         <div class="col">
           <h2>薪资</h2>
           <div>
-            <el-select v-model="education">
-              <el-option label="5K" value="1"></el-option>
-            </el-select>
+            <el-input v-model.number="education"></el-input>
             <span class="li"></span>
-            <el-select v-model="education">
-              <el-option label="8K" value="1"></el-option>
-            </el-select>
+            <el-input v-model.number="education"></el-input>
           </div>
         </div>
         <div class="col">
           <h2>工龄</h2>
           <div>
             <el-select v-model="education">
-              <el-option label="20" value="1"></el-option>
+              <el-option label="不限" :value="0"></el-option>
+              <el-option label="在校生" :value="1"></el-option>
+              <el-option label="应届生" :value="2"></el-option>
+              <el-option label="一年以下" :value="3"></el-option>
+              <el-option label="1-3年" :value="4"></el-option>
+              <el-option label="3-5年" :value="5"></el-option>
+              <el-option label="5-10年" :value="6"></el-option>
+              <el-option label="10年以上" :value="7"></el-option>
             </el-select>
             <span class="li"></span>
             <el-select v-model="education">
-              <el-option label="35" value="1"></el-option>
+              <el-option label="不限" :value="0"></el-option>
+              <el-option label="在校生" :value="1"></el-option>
+              <el-option label="应届生" :value="2"></el-option>
+              <el-option label="一年以下" :value="3"></el-option>
+              <el-option label="1-3年" :value="4"></el-option>
+              <el-option label="3-5年" :value="5"></el-option>
+              <el-option label="5-10年" :value="6"></el-option>
+              <el-option label="10年以上" :value="7"></el-option>
             </el-select>
           </div>
         </div>
         <div class="col">
           <h2>年龄</h2>
           <div>
-            <el-select v-model="education">
-              <el-option label="20" value="1"></el-option>
-            </el-select>
+            <el-input v-model.number="education"></el-input>
             <span class="li"></span>
-            <el-select v-model="education">
-              <el-option label="35" value="1"></el-option>
-            </el-select>
+            <el-input v-model.number="education"></el-input>
           </div>
         </div>
         <div class="col">
           <el-checkbox-group v-model="jobeType">
-            <el-checkbox label="搜全职"></el-checkbox>
-            <el-checkbox label="搜兼职"></el-checkbox>
+            <el-checkbox :label="1">搜全职</el-checkbox>
+            <el-checkbox :label="2">搜兼职</el-checkbox>
           </el-checkbox-group>
         </div>
         <div class="col">
-          <span class="show-more">隐藏</span>
+          <span class="show-more" @click="switchMore">{{isShowMore ? '隐藏' : '更多'}}</span>
         </div>
       </div>
-      <div class="row2">
-        <div class="col">
-          <el-form-item label="公司">
-            <el-input v-model="company"></el-input>
-          </el-form-item>
-          <el-checkbox v-model="currentJob">最近工作</el-checkbox>
+      <div v-show="isShowMore" class="more-info">
+        <div class="row2">
+          <div class="col">
+            <el-form-item label="公司">
+              <el-input v-model="company"></el-input>
+            </el-form-item>
+            <el-checkbox v-model="currentJob">最近工作</el-checkbox>
+          </div>
+          <div class="col">
+            <el-form-item label="行业">
+              <el-select multiple v-model="industry" placeholder="最多选三项">
+                <el-option
+                  v-for="item in industryList"
+                  :label="item.name"
+                  :value="item.id"
+                  :key="item.id"
+                ></el-option>
+              </el-select>
+            </el-form-item>
+          </div>
         </div>
-        <div class="col">
-          <el-form-item label="行业">
-            <el-select multiple v-model="industry" placeholder="最多选三项">
-              <el-option label="北京" value="1"></el-option>
-              <el-option label="北京2" value="2"></el-option>
-            </el-select>
-          </el-form-item>
+        <div class="row2">
+          <div class="col">
+            <el-form-item label="工作内容">
+              <el-input v-model="company"></el-input>
+            </el-form-item>
+            <el-checkbox v-model="currentJob">最近工作</el-checkbox>
+          </div>
+          <div class="col">
+            <el-form-item label="职业">
+              <el-select multiple v-model="industry" placeholder="最多选三项">
+                <el-option
+                  v-for="item in industryList"
+                  :label="item.name"
+                  :value="item.id"
+                  :key="item.id"
+                ></el-option>
+              </el-select>
+            </el-form-item>
+          </div>
         </div>
-      </div>
-      <div class="row2">
-        <div class="col">
-          <el-form-item label="工作内容">
-            <el-input v-model="company"></el-input>
-          </el-form-item>
-          <el-checkbox v-model="currentJob">最近工作</el-checkbox>
-        </div>
-        <div class="col">
-          <el-form-item label="职业">
-            <el-select multiple v-model="industry" placeholder="最多选三项">
-              <el-option label="北京" value="1"></el-option>
-              <el-option label="北京2" value="2"></el-option>
-            </el-select>
-          </el-form-item>
-        </div>
-      </div>
-      <div class="row2">
-        <div class="col">
-          <el-form-item label="排除学校">
-            <el-select multiple v-model="industry" placeholder="最多选三项">
-              <el-option label="北京" value="1"></el-option>
-              <el-option label="北京2" value="2"></el-option>
-            </el-select>
-          </el-form-item>
-        </div>
-        <div class="col">
-          <el-form-item label="排除履历">
-            <el-select multiple v-model="industry" placeholder="最多选三项">
-              <el-option label="北京" value="1"></el-option>
-              <el-option label="北京2" value="2"></el-option>
-            </el-select>
-          </el-form-item>
+        <div class="row2">
+          <div class="col">
+            <el-form-item label="排除学校">
+              <el-select multiple v-model="industry" placeholder="最多选三项">
+                <el-option label="北京" value="1"></el-option>
+                <el-option label="北京2" value="2"></el-option>
+              </el-select>
+            </el-form-item>
+          </div>
+          <div class="col">
+            <el-form-item label="排除履历">
+              <el-select multiple v-model="industry" placeholder="最多选三项">
+                <el-option label="北京" value="1"></el-option>
+                <el-option label="北京2" value="2"></el-option>
+              </el-select>
+            </el-form-item>
+          </div>
         </div>
       </div>
       <div class="row1 row3">
@@ -198,8 +239,13 @@
       </div>
       <div class="bottom">
         <div class="col">
-          <el-tag closable>UI设计师</el-tag>
-          <el-tag closable>JAVA</el-tag>
+          <el-tag
+            v-for="item in searchLabelList"
+            @click="onSelectTag(item)"
+            :key="item.id"
+            closable
+            @close="onCloseTag(item)"
+          >{{item.labelName}}</el-tag>
         </div>
         <div class="checkbox-group">
           <el-checkbox-group v-model="mangResume">
@@ -214,44 +260,53 @@
       <div class="all-checked">
         <el-checkbox v-model="allCheckbox" label="全选"></el-checkbox>
       </div>
-      <div class="recruit-list">
-        <div class="recruit-item">
+      <div v-show="peopleList.length" class="recruit-list">
+        <div v-for="item in peopleList" :key="item.resume_id" class="recruit-item">
           <div class="row">
             <div class="left">
               <span class="type">全职</span>
-              <span class="name">姓名</span>
-              <span class="gender">性别</span>
+              <span class="name">{{item.name}}</span>
+              <span class="gender">{{item.sex | filterSex}}</span>
               <span class="post">
                 当前职位：
-                <span class="txt">人力资源总监</span>
+                <span class="txt">{{item.class_name}}</span>
               </span>
               <span class="wages">
                 期望月薪：
-                <span class="txt">200k-1000k</span>
+                <span class="txt">{{item.qiwxz}}</span>
               </span>
             </div>
-            <span class="get-time">获取时间：2019.05.01</span>
+            <span class="get-time">获取时间：</span>
           </div>
-          <div class="content">
-            <el-checkbox v-model="checkboxItem1"></el-checkbox>
-            <div class="avatar">
-              <img src alt />
+          <div @click="onSeeResume(item)" class="content">
+            <div class="box">
+              <el-checkbox></el-checkbox>
+              <div class="avatar">
+                <img :src="item.headimgurl" alt />
+              </div>
             </div>
+
             <div class="info">
-              <p class="txt">年龄|所在学校|学历|职业分类</p>
-              <p class="txt">1990.03-1990.05 四川大学 金融学 本科</p>
+              <p
+                class="txt"
+              >{{item.age}}|{{item.province}}{{item.city}}{{item.district}}|{{item.education | filtersEdu}}|{{item.iname}}|{{item.major}}</p>
+              <p
+                class="txt"
+              >{{item.star_time}}-{{item.end_time}} {{item.school_name}} {{item.major}} {{item.education | filtersEdu}}</p>
             </div>
             <div class="info2">
-              <p class="txt">1990.03-至今（1年6个月） 招商银行四川分行科技银行中心 大客户销售总监 200k-500k</p>
-              <p class="txt">1990.03-至今（1年6个月） 招商银行四川分行科技银行中心 大客户销售总监 200k-500k</p>
-              <p class="txt">1990.03-至今（1年6个月） 招商银行四川分行科技银行中心 大客户销售总监 200k-500k</p>
+              <p
+                v-for="(subitem, i) in item.work_exp"
+                :key="i"
+                class="txt"
+              >{{subitem.starttime}}-{{subitem.endtime}} {{subitem.company}} {{subitem.post}} {{subitem.money}}-{{item.sh_money}}</p>
             </div>
             <div class="keys">
               <p class="title">匹配因素：</p>
               <div class="txt-wrap">
-                <span class="txt">科技</span>
+                <!-- <span class="txt">科技</span>
                 <span class="txt">北京</span>
-                <span class="txt">大客户</span>
+                <span class="txt">大客户</span>-->
               </div>
             </div>
           </div>
@@ -263,12 +318,34 @@
           </div>
         </div>
       </div>
-      <el-pagination layout="prev, pager, next" :total="100"></el-pagination>
+      <div v-show="!peopleList.length" class="nothing-wrap">
+        <div class="nothing-box">
+          <img src="../assets/img/no-data.png" alt />
+          <div class="tips">
+            <span>暂无人才</span>
+            <router-link to="/user" class="add-people" tag="span">添加人才</router-link>
+          </div>
+        </div>
+      </div>
+      <el-pagination
+        layout="prev, pager, next"
+        @current-change="onPageChange"
+        :total="peopleListPagination.allCount"
+      ></el-pagination>
     </div>
   </div>
 </template>
 
 <script>
+import { mapGetters } from 'vuex'
+import {
+  searchPeople,
+  getAllAddress,
+  formatterAddressData,
+  getAllIndustry,
+  getUserResume
+} from '@/api/api'
+const PAGE_NUMBER = 10 // 分页每页显示条数
 export default {
   name: 'MyPeopleBank',
   data() {
@@ -289,7 +366,157 @@ export default {
       userName: '',
       mangResume: [],
       allCheckbox: false,
-      checkboxItem1: false
+      checkboxItem1: false,
+      peopleListPagination: {
+        currentPage: 1,
+        number: PAGE_NUMBER,
+        allCount: 0
+      },
+      peopleList: [
+        // {
+        //   resume_id: 0,
+        //   status: 0,
+        //   name: '',
+        //   sex: '',
+        //   class_name: '',
+        //   qiwxz: 6,
+        //   headimgurl: '',
+        //   age: 0,
+        //   province: '',
+        //   city: '',
+        //   district: '',
+        //   education: 1,
+        //   iname: null,
+        //   school_name: null,
+        //   major: null,
+        //   star_time: null,
+        //   end_time: null,
+        //   work_exp: [
+        //     {
+        //       starttime: '',
+        //       endtime: '',
+        //       company: '',
+        //       post: '',
+        //       money: null,
+        //       sh_money: null
+        //     }
+        //   ]
+        // }
+      ],
+      addresssList: [],
+      industryList: [],
+      isShowMore: false,
+      searchLabelList: [
+        {
+          id: 1,
+          labelName: 'UI设计师',
+          name: '',
+          edu: '',
+          tel: '',
+          email: '',
+          resumeSource: ''
+        },
+        {
+          id: 2,
+          labelName: 'JAVA',
+          name: '',
+          edu: '',
+          tel: '',
+          email: '',
+          resumeSource: ''
+        }
+      ]
+    }
+  },
+  computed: {
+    ...mapGetters(['getToken', 'getMemberId'])
+  },
+  created() {
+    this.initPeopleList()
+    this.initAddressSelect()
+    this.initIndustrySelect()
+  },
+  methods: {
+    initAddressSelect() {
+      getAllAddress().then(res => {
+        if (res.code === 200) {
+          formatterAddressData(res.data) // 特殊处理地区地质
+          this.addresssList = res.data
+        }
+      })
+    },
+    initIndustrySelect() {
+      getAllIndustry().then(res => {
+        if (res.code === 200) {
+          this.industryList = res.data
+        }
+      })
+    },
+    initEduSelect() {},
+    initPeopleList(currentPage = 1) {
+      searchPeople({
+        member_id: this.getMemberId,
+        token: this.getToken,
+        number: PAGE_NUMBER,
+        page: currentPage
+      }).then(res => {
+        if (res.code === 200) {
+          this.peopleList = res.data
+          this.peopleListPagination.allCount = res.pagelist.count_num
+        }
+      })
+    },
+    onPageChange(pageNum) {
+      this.peopleListPagination.currentPage = pageNum
+    },
+    switchMore() {
+      this.isShowMore = !this.isShowMore
+    },
+    onSelectTag(data) {
+      for (let i = 0; i < this.searchLabelList.length; i++) {
+        if (this.searchLabelList[i].id === data.id) {
+          console.log(data)
+          return
+        }
+      }
+    },
+    onCloseTag(data) {
+      for (let i = 0; i < this.searchLabelList.length; i++) {
+        if (this.searchLabelList[i].id === data.id) {
+          console.log(data)
+          this.searchLabelList.splice(i, 1)
+          return
+        }
+      }
+    },
+    onSeeResume(data) {
+      this.$router.push({
+        path: '/user/resumeinfo',
+        query: {
+          resumeId: data.resume_id
+        }
+      })
+    }
+  },
+  filters: {
+    filterSex(num) {
+      const map = {
+        1: '男',
+        2: '女'
+      }
+      return map[num]
+    },
+    filtersEdu(num) {
+      const map = {
+        1: '初中',
+        2: '中专、技校',
+        3: '高中',
+        4: '大专',
+        5: '本科',
+        6: '研究生',
+        7: '博士'
+      }
+      return map[num]
     }
   }
 }
@@ -311,8 +538,11 @@ body {
 
   .search-wrap {
     .prepend-select {
+      margin-top: -1px;
       width: 124px;
+      height: 60px;
       background: none;
+      border: none;
     }
     .el-input-group__append,
     .el-input-group__prepend {
@@ -381,13 +611,13 @@ body {
         width: 328px;
       }
       &:nth-child(2) {
-        width: 200px;
+        width: 272px;
       }
       &:nth-child(3) {
-        width: 140px;
+        width: 260px;
       }
       &:nth-child(4) {
-        width: 140px;
+        width: 186px;
       }
       &:nth-child(5) {
         margin-top: 30px;
@@ -609,19 +839,24 @@ body {
           border-bottom: 1px solid #eef0f5ff;
           align-items: center;
           justify-content: space-between;
-          & > .avatar {
-            margin-left: 12px;
-            width: 68px;
-            height: 68px;
-            border-radius: 50%;
-            background-color: #ccccccff;
-            & > img {
-              display: block;
+          & > .box {
+            display: flex;
+            align-items: center;
+            & > .avatar {
+              margin-left: 12px;
               width: 68px;
               height: 68px;
               border-radius: 50%;
+              background-color: #ccccccff;
+              & > img {
+                display: block;
+                width: 68px;
+                height: 68px;
+                border-radius: 50%;
+              }
             }
           }
+
           & > .info {
             margin-left: 24px;
             font-size: 14px;
@@ -718,6 +953,7 @@ body {
   }
   .el-tag {
     margin-right: 12px;
+    margin-bottom: 10px;
     border-radius: 0;
     background: none;
     border-color: #ccccccff;
@@ -775,6 +1011,40 @@ body {
   .el-select .el-tag__close.el-icon-close {
     color: #4799ccff;
     background: none;
+  }
+  .nothing-wrap {
+    margin-top: 10px;
+    position: relative;
+    display: block;
+    width: 1240px;
+    height: 740px;
+    background: #fff;
+    .nothing-box {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate3d(-50%, -50%, 0);
+      width: 360px;
+      & > img {
+        display: block;
+        margin: 0 auto;
+        width: 292px;
+        height: 236px;
+      }
+      & > .tips {
+        margin-top: 20px;
+        display: flex;
+        font-size: 14px;
+        line-height: 24px;
+        color: #61687c;
+        justify-content: center;
+        & > .add-people {
+          margin-left: 15px;
+          color: #f06358;
+          cursor: pointer;
+        }
+      }
+    }
   }
 }
 </style>

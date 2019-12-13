@@ -8,12 +8,12 @@
     <div class="one">
       <div>
         <img src="../assets/img/mobile2.png" alt />
-        <input type="text" v-model="phone" />
+        <input type="text" maxlength="11" v-model="phone" />
       </div>
       <div class="verify-wrap" id="verify-wrap"></div>
       <div class="vcode-wrap">
         <img src="../assets/img/safe.png" alt />
-        <input type="text" v-model="code" />
+        <input type="text" maxlength="6" v-model="code" />
         <div @click="sendMsg" class="get-vcode">获取验证码</div>
         <p v-show="errMessage" class="error-message">{{errMessage}}</p>
         <p
@@ -169,7 +169,6 @@
             <div class="half-box">
               <div class="half">
                 <el-form-item prop="industry">
-                  <!-- <el-input v-model="registerHRData.industry" placeholder="*公司行业"></el-input> -->
                   <el-select v-model="registerHRData.industry" placeholder="*选择公司行业">
                     <el-option
                       v-for="item in industryList"
@@ -182,7 +181,6 @@
               </div>
               <div class="half">
                 <el-form-item prop="position">
-                  <!-- <el-input v-model="registerHRData.position" placeholder="*担任职位"></el-input> -->
                   <el-select v-model="registerHRData.position" placeholder="*选择担任职位">
                     <el-option
                       v-for="item in postList"
@@ -195,7 +193,6 @@
               </div>
             </div>
             <div class="next-btn-wrap2">
-              <!-- <div class="cancel-btn" @click="onCancelRegister('resigerHr')">取消</div> -->
               <div class="cancel-btn" @click="onPrevStep('step1')">上一步</div>
               <div class="next-btn" @click="onNextStep('step3')">下一步</div>
             </div>
@@ -273,7 +270,6 @@
                   <el-input v-model="registerHHData.code" placeholder="邀请码"></el-input>
                 </el-form-item>
                 <el-form-item prop="zy_industry">
-                  <!-- <el-input v-model="registerHHData.zy_industry" placeholder="*职业行业，最多5项"></el-input> -->
                   <el-select
                     v-model="registerHHData.zy_industry"
                     :multiple-limit="5"
@@ -385,7 +381,6 @@
             <div class="half-box">
               <div class="half">
                 <el-form-item prop="industry">
-                  <!-- <el-input v-model="registerHHData.industry" placeholder="*公司行业"></el-input> -->
                   <el-select v-model="registerHHData.industry" placeholder="*选择公司行业">
                     <el-option
                       v-for="item in industryList"
@@ -398,7 +393,6 @@
               </div>
               <div class="half">
                 <el-form-item prop="position">
-                  <!-- <el-input v-model="registerHHData.position" placeholder="*担任职位"></el-input> -->
                   <el-select v-model="registerHHData.position" placeholder="*担任职位">
                     <el-option
                       v-for="item in postList"
@@ -557,9 +551,6 @@
               <el-input v-model="resigerJobSee.major" placeholder="*所学专业"></el-input>
             </el-form-item>
             <div class="box">
-              <!-- <el-form-item>
-                <el-date-picker value-format="yyyy-MM-dd" v-model="resigerJobSee.starttime" placeholder="*入学时间"></el-date-picker>
-              </el-form-item>-->
               <el-form-item prop="graduation_time">
                 <el-date-picker
                   value-format="yyyy-MM-dd"
@@ -585,7 +576,6 @@
           </div>
           <div class="body">
             <el-form-item prop="gangwei">
-              <!-- <el-input v-model="resigerJobSee.gangwei" placeholder="*期望的职位"></el-input> -->
               <el-select v-model="resigerJobSee.gangwei" placeholder="*选择期望的职位">
                 <el-option
                   v-for="item in postList"
@@ -597,15 +587,10 @@
             </el-form-item>
             <div class="box">
               <el-form-item prop="qiwxz">
-                <!-- <el-select v-model="resigerJobSee.qiwxz" placeholder="*选择期望月薪"></el-select> -->
                 <el-input v-model.number="resigerJobSee.qiwxz" maxlength="9" placeholder="*期望月薪"></el-input>
               </el-form-item>
-              <!-- <el-form-item>
-                <el-select v-model="resigerJobSee.hopewages2" placeholder="*选择期望月薪"></el-select>
-              </el-form-item>-->
             </div>
             <el-form-item prop="industry">
-              <!-- <el-input v-model="resigerJobSee.industry" placeholder="*期望的行业"></el-input> -->
               <el-select v-model="resigerJobSee.industry" placeholder="*选择期望的行业">
                 <el-option
                   v-for="item in industryList"
@@ -663,7 +648,6 @@
               <el-input v-model="resigerJobSee.company" placeholder="*公司全称"></el-input>
             </el-form-item>
             <el-form-item prop="post">
-              <!-- <el-input v-model="resigerJobSee.post" placeholder="*担任职位"></el-input> -->
               <el-select v-model="resigerJobSee.post" placeholder="*选择担任职位">
                 <el-option
                   v-for="item in postList"
@@ -685,15 +669,9 @@
               <el-form-item prop="money">
                 <el-input v-model.number="resigerJobSee.money" maxlength="9" placeholder="*税前月薪"></el-input>
               </el-form-item>
-              <!-- <el-form-item>
-                <el-select v-model="resigerJobSee.money" placeholder="*选择税前月薪"></el-select>
-              </el-form-item>-->
               <el-form-item prop="sh_money">
                 <el-input v-model.number="resigerJobSee.sh_money" maxlength="9" placeholder="*税后月薪"></el-input>
               </el-form-item>
-              <!-- <el-form-item>
-                <el-select v-model="resigerJobSee.sh_money" placeholder="*选择税后月薪"></el-select>
-              </el-form-item>-->
             </div>
             <div class="box">
               <el-form-item prop="starttime">
@@ -1310,7 +1288,6 @@ export default {
       })
         .then(res => {
           // 用户类型是空也进入了登录页面，处理异常情况
-          console.log(res)
           res.data && res.data.token !== undefined
             ? this.syncSetToken(res.data.token)
             : ''
@@ -1326,7 +1303,7 @@ export default {
             if (!res.data.type) {
               this.resiger = true
             } else {
-              this.$router.push('/user')
+              this.$router.replace('/user')
             }
           } else if (res.code === 40011) {
             this.resigerJobSee.token = res.data.token
@@ -1401,8 +1378,8 @@ export default {
           this.resigerJobSee.city = list[list.length - 1]
           registerJobseeUser(this.resigerJobSee).then(res => {
             if (res.code === 200) {
-              this.syncSetUsetType(2)
-              this.$router.push('/user')
+              this.syncSetUsetType('1')
+              this.$router.replace('/user')
             } else {
               this.$message.error(res.message)
             }
@@ -1453,8 +1430,8 @@ export default {
           this.registerHRData.member_id = this.getMemberId
           registerHRUser(this.registerHRData).then(res => {
             if (res.code === 200) {
-              this.syncSetUsetType(2)
-              this.$router.push('/user')
+              this.syncSetUsetType('2')
+              this.$router.replace('/user/myaccount')
             } else {
               this.$message.error(res.message)
             }
@@ -1503,10 +1480,9 @@ export default {
           //对职业行业数据特殊处理
           this.registerHHData.zy_industry = this.registerHHData.zy_industry.join(',')
           registerHHUser(this.registerHHData).then(res => {
-            console.log(res)
             if (res.code === 200) {
-              this.syncSetUsetType(3)
-              this.$router.push('/user')
+              this.syncSetUsetType('3')
+              this.$router.replace('/user/myaccount')
             } else {
               this.$message.error(res.message)
             }

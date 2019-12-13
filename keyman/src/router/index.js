@@ -50,41 +50,30 @@ const routes = [
   {
     path: '/login',
     name: 'Login',
-    component: () => import('@/views/Login')
+    component: () => import('@/views/Login'),
+    beforeEnter(to, from, next) {
+      const flag = window.localStorage.getItem('keyMan')
+      if (flag) {
+        next({ path: '/user' })
+      } else {
+        next()
+      }
+    }
   },
   {
     path: '/user',
     component: () => import('@/views/Layout'),
     children: [
-      // 猎头
+      // 猎头(type=3,内部猎头)  //type=4 外部猎头(兼职猎头)
       {
-        path: '',
-        component: () => import('@/views/MyPost')
-      },
-      {
-        path: 'jobwant',
-        name: 'jobwant',
-        component: () => import('@/views/JobWant')
-      },
-      {
-        path: 'searchremuse',
-        name: 'serachremuse',
-        component: () => import('@/views/SearchResume')
-      },
-      {
-        path: 'mydelivery',
-        name: 'mydelivery',
-        component: () => import('@/views/MyDelivery')
+        path: 'searchresume',
+        alias: '',
+        component: () => import('@/views/MyPeopleBank')
       },
       {
         path: 'mypost',
         name: 'mypost',
         component: () => import('@/views/MyPost')
-      },
-      {
-        path: 'myresume',
-        name: 'myresume',
-        component: () => import('@/views/MyResume')
       },
       {
         path: 'jobchart',
@@ -97,19 +86,74 @@ const routes = [
         component: () => import('@/views/MyPeopleBank')
       },
       {
+        path: 'getpost',
+        name: 'getpost',
+        component: () => import('@/views/GetPost')
+      },
+      {
+        path: 'resumeinfo',
+        name: 'resumeInfo',
+        component: () => import('@/views/ResumeInfo')
+      },
+      // hr
+      {
         path: 'companyinfo',
         name: 'companyinfo',
         component: () => import('@/views/CompanyInfo')
       },
+      //求职者
+      {
+        path: 'jobwant',
+        name: 'jobwant',
+        component: () => import('@/views/JobWant')
+      },
+      {
+        path: 'jobwantchart',
+        name: 'jobwantchart',
+        component: () => import('@/views/JobwantChart')
+      },
+      {
+        path: 'mydelivery',
+        name: 'mydelivery',
+        component: () => import('@/views/MyDelivery')
+      },
+      {
+        path: 'myresume',
+        name: 'myresume',
+        component: () => import('@/views/MyResume')
+      },
+      {
+        path: 'jobwantdetail',
+        name: 'jobwantdetail',
+        component: () => import('@/views/JobwantDetail')
+      },
+      // 公共-我的账户
       {
         path: 'myaccount',
         name: 'myaccount',
         component: () => import('@/views/MyAccount')
       }
-      // 外部猎头
-      // hr
-      //求职者
-    ]
+    ],
+    beforeEnter(to, from, next) {
+      const flag = window.localStorage.getItem('keyMan')
+      if (!flag) {
+        next({ path: '/login' })
+      } else {
+        next()
+      }
+    }
+  },
+  {
+    path: '/user*',
+    redirect: '/user'
+  },
+  {
+    path: '/login*',
+    redirect: '/login'
+  },
+  {
+    path: '*',
+    redirect: '/'
   }
 ]
 

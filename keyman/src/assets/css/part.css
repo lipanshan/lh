@@ -59,6 +59,7 @@ header {
     font-size: 18px;
     color: #fff;
     padding: 0 15px;
+    cursor: pointer;
 }
 
 .select {

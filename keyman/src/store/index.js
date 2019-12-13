@@ -10,7 +10,9 @@ const KEYMAN_LOCAL_DATA = 'keyMan'
 const localstorageData = window.localStorage.getItem(KEYMAN_LOCAL_DATA) ? JSON.parse(window.localStorage.getItem(KEYMAN_LOCAL_DATA)) : {
   token: '',
   userType: '',
-  memberId: ''
+  memberId: '',
+  headimgurl: '',
+  nickname: ''
 }
 const mutations = {
   syncSetToken(state, token) {
@@ -24,6 +26,12 @@ const mutations = {
   syncSetMemberId(state, id) {
     state.memberId = id
     updateLocalData(state)
+  },
+  syncSetAvatar(state, url) {
+    state.headimgurl = url
+  },
+  syncSetNickname(state, nickname) {
+    state.nickname = nickname
   }
 }
 const actions = {
@@ -38,6 +46,13 @@ const actions = {
   asyncSetMemberId({ commit, state }, id) {
     commit('memberId', id)
     updateLocalData(state)
+  },
+  asyncSetAvatar({ commit, state }, url) {
+    commit('headimgurl', url)
+  },
+  asyncSetNickname({ commit, state }, nickname) {
+    state.nickname = nickname
+    commit('nickname', nickname)
   }
 }
 const getters = {
@@ -49,6 +64,12 @@ const getters = {
   },
   getMemberId(state) {
     return state.memberId
+  },
+  getAvatar(state) {
+    return state.headimgurl
+  },
+  getNickname(state) {
+    return state.nickname
   }
 }
 const updateLocalData = (data) => {

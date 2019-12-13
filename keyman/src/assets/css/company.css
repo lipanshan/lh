@@ -1,84 +1,107 @@
-.hidden{
+.hidden {
     display: none;
 }
-.company{
+
+.company {
     width: 1240px;
     height: auto;
     background: #fff;
     margin: 40px auto;
 }
-.company>ul{
+
+.company>ul {
     height: 50px;
     width: 100%;
     background: #49444B;
     overflow: hidden;
 }
-.company>ul li{
+
+.company>ul li {
     width: 220px;
     height: 50px;
     line-height: 50px;
     text-align: center;
     float: left;
     color: #fff;
+    cursor: pointer;
 }
-.company>ul li.cur{
+
+.company>ul li.cur {
     background: #FE7271;
 }
-.company>.jb{
+
+.company>.jb {
     padding: 30px 70px;
 }
-.company>.jb>p:first-child{
+
+.company>.jb>p:first-child {
     font-size: 18px;
     line-height: 20px;
     margin-bottom: 9px;
     color: #24272E;
 }
-.company>.jb>p:nth-child(2){
+
+.company>.jb>p:nth-child(2) {
     font-size: 12px;
     line-height: 14px;
     color: #9FA3B0;
     margin-bottom: 18px;
 }
-.company>.jb>div{
+
+.company>.jb>div {
     height: 40px;
     width: 100%;
     margin-bottom: 14px;
 }
-.company>.jb>div>span{
+
+.company>.jb>div>span {
     float: left;
     line-height: 40px;
     font-size: 16px;
 }
-.company>.jb>div:nth-child(4){
+
+.company>.jb>div:nth-child(4) {
     height: 84px;
+    position: relative;
 }
-.company>.jb>div:nth-child(4)>img{
+
+.company>.jb>div:nth-child(4)>img {
     float: left;
     height: 84px;
     width: 84px;
     margin-left: 16px;
 }
 
+.company>.jb>div:nth-child(4)>input {
+    position: absolute;
+    top: 0;
+    left: 67px;
+    height: 84px;
+    width: 84px;
+    opacity: 0;
+}
 
-.company>.jb>div>span:nth-child(3){
-    padding-left:32px;
+.company>.jb>div>span:nth-child(3) {
+    padding-left: 32px;
     font-size: 14px;
     color: #FE7271;
     text-decoration: underline;
 }
-.company>.jb>div>span:nth-child(3):hover{
+
+.company>.jb>div>span:nth-child(3):hover {
     cursor: pointer;
 }
 
-.company>.jb>div>input{
-    border:1px solid #E3E7ED;
+.company>.jb>div>input, .company>.jb>div>select {
+    border: 1px solid #E3E7ED;
     float: left;
     height: 40px;
     width: 570px;
     margin-left: 16px;
+    cursor: pointer;
 }
 
-.company>.jb>.btn{
+.company>.jb>.btn {
     font-size: 14px;
     line-height: 40px;
     text-align: center;
@@ -87,36 +110,37 @@
     background: #FE7271;
     margin-left: 80px;
 }
-.company>.js{
+
+.company>.js {
     height: 358px;
     width: 100%;
     padding: 30px 70px;
 }
-.company>.js p:first-child,
-.company>.xc p:first-child,
-.company>.fl p:first-child{
+
+.company>.js p:first-child, .company>.xc p:first-child, .company>.fl p:first-child {
     font-size: 18px;
     line-height: 20px;
     margin-bottom: 9px;
     color: #24272E;
 }
-.company>.js p:nth-child(2),
-.company>.xc p:nth-child(2),
-.company>.fl p:nth-child(2){
+
+.company>.js p:nth-child(2), .company>.xc p:nth-child(2), .company>.fl p:nth-child(2) {
     font-size: 12px;
     line-height: 14px;
     color: #9FA3B0;
     margin-bottom: 18px;
 }
-.company>.js textarea{
+
+.company>.js textarea {
     height: 170px;
     width: 100%;
     resize: none;
     outline: none;
-    border:1px solid #E3E7ED;
+    border: 1px solid #E3E7ED;
     margin-bottom: 20px;
 }
-.company>.js div{
+
+.company>.js div {
     float: right;
     width: 100px;
     height: 40px;
@@ -124,33 +148,38 @@
     background: #FE7271;
     color: #fff;
     line-height: 40px;
+    cursor: pointer;
 }
 
-
-.company>.fl{
+.company>.fl {
     height: 462px;
     width: 100%;
     padding: 30px 70px;
 }
-.company>.fl>div{
+
+.company>.fl>div {
     height: 40px;
     width: 100%;
     margin-bottom: 14px;
 }
-.company>.fl>div span{
+
+.company>.fl>div span {
     line-height: 40px;
     font-size: 16px;
     margin-right: 16px;
     float: left;
 }
-.company>.fl>div input{
+
+.company>.fl>div input {
     height: 40px;
     border: 1px solid #E3E7ED;
     width: 400px;
     float: left;
     margin-right: 11px;
 }
-.company>.fl>div .btn{
+
+.company>.fl>div .btn {
+    cursor: pointer;
     font-size: 14px;
     height: 30px;
     width: 100px;
@@ -161,13 +190,15 @@
     color: #fff;
     float: left;
 }
-.company>.fl>div:nth-child(5){
+
+.company>.fl>div:nth-child(5) {
     height: 170px;
     width: 100%;
     padding: 18px 20px;
     border: 1px solid #E3E7ED;
 }
-.company>.fl>div:nth-child(5) span{
+
+.company>.fl>div:nth-child(5) span {
     padding: 0 20px;
     line-height: 30px;
     height: 30px;
@@ -175,8 +206,10 @@
     width: auto;
     color: #fff;
     border-radius: 15px;
+    cursor: pointer;
 }
-.company>.fl>.btn{
+
+.company>.fl>.btn {
     float: right;
     width: 100px;
     height: 40px;
@@ -184,36 +217,51 @@
     background: #FE7271;
     color: #fff;
     line-height: 40px;
+    cursor: pointer;
 }
-.company>.xc{
+
+.company>.xc {
     height: 522px;
     width: 100%;
     padding: 30px 27px;
+    position: relative;
 }
-.company>.xc img{
+
+.company>.xc>div>div {
     width: 270px;
     height: 167px;
     float: left;
     margin-right: 34px;
     margin-bottom: 30px;
+    position: relative;
 }
-.company>.xc img:nth-child(4),
-.company>.xc img:nth-child(8){
+
+.company>.xc>div img, .company>.xc>div input {
+    height: 100%;
+    width: 100%;
+}
+
+.company>.xc>div input {
+    position: absolute;
+    left: 0;
+    top: 0;
+    opacity: 0;
+    cursor: pointer;
+}
+
+.company>.xc img:nth-child(4), .company>.xc img:nth-child(8) {
     margin-right: 0;
 }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+.company>.xc .btn {
+    width: 100px;
+    height: 40px;
+    text-align: center;
+    background: #FE7271;
+    color: #fff;
+    line-height: 40px;
+    cursor: pointer;
+    position: absolute;
+    right: 70px;
+    bottom: 33px;
+}

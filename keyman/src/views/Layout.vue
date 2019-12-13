@@ -43,14 +43,21 @@ export default {
   filters: {
     filterName(n) {
       const nameMap = {
-        jobwant: '找工作',
-        serachremuse: '搜简历',
+        undefined: '搜简历',
         mydelivery: '我的投递',
         mypost: '我的职位',
-        myresume: '我的简历',
         jobchart: '职聊',
+        jobwantchart: '职聊',
         mypeoplebank: '我的人才库',
-        myaccount: '我的账户'
+        myaccount: '我的账户',
+        jobwant: '求职',
+        myliver: '我的投递',
+        myresume: '我的简历',
+        changstatus: '切换身份',
+        companyinfo: '公司资料',
+        getpost: '领取的职位',
+        searchpeople: '搜人才',
+        resumeInfo: '个人简历'
       }
       return nameMap[`${n}`]
     }
@@ -85,28 +92,56 @@ body {
             margin-right: 6px;
             width: 20px;
             height: 22px;
-            &.serachremuse {
-              background: url(../assets/img/my.png) no-repeat 0 0;
-              background-size: 18px 18px;
-            }
-            &.jobchart {
-              background: url(../assets/img/msg.png) no-repeat 0 0;
+            background: url(../assets/img/searchremuse.png) no-repeat center 0;
+            background-size: 16px 18px;
+            &.jobchart,
+            &.jobwantchart {
+              background: url(../assets/img/chart.png) no-repeat 0 0;
               background-size: 18px 18px;
             }
             &.mypost {
-              background: url(../assets/img/email2.png) no-repeat 0 0;
-              background-size: 18px 18px;
-            }
-            &.mypeoplebank {
-              background: url(../assets/img/note.png) no-repeat 0 0;
+              background: url(../assets/img/mypost.png) no-repeat center center;
               background-size: 18px 18px;
             }
             &.myaccount {
-              background: url(../assets/img/account.png) no-repeat 0 0;
+              background: url(../assets/img/myaccount.png) no-repeat center
+                center;
+              background-size: 16px 16px;
+            }
+            &.mypeoplebank {
+              background: url(../assets/img/mypeoplebank.png) no-repeat center
+                center;
               background-size: 18px 18px;
             }
+            &.jobwant {
+              background: url(../assets/img/my.png) no-repeat 0 0;
+              background-size: 18px 18px;
+            }
+            &.myliver,
+            &.mydelivery {
+              background: url(../assets/img/email2.png) no-repeat center center;
+              background-size: 18px 18px;
+            }
+            &.myresume {
+              // background: url(../assets/img/myresume.png) no-repeat 0 0;
+              // background-size: 18px 18px;
+            }
             &.changstatus {
-              background: url(../assets/img/tab.png) no-repeat 0 0;
+              background: url(../assets/img/change_status.png) no-repeat 0 0;
+              background-size: 18px 18px;
+            }
+            &.companyinfo {
+              background: url(../assets/img/company_info.png) no-repeat center
+                center;
+              background-size: 18px 18px;
+            }
+            &.getpost {
+              background: url(../assets/img/getpost.png) no-repeat center center;
+              background-size: 18px 18px;
+            }
+            &.searchpeople {
+              background: url(../assets/img/searchpeople.png) no-repeat center
+                center;
               background-size: 18px 18px;
             }
           }
