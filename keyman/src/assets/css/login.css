@@ -109,16 +109,24 @@
     top: 0;
     left: 0;
 } */
-#app .verify-wrap .drag-btn {
-  height: 50px;
+#app .verify-wrap .verify-move-block {
+  margin-top: -1px;
+  margin-left: -1px;
+  height: 46px;
   width: 120px;
   background-size: 22px 22px;
   background: #fff no-repeat;
   background-image: url('../img/slide.png');
   background-position: center;
-  border: 1px solid #CCCCCC;
+  /* border: none; */
+  box-shadow: 0 0 0 ;
 }
-
+#app .verify-wrap .verify-move-block > i {
+  display: none;
+}
+.verify-wrap .drag-btn {
+  height: 50px;
+}
 #app .verify-wrap .drag-progress {
   height: 50px;
 }

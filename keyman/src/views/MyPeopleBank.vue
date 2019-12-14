@@ -14,11 +14,7 @@
             children: 'data_list'
           }"
           ></el-cascader>
-          <!-- <el-select >
-            <el-option label="北京" value="1"></el-option>
-            <el-option label="天津" value="2"></el-option>
-          </el-select>-->
-          <span slot="append" class="search-btn">搜索</span>
+          <span slot="append" class="search-btn" @click="onSearch">搜索</span>
         </el-input>
       </div>
       <div class="row1">
@@ -460,6 +456,7 @@ export default {
         number: PAGE_NUMBER,
         page: currentPage
       }).then(res => {
+        console.log(res)
         if (res.code === 200) {
           this.peopleList = res.data
           this.peopleListPagination.allCount = res.pagelist.count_num
@@ -496,6 +493,9 @@ export default {
           resumeId: data.resume_id
         }
       })
+    },
+    onSearch() {
+
     }
   },
   filters: {

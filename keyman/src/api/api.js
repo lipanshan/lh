@@ -285,3 +285,43 @@ export function getUserResume(data) {
     return Promise.resolve(JSON.parse(res))
   })
 }
+
+//上传个人简历-个人信息
+
+const UPLOAD_RESUME_INFO_URL = 'api/apidate/resume_message'
+
+export function uploadResumeInfo(data) {
+  return axios.post(UPLOAD_RESUME_INFO_URL, data).then((res) => {
+    return Promise.resolve(JSON.parse(res))
+  })
+}
+
+//上传个人简历-工作经历
+
+const UPLOAD_RESUME_EXPER_URL = 'api/apidate/job_experience'
+
+export function uploadResumeExper(data) {
+  return axios.post(UPLOAD_RESUME_EXPER_URL, data).then((res) => {
+    return Promise.resolve(JSON.parse(res))
+  })
+}
+
+//上传个人简历-教育经历
+
+const UPLOAD_RESUME_EDU_URL = 'api/apidate/study_experience'
+
+export function uploadResumeEdu(data) {
+  return axios.post(UPLOAD_RESUME_EDU_URL, data).then((res) => {
+    return Promise.resolve(JSON.parse(res))
+  })
+}
+
+//上传个人简历-教育经历
+
+const UPLOAD_RESUME_PROJECT_URL = 'api/apidate/project_experience'
+
+export function uploadResumeProject(data) {
+  return axios.post(UPLOAD_RESUME_PROJECT_URL, data).then((res) => {
+    return Promise.resolve(JSON.parse(res))
+  })
+}

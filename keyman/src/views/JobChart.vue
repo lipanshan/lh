@@ -10,7 +10,7 @@
         <div class="nav-item">推荐</div>
       </nav>
       <div class="label-btns">
-        <span class="upload-resume">上传简历</span>
+        <router-link to="/user/uploadresume" tag="span" class="upload-resume">上传简历</router-link>
         <span class="upload-people">我上传的候选人</span>
         <span class="set-top">标记置顶</span>
         <span class="inconformity">不符合</span>

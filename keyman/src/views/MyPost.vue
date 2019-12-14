@@ -83,7 +83,7 @@
             </div>
             <div class="btns-group">
               <p class="txt">全部人选({{item.sc_num}})</p>
-              <div class="upload-resume">上传简历</div>
+              <div class="upload-resume" @click="onToResume(item)">上传简历</div>
             </div>
           </div>
           <div class="time">
@@ -1109,6 +1109,14 @@ export default {
         this.tipsModel.message = res.message
         if (res.code === 200) {
           this.initPostList(this.currentPageNum)
+        }
+      })
+    },
+    onToResume(data) {
+      this.$router.push({
+        path: '/user/uploadresume',
+        query: {
+          resume_id: data.resume_id
         }
       })
     }

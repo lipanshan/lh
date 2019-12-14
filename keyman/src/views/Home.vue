@@ -25,8 +25,7 @@ export default {
 </script>
 
 <style lang="scss">
-@import '../assets/css/index.css';
 .router-link-exact-active {
-  color: #F06358 !important;
+  color: #f06358 !important;
 }
 </style>

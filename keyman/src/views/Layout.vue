@@ -57,7 +57,8 @@ export default {
         companyinfo: '公司资料',
         getpost: '领取的职位',
         searchpeople: '搜人才',
-        resumeInfo: '个人简历'
+        resumeInfo: '个人简历',
+        uploadresume: '上传简历'
       }
       return nameMap[`${n}`]
     }

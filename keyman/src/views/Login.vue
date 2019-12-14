@@ -2,10 +2,10 @@
   <div class="window">
     <p>欢迎登录</p>
     <ul>
-      <li @click="tab_page" class="cur">短信注册/登陆</li>
-      <li @click="tab_page">扫码登陆</li>
+      <li @click="tab_page('one')" :class="{'cur': tag === 'one'}">短信注册/登陆</li>
+      <li @click="tab_page('two')" :class="{'cur': tag === 'two'}">扫码登陆</li>
     </ul>
-    <div class="one">
+    <div v-show="tag === 'one'" class="one">
       <div>
         <img src="../assets/img/mobile2.png" alt />
         <input type="text" maxlength="11" v-model="phone" />
@@ -26,11 +26,11 @@
         <input v-model="registerProtocol" type="checkbox" />
         <span>
           我已同意并同意相关服务条款和隐私
-          <a href="#">《注册协议》</a>
+          <router-link target="_blank" to="/registerintro">《注册协议》</router-link>
         </span>
       </p>
     </div>
-    <div class="two hidden">
+    <div v-show="tag === 'two'" class="two">
       <p>打开微信，扫一扫</p>
       <img src="../assets/img/wechat2code.png" alt />
     </div>
@@ -1170,7 +1170,8 @@ export default {
             message: ''
           }
         ]
-      }
+      },
+      tag: 'one'
     }
   },
   computed: {
@@ -1197,19 +1198,8 @@ export default {
     })
   },
   methods: {
-    tab_page: function(e) {
-      var index = $(e.target).index()
-      $(e.target)
-        .addClass('cur')
-        .siblings()
-        .removeClass('cur')
-      if (index == 0) {
-        $('.one').show()
-        $('.two').hide()
-      } else if (index == 1) {
-        $('.two').show()
-        $('.one').hide()
-      }
+    tab_page: function(tag) {
+      this.tag = tag
     },
     sendMsg() {
       if (this.sendMsgFlag) {
@@ -1379,7 +1369,7 @@ export default {
           registerJobseeUser(this.resigerJobSee).then(res => {
             if (res.code === 200) {
               this.syncSetUsetType('1')
-              this.$router.replace('/user')
+              this.$router.replace('/user/jobwant')
             } else {
               this.$message.error(res.message)
             }
@@ -1478,7 +1468,9 @@ export default {
           const list = this.registerHHData.city
           this.registerHHData.city = list[list.length - 1]
           //对职业行业数据特殊处理
-          this.registerHHData.zy_industry = this.registerHHData.zy_industry.join(',')
+          this.registerHHData.zy_industry = this.registerHHData.zy_industry.join(
+            ','
+          )
           registerHHUser(this.registerHHData).then(res => {
             if (res.code === 200) {
               this.syncSetUsetType('3')

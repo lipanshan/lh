@@ -61,6 +61,21 @@ const routes = [
     }
   },
   {
+    path: '/registerintro',
+    name: 'registerintro',
+    component: () => import('@/views/UserRegisterIntro')
+  },
+  {
+    path: '/registerintro2',
+    name: 'registerintro2',
+    component: () => import('@/views/UserRegisterHrIntro')
+  },
+  {
+    path: '/registerintro3',
+    name: 'registerintro3',
+    component: () => import('@/views/UserRegisterPostIntro')
+  },
+  {
     path: '/user',
     component: () => import('@/views/Layout'),
     children: [
@@ -95,8 +110,12 @@ const routes = [
         name: 'resumeInfo',
         component: () => import('@/views/ResumeInfo')
       },
-      // hr
       {
+        path: 'uploadresume',
+        name: 'uploadresume',
+        component: () => import('@/views/UploadResume')
+      },
+      { // hr
         path: 'companyinfo',
         name: 'companyinfo',
         component: () => import('@/views/CompanyInfo')

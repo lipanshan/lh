@@ -17,7 +17,7 @@
               <ul>
                 <li style="float: left;" v-for="(x, index) in hotWork" :key="index">{{x.class_name}}</li>
               </ul>
-              <div>查看更多兼职></div>
+              <div @click="jump_j">查看更多兼职></div>
             </div>
           </div>
           <div>
@@ -44,8 +44,7 @@
               <ul>
                 <li style="float: left;" v-for="(x, index) in hotWork" :key="index">{{x.class_name}}</li>
               </ul>
-              <router-link to="/" tag="div">查看更多兼职></router-link>
-              <div @click="jump_j">></div>
+              <div @click="jump_q">查看更多全职></div>
             </div>
           </div>
           <div>
@@ -161,23 +160,15 @@ export default {
     })
   },
   methods: {
-    jump_j: function() {
-      window.location.href = 'page/part.html'
+    jump_j() {
+      this.$router.push({
+        path: '/parttime'
+      })
     },
-    jump_q: function() {
-      window.location.href = 'page/allTime.html'
-    },
-    login: function(e) {
-      window.location.href = 'page/login/login.html'
-    },
-    jump_lt: function(e) {
-      window.location.href = 'page/headhunting.html'
-    },
-    jump_app: function(e) {
-      window.location.href = 'page/download.html'
-    },
-    jump_news: function(e) {
-      window.location.href = 'page/news.html'
+    jump_q() {
+      this.$router.push({
+        path: '/fulltime'
+      })
     }
   },
   filters: {
@@ -226,4 +217,288 @@ export default {
 </script>
 
 <style>
+.banner {
+  height: 32.65vw;
+  width: 100%;
+  background: url('../assets/img/banner.png') no-repeat;
+  background-size: 100% 100%;
+  overflow: hidden;
+}
+
+.banner .slogen {
+  margin: 11.8vw auto 0;
+  font-size: 70px;
+  color: #fff;
+  text-align: center;
+}
+
+.banner .seach {
+  width: 850px;
+  height: 70px;
+  margin: 79px auto 0;
+}
+
+.banner .seach input {
+  width: 708px;
+  float: left;
+  height: 70px;
+  background: #fff;
+  border: none;
+  box-sizing: border-box;
+  font-size: 20px;
+  padding-left: 27px;
+}
+
+.banner .seach .confirm {
+  width: 140px;
+  background: #f06358;
+  text-align: center;
+  line-height: 70px;
+  height: 70px;
+  font-size: 20px;
+  color: #fff;
+  float: left;
+  cursor: pointer;
+}
+
+.main {
+  width: 100%;
+  height: auto;
+  background: #f3f5f6;
+  overflow: hidden;
+  padding-top: 43px;
+}
+
+.main-box {
+  width: 1462px;
+  height: auto;
+  margin: 0 auto;
+}
+
+.main-box > .part-time {
+  height: auto;
+  width: 100%;
+  background: #fff;
+}
+
+.main-box > .part-time > div {
+  height: 136px;
+  width: 100%;
+}
+
+.main-box > .part-time > div:first-child {
+  padding: 30px 30px 21px;
+  border: 1px solid #ebebeb;
+}
+
+.main-box > .part-time > div:first-child > p:first-child {
+  font-size: 42px;
+  line-height: 42px;
+}
+
+.main-box > .part-time > div:first-child > div:nth-child(2) {
+  height: 20px;
+  width: 100%;
+  margin-top: 27px;
+}
+
+.main-box > .part-time > div:first-child > div:nth-child(2) > div:first-child {
+  font-size: 20px;
+  color: #f06358;
+  float: left;
+  margin-right: 68px;
+}
+
+.main-box > .part-time > div:first-child > div:nth-child(2) > ul {
+  float: left;
+}
+
+.main-box > .part-time > div:first-child > div:nth-child(2) > ul > li {
+  font-size: 20px;
+  color: #afb4b6;
+  margin-right: 10px;
+}
+
+.main-box > .part-time > div:first-child > div:nth-child(2) > div:nth-child(3) {
+  float: right;
+  color: #fd877d;
+  cursor: pointer;
+}
+
+.main-box > .part-time > div:nth-child(2) {
+  border-bottom: 1px solid #ebebeb;
+}
+
+.main-box > .part-time > div:nth-child(2) > div,
+.main-box > .part-time > div:nth-child(3) > div {
+  float: left;
+  width: 33.33%;
+  border-right: 1px solid #ebebeb;
+  height: 100%;
+  padding: 10px 0;
+}
+
+.main-box > .part-time > div:nth-child(2) > div:hover,
+.main-box > .part-time > div:nth-child(3) > div:hover {
+  cursor: pointer;
+  box-shadow: 0 0 5px rgba(60, 61, 62, 0.3);
+}
+
+.main-box > .part-time > div:nth-child(2) > div:last-child,
+.main-box > .part-time > div:nth-child(3) > div:last-child {
+  border: none;
+}
+
+.main-box > .part-time > div:nth-child(2) > div > p,
+.main-box > .part-time > div:nth-child(3) > div > p {
+  height: 38px;
+  width: 100%;
+  line-height: 45px;
+  padding: 0 27px;
+}
+
+.main-box > .part-time > div:nth-child(2) > div > p:first-child,
+.main-box > .part-time > div:nth-child(3) > div > p:first-child {
+  font-size: 24px;
+}
+
+.main-box
+  > .part-time
+  > div:nth-child(2)
+  > div
+  > p:first-child
+  > span:nth-child(2),
+.main-box
+  > .part-time
+  > div:nth-child(2)
+  > div
+  > p:first-child
+  > span:nth-child(3),
+.main-box
+  > .part-time
+  > div:nth-child(3)
+  > div
+  > p:first-child
+  > span:nth-child(2),
+.main-box
+  > .part-time
+  > div:nth-child(3)
+  > div
+  > p:first-child
+  > span:nth-child(3) {
+  color: #fd877d;
+  float: right;
+}
+
+.main-box
+  > .part-time
+  > div:nth-child(2)
+  > div:hover
+  > p:first-child
+  > span:nth-child(2),
+.main-box
+  > .part-time
+  > div:nth-child(2)
+  > div:hover
+  > p:first-child
+  > span:nth-child(3),
+.main-box
+  > .part-time
+  > div:nth-child(3)
+  > div:hover
+  > p:first-child
+  > span:nth-child(2),
+.main-box
+  > .part-time
+  > div:nth-child(3)
+  > div:hover
+  > p:first-child
+  > span:nth-child(3) {
+  font-weight: 700;
+}
+
+.main-box
+  > .part-time
+  > div:nth-child(2)
+  > div
+  > p:first-child
+  > span:nth-child(2),
+.main-box
+  > .part-time
+  > div:nth-child(3)
+  > div
+  > p:first-child
+  > span:nth-child(2) {
+  font-size: 15px;
+  margin-left: 10px;
+}
+
+.main-box > .part-time > div:nth-child(2) > div > p:nth-child(2) span,
+.main-box > .part-time > div:nth-child(2) > div > p:nth-child(3) span,
+.main-box > .part-time > div:nth-child(2) > div p,
+.main-box > .part-time > div:nth-child(3) > div > p:nth-child(2) span,
+.main-box > .part-time > div:nth-child(3) > div > p:nth-child(3) span,
+.main-box > .part-time > div:nth-child(3) > div p {
+  font-size: 18px;
+  color: #afb4b6;
+}
+
+.main-box
+  > .all-time
+  > div:nth-child(2)
+  > div
+  > p:first-child
+  > span:nth-child(2),
+.main-box
+  > .all-time
+  > div:nth-child(3)
+  > div
+  > p:first-child
+  > span:nth-child(2) {
+  font-size: 24px;
+}
+
+.all-time {
+  margin-top: 42px;
+  margin-bottom: 34px;
+}
+
+.advert {
+  width: 100%;
+  height: auto;
+  background: #f3f5f6;
+  margin-bottom: 10px;
+}
+.advert-box {
+  margin: 0 auto;
+  width: 1462px;
+  height: auto;
+  overflow: hidden;
+}
+.advert-box > img {
+  float: left;
+  margin: 1px;
+}
+.advert-box > img:first-child {
+  width: 973px;
+  height: 422px;
+}
+.advert-box > img:nth-child(2) {
+  height: 485px;
+  height: 422px;
+}
+.advert-box > img:nth-child(3) {
+  height: 973px;
+  height: 209px;
+}
+.advert-box > img:nth-child(4) {
+  height: 485px;
+  height: 209px;
+}
+.advert-box > img:nth-child(5),
+.advert-box > img:nth-child(5),
+.advert-box > img:nth-child(5) {
+  height: 485px;
+  height: 209px;
+}
 </style>
