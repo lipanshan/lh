@@ -60,8 +60,8 @@ export default {
   min-width: 1280px;
   background: #fff;
   .footer-box {
-    padding-left: 107px;
-    padding-right: 107px;
+    margin: 0 auto;
+    width: 1280px;
     text-align: left;
     & > p {
       display: flex;

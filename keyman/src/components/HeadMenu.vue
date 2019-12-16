@@ -102,6 +102,7 @@ export default {
           font-size: 16px;
           line-height: 26px;
           color: #fff;
+          cursor: pointer;
           &.current-address {
             color: #f06358;
             margin-left: 4px;
@@ -152,6 +153,7 @@ export default {
           line-height: 60px;
           color: #fff;
           text-align: center;
+          cursor: pointer;
         }
       }
     }

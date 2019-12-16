@@ -325,3 +325,13 @@ export function uploadResumeProject(data) {
     return Promise.resolve(JSON.parse(res))
   })
 }
+
+// 首页搜索、全职搜索 
+
+const HOME_PAGE_SERARCH_URL = 'api/apidate/all_job_list'
+
+export function searchAllJob(data) {
+  return axios.post(HOME_PAGE_SERARCH_URL, data).then((res) => {
+    return Promise.resolve(JSON.parse(res))
+  })
+}
