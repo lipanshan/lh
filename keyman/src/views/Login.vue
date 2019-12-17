@@ -1,304 +1,620 @@
 <template>
-  <div class="window">
-    <p>欢迎登录</p>
-    <ul>
-      <li @click="tab_page('one')" :class="{'cur': tag === 'one'}">短信注册/登陆</li>
-      <li @click="tab_page('two')" :class="{'cur': tag === 'two'}">扫码登陆</li>
-    </ul>
-    <div v-show="tag === 'one'" class="one">
-      <div>
-        <img src="../assets/img/mobile2.png" alt />
-        <input type="text" maxlength="11" v-model="phone" />
+  <div class="login-wrap">
+    <div class="window">
+      <p>欢迎登录</p>
+      <ul>
+        <li @click="tab_page('one')" :class="{'cur': tag === 'one'}">短信注册/登陆</li>
+        <li @click="tab_page('two')" :class="{'cur': tag === 'two'}">扫码登陆</li>
+      </ul>
+      <div v-show="tag === 'one'" class="one">
+        <div>
+          <img src="../assets/img/mobile2.png" alt />
+          <input type="text" maxlength="11" v-model="phone" />
+        </div>
+        <div class="verify-wrap" id="verify-wrap"></div>
+        <div class="vcode-wrap">
+          <img src="../assets/img/safe.png" alt />
+          <input type="text" maxlength="6" v-model="code" />
+          <div @click="sendMsg" class="get-vcode">获取验证码</div>
+          <p v-show="errMessage" class="error-message">{{errMessage}}</p>
+          <p
+            v-show="sendMsgSuccessTips && !errMessage"
+            class="error-message success-color"
+          >{{sendMsgSuccessTips}}</p>
+        </div>
+        <div class="login-btn" @click="onLogin">登录/注册</div>
+        <p>
+          <input v-model="registerProtocol" type="checkbox" />
+          <span>
+            我已同意并同意相关服务条款和隐私
+            <router-link target="_blank" to="/registerintro">《注册协议》</router-link>
+          </span>
+        </p>
       </div>
-      <div class="verify-wrap" id="verify-wrap"></div>
-      <div class="vcode-wrap">
-        <img src="../assets/img/safe.png" alt />
-        <input type="text" maxlength="6" v-model="code" />
-        <div @click="sendMsg" class="get-vcode">获取验证码</div>
-        <p v-show="errMessage" class="error-message">{{errMessage}}</p>
-        <p
-          v-show="sendMsgSuccessTips && !errMessage"
-          class="error-message success-color"
-        >{{sendMsgSuccessTips}}</p>
+      <div v-show="tag === 'two'" class="two">
+        <p>打开微信，扫一扫</p>
+        <img src="../assets/img/wechat2code.png" alt />
       </div>
-      <div class="login-btn" @click="onLogin">登录/注册</div>
-      <p>
-        <input v-model="registerProtocol" type="checkbox" />
-        <span>
-          我已同意并同意相关服务条款和隐私
-          <router-link target="_blank" to="/registerintro">《注册协议》</router-link>
-        </span>
-      </p>
-    </div>
-    <div v-show="tag === 'two'" class="two">
-      <p>打开微信，扫一扫</p>
-      <img src="../assets/img/wechat2code.png" alt />
-    </div>
-    <!-- 选择用户注册类型 -->
-    <el-dialog :modal-append-to-body="false" width="410px" :visible.sync="resiger">
-      <div class="register">
-        <div class="title">请选择您的身份</div>
-        <ul class="list">
-          <li class="item" @click="onSelectUserType('1')">
-            <div class="avatar">
-              <img src="../assets/img/user_type1@2x.png" alt />
-            </div>
-            <div class="info">我要找工作</div>
-          </li>
-          <li class="item" @click="onSelectUserType('2')">
-            <div class="avatar">
-              <img src="../assets/img/user_type2@2x.png" alt />
-            </div>
-            <div class="info">我是HR</div>
-          </li>
-          <li class="item" @click="onSelectUserType('3')">
-            <div class="avatar">
-              <img src="../assets/img/user_type3@2x.png" alt />
-            </div>
-            <div class="info">我是猎头</div>
-          </li>
-        </ul>
-      </div>
-    </el-dialog>
-    <!-- 注册HR -->
-    <el-dialog
-      :modal-append-to-body="false"
-      width="460px"
-      :visible.sync="resigerHr"
-      class="register-model"
-    >
-      <el-form
-        :model="registerHRData"
-        :rules="registerHRDataRules"
-        ref="registerHRWrap"
-        class="resiger-hr"
+      <!-- 选择用户注册类型 -->
+      <el-dialog :modal-append-to-body="false" width="410px" :visible.sync="resiger">
+        <div class="register">
+          <div class="title">请选择您的身份</div>
+          <ul class="list">
+            <li class="item" @click="onSelectUserType('1')">
+              <div class="avatar">
+                <img src="../assets/img/user_type1@2x.png" alt />
+              </div>
+              <div class="info">我要找工作</div>
+            </li>
+            <li class="item" @click="onSelectUserType('2')">
+              <div class="avatar">
+                <img src="../assets/img/user_type2@2x.png" alt />
+              </div>
+              <div class="info">我是HR</div>
+            </li>
+            <li class="item" @click="onSelectUserType('3')">
+              <div class="avatar">
+                <img src="../assets/img/user_type3@2x.png" alt />
+              </div>
+              <div class="info">我是猎头</div>
+            </li>
+          </ul>
+        </div>
+      </el-dialog>
+      <!-- 注册HR -->
+      <el-dialog
+        :modal-append-to-body="false"
+        width="460px"
+        :visible.sync="resigerHr"
+        class="register-model"
       >
-        <div class="step1" v-show="registerStep === 'step1'">
-          <div class="head">
-            <div class="icon"></div>
-            <div class="info">
-              <p class="title">您的基本信息</p>
-              <p class="subtitle">完善基本信息后会遇到更多对你感兴趣的HR\猎头</p>
+        <el-form
+          :model="registerHRData"
+          :rules="registerHRDataRules"
+          ref="registerHRWrap"
+          class="resiger-hr"
+        >
+          <div class="step1" v-show="registerStep === 'step1'">
+            <div class="head">
+              <div class="icon"></div>
+              <div class="info">
+                <p class="title">您的基本信息</p>
+                <p class="subtitle">完善基本信息后会遇到更多对你感兴趣的HR\猎头</p>
+              </div>
             </div>
-          </div>
-          <div class="body">
-            <div class="top">
-              <div class="left">
-                <el-form-item prop="nickname">
-                  <el-input v-model="registerHRData.nickname" placeholder="*姓名"></el-input>
-                </el-form-item>
-                <el-form-item prop="sex">
-                  <el-radio-group v-model="registerHRData.sex">
-                    <el-radio label="1">男</el-radio>
-                    <el-radio label="2">女</el-radio>
-                  </el-radio-group>
-                </el-form-item>
+            <div class="body">
+              <div class="top">
+                <div class="left">
+                  <el-form-item prop="nickname">
+                    <el-input v-model="registerHRData.nickname" placeholder="*姓名"></el-input>
+                  </el-form-item>
+                  <el-form-item prop="sex">
+                    <el-radio-group v-model="registerHRData.sex">
+                      <el-radio label="1">男</el-radio>
+                      <el-radio label="2">女</el-radio>
+                    </el-radio-group>
+                  </el-form-item>
 
-                <el-form-item prop="email">
-                  <el-input v-model="registerHRData.email" placeholder="*工作邮箱"></el-input>
-                </el-form-item>
-              </div>
-              <div class="right">
-                <el-upload action="#" :before-upload="onBeforeUploadHeadimgurl1">
-                  <div class="img">
-                    <img :src="headimgurl1" alt />
-                  </div>
-                  <div class="upload-btns">*上传</div>
-                </el-upload>
-              </div>
-            </div>
-            <div class="next-btn-wrap">
-              <div class="next-btn" @click="onNextStep('step2')">下一步</div>
-            </div>
-          </div>
-        </div>
-        <div v-show="registerStep === 'step2'" class="step2">
-          <div class="head">
-            <div class="icon"></div>
-            <div class="info">
-              <p class="title">创建公司信息</p>
-              <p class="subtitle">向大家介绍一下自己吧</p>
-            </div>
-          </div>
-          <div class="body">
-            <el-form-item prop="company_name">
-              <el-input v-model="registerHRData.company_name" placeholder="*完整公司名称"></el-input>
-            </el-form-item>
-            <div class="top img-box-wrap">
-              <div class="right">
-                <el-upload action="#" :before-upload="onBeforeUploadheadimgurl2">
-                  <div class="img">
-                    <img :src="headimgurl2" alt />
-                  </div>
-                  <div class="upload-btns">*上传公司logo</div>
-                  <p class="tips">200K以内</p>
-                </el-upload>
-              </div>
-              <div class="right">
-                <el-upload action="#" :before-upload="onBeforeUploadheadimgurl3">
-                  <div class="img">
-                    <img :src="headimgurl3" alt />
-                  </div>
-                  <div class="upload-btns">*上传营业执照</div>
-                  <p class="tips">500K以内</p>
-                </el-upload>
-              </div>
-            </div>
-            <el-form-item prop="institution">
-              <el-input v-model="registerHRData.institution" placeholder="*营业执照编号和组织机构代码"></el-input>
-            </el-form-item>
-            <div class="box">
-              <div class="left2">
-                <el-form-item prop="company_short_name">
-                  <el-input v-model="registerHRData.company_short_name" placeholder="*公司简称"></el-input>
-                </el-form-item>
-              </div>
-              <div class="right2">
-                <el-form-item prop="employee_num">
-                  <el-select v-model="registerHRData.employee_num" placeholder="*选择人员规模">
-                    <el-option label="0-20人" value="1"></el-option>
-                    <el-option label="20-99人" value="2"></el-option>
-                    <el-option label="100-499人" value="3"></el-option>
-                    <el-option label="500-999人" value="4"></el-option>
-                    <el-option label="1000-9999人" value="5"></el-option>
-                    <el-option label="10000以上" value="6"></el-option>
-                  </el-select>
-                </el-form-item>
-              </div>
-            </div>
-            <div class="half-box">
-              <div class="half">
-                <el-form-item prop="industry">
-                  <el-select v-model="registerHRData.industry" placeholder="*选择公司行业">
-                    <el-option
-                      v-for="item in industryList"
-                      :label="item.name"
-                      :value="item.id"
-                      :key="item.id"
-                    ></el-option>
-                  </el-select>
-                </el-form-item>
-              </div>
-              <div class="half">
-                <el-form-item prop="position">
-                  <el-select v-model="registerHRData.position" placeholder="*选择担任职位">
-                    <el-option
-                      v-for="item in postList"
-                      :value="item.c_id"
-                      :key="item.c_id"
-                      :label="item.class_name"
-                    ></el-option>
-                  </el-select>
-                </el-form-item>
-              </div>
-            </div>
-            <div class="next-btn-wrap2">
-              <div class="cancel-btn" @click="onPrevStep('step1')">上一步</div>
-              <div class="next-btn" @click="onNextStep('step3')">下一步</div>
-            </div>
-          </div>
-        </div>
-        <div class="step3" v-show="registerStep === 'step3'">
-          <div class="head">
-            <div class="icon"></div>
-            <div class="info">
-              <p class="title">在职证明</p>
-              <p class="subtitle">向大家介绍一下自己吧</p>
-            </div>
-          </div>
-          <div class="body">
-            <div class="box">
-              <p class="txt">有效工作证明为以下任意一种</p>
-              <p class="txt">1.名片，且带有公司全称及姓名</p>
-              <p class="txt">2.工作证，且带有公司全称及姓名</p>
-              <p class="txt">3.工作证明，且带有公司全称、姓名及公章</p>
-              <div class="wrap">
-                <!-- <div class="download">下载工作证明范本</div> -->
-                <div class="upload-wrap">
-                  <el-upload action="#" :before-upload="onBeforeUploadheadimgurl4">
-                    <div class="upload-img-wrap">
-                      <img :src="headimgurl4" alt />
+                  <el-form-item prop="email">
+                    <el-input v-model="registerHRData.email" placeholder="*工作邮箱"></el-input>
+                  </el-form-item>
+                </div>
+                <div class="right">
+                  <el-upload action="#" :before-upload="onBeforeUploadHeadimgurl1">
+                    <div class="img">
+                      <img :src="headimgurl1" alt />
                     </div>
-                    <div class="upload-btns">上传工作证明</div>
+                    <div class="upload-btns">*上传</div>
                   </el-upload>
                 </div>
               </div>
-            </div>
-            <div class="bottom-btns-wrap">
-              <div class="prev-btn" @click="onPrevStep('step2')">上一步</div>
-              <div class="end-btn" @click="onCertificationHR">开始实名认证</div>
+              <div class="next-btn-wrap">
+                <div class="next-btn" @click="onNextStep('step2')">下一步</div>
+              </div>
             </div>
           </div>
-        </div>
-      </el-form>
-    </el-dialog>
-    <!-- 注册猎头 -->
-    <el-dialog
-      :modal-append-to-body="false"
-      width="460px"
-      :visible.sync="resigerHeadhunt"
-      class="register-model"
-    >
-      <el-form
-        :model="registerHHData"
-        :rules="registerHHDataRules"
-        ref="registerHHWrap"
-        class="resiger-headhunt"
+          <div v-show="registerStep === 'step2'" class="step2">
+            <div class="head">
+              <div class="icon"></div>
+              <div class="info">
+                <p class="title">创建公司信息</p>
+                <p class="subtitle">向大家介绍一下自己吧</p>
+              </div>
+            </div>
+            <div class="body">
+              <el-form-item prop="company_name">
+                <el-input v-model="registerHRData.company_name" placeholder="*完整公司名称"></el-input>
+              </el-form-item>
+              <div class="top img-box-wrap">
+                <div class="right">
+                  <el-upload action="#" :before-upload="onBeforeUploadheadimgurl2">
+                    <div class="img">
+                      <img :src="headimgurl2" alt />
+                    </div>
+                    <div class="upload-btns">*上传公司logo</div>
+                    <p class="tips">200K以内</p>
+                  </el-upload>
+                </div>
+                <div class="right">
+                  <el-upload action="#" :before-upload="onBeforeUploadheadimgurl3">
+                    <div class="img">
+                      <img :src="headimgurl3" alt />
+                    </div>
+                    <div class="upload-btns">*上传营业执照</div>
+                    <p class="tips">500K以内</p>
+                  </el-upload>
+                </div>
+              </div>
+              <el-form-item prop="institution">
+                <el-input v-model="registerHRData.institution" placeholder="*营业执照编号和组织机构代码"></el-input>
+              </el-form-item>
+              <div class="box">
+                <div class="left2">
+                  <el-form-item prop="company_short_name">
+                    <el-input v-model="registerHRData.company_short_name" placeholder="*公司简称"></el-input>
+                  </el-form-item>
+                </div>
+                <div class="right2">
+                  <el-form-item prop="employee_num">
+                    <el-select v-model="registerHRData.employee_num" placeholder="*选择人员规模">
+                      <el-option label="0-20人" value="1"></el-option>
+                      <el-option label="20-99人" value="2"></el-option>
+                      <el-option label="100-499人" value="3"></el-option>
+                      <el-option label="500-999人" value="4"></el-option>
+                      <el-option label="1000-9999人" value="5"></el-option>
+                      <el-option label="10000以上" value="6"></el-option>
+                    </el-select>
+                  </el-form-item>
+                </div>
+              </div>
+              <div class="half-box">
+                <div class="half">
+                  <el-form-item prop="industry">
+                    <el-select v-model="registerHRData.industry" placeholder="*选择公司行业">
+                      <el-option
+                        v-for="item in industryList"
+                        :label="item.name"
+                        :value="item.id"
+                        :key="item.id"
+                      ></el-option>
+                    </el-select>
+                  </el-form-item>
+                </div>
+                <div class="half">
+                  <el-form-item prop="position">
+                    <el-select v-model="registerHRData.position" placeholder="*选择担任职位">
+                      <el-option
+                        v-for="item in postList"
+                        :value="item.c_id"
+                        :key="item.c_id"
+                        :label="item.class_name"
+                      ></el-option>
+                    </el-select>
+                  </el-form-item>
+                </div>
+              </div>
+              <div class="next-btn-wrap2">
+                <div class="cancel-btn" @click="onPrevStep('step1')">上一步</div>
+                <div class="next-btn" @click="onNextStep('step3')">下一步</div>
+              </div>
+            </div>
+          </div>
+          <div class="step3" v-show="registerStep === 'step3'">
+            <div class="head">
+              <div class="icon"></div>
+              <div class="info">
+                <p class="title">在职证明</p>
+                <p class="subtitle">向大家介绍一下自己吧</p>
+              </div>
+            </div>
+            <div class="body">
+              <div class="box">
+                <p class="txt">有效工作证明为以下任意一种</p>
+                <p class="txt">1.名片，且带有公司全称及姓名</p>
+                <p class="txt">2.工作证，且带有公司全称及姓名</p>
+                <p class="txt">3.工作证明，且带有公司全称、姓名及公章</p>
+                <div class="wrap">
+                  <!-- <div class="download">下载工作证明范本</div> -->
+                  <div class="upload-wrap">
+                    <el-upload action="#" :before-upload="onBeforeUploadheadimgurl4">
+                      <div class="upload-img-wrap">
+                        <img :src="headimgurl4" alt />
+                      </div>
+                      <div class="upload-btns">上传工作证明</div>
+                    </el-upload>
+                  </div>
+                </div>
+              </div>
+              <div class="bottom-btns-wrap">
+                <div class="prev-btn" @click="onPrevStep('step2')">上一步</div>
+                <div class="end-btn" @click="onCertificationHR">开始实名认证</div>
+              </div>
+            </div>
+          </div>
+        </el-form>
+      </el-dialog>
+      <!-- 注册猎头 -->
+      <el-dialog
+        :modal-append-to-body="false"
+        width="460px"
+        :visible.sync="resigerHeadhunt"
+        class="register-model"
       >
-        <div class="step1" v-show="registerStep === 'step1'">
-          <div class="head">
-            <div class="icon"></div>
-            <div class="info">
-              <p class="title">创建招聘名片</p>
-              <p class="subtitle">向大家介绍一下自己吧</p>
+        <el-form
+          :model="registerHHData"
+          :rules="registerHHDataRules"
+          ref="registerHHWrap"
+          class="resiger-headhunt"
+        >
+          <div class="step1" v-show="registerStep === 'step1'">
+            <div class="head">
+              <div class="icon"></div>
+              <div class="info">
+                <p class="title">创建招聘名片</p>
+                <p class="subtitle">向大家介绍一下自己吧</p>
+              </div>
+            </div>
+            <div class="body">
+              <div class="top">
+                <div class="left">
+                  <el-form-item prop="nickname">
+                    <el-input v-model="registerHHData.nickname" placeholder="*姓名"></el-input>
+                  </el-form-item>
+                  <el-radio-group v-model="registerHHData.sex">
+                    <el-radio label="1">男</el-radio>
+                    <el-radio label="2">女</el-radio>
+                  </el-radio-group>
+                  <el-form-item prop="email">
+                    <el-input v-model="registerHHData.email" placeholder="*工作邮箱"></el-input>
+                  </el-form-item>
+                  <el-form-item prop="code">
+                    <el-input v-model="registerHHData.code" placeholder="邀请码"></el-input>
+                  </el-form-item>
+                  <el-form-item prop="zy_industry">
+                    <el-select
+                      v-model="registerHHData.zy_industry"
+                      :multiple-limit="5"
+                      multiple
+                      placeholder="*职业行业，最多5项"
+                    >
+                      <el-option
+                        v-for="item in industryList"
+                        :label="item.name"
+                        :value="item.id"
+                        :key="item.id"
+                      ></el-option>
+                    </el-select>
+                  </el-form-item>
+                </div>
+                <div class="right">
+                  <el-upload action="#" :before-upload="onBeforeUploadheadimgurl5">
+                    <div class="img">
+                      <img :src="headimgurl5" alt />
+                    </div>
+                    <div class="upload-btns">*上传半身照</div>
+                  </el-upload>
+                  <el-form-item prop="op_years">
+                    <el-input v-model="registerHHData.op_years" placeholder="*职业年限"></el-input>
+                  </el-form-item>
+                  <el-form-item prop="city">
+                    <el-cascader
+                      v-model="registerHHData.city"
+                      placeholder="*选择所在地"
+                      :options="addressList"
+                      :props="{
+                      value: 'name',
+                      label: 'name',
+                      children: 'data_list'
+                    }"
+                      value="name"
+                      label="name"
+                      children="data_list"
+                    >
+                      <template slot-scope="{ node, data }">
+                        <span>{{ data.name }}</span>
+                      </template>
+                    </el-cascader>
+                  </el-form-item>
+                </div>
+              </div>
+              <el-form-item prop="en_name">
+                <el-input v-model="registerHHData.en_name" placeholder="*英文名字，第一个字母大写"></el-input>
+              </el-form-item>
+              <div class="next-btn-wrap">
+                <div class="next-btn" @click="onNextStep('step2')">下一步</div>
+              </div>
             </div>
           </div>
-          <div class="body">
-            <div class="top">
-              <div class="left">
-                <el-form-item prop="nickname">
-                  <el-input v-model="registerHHData.nickname" placeholder="*姓名"></el-input>
-                </el-form-item>
-                <el-radio-group v-model="registerHHData.sex">
-                  <el-radio label="1">男</el-radio>
-                  <el-radio label="2">女</el-radio>
-                </el-radio-group>
-                <el-form-item prop="email">
-                  <el-input v-model="registerHHData.email" placeholder="*工作邮箱"></el-input>
-                </el-form-item>
-                <el-form-item prop="code">
-                  <el-input v-model="registerHHData.code" placeholder="邀请码"></el-input>
-                </el-form-item>
-                <el-form-item prop="zy_industry">
-                  <el-select
-                    v-model="registerHHData.zy_industry"
-                    :multiple-limit="5"
-                    multiple
-                    placeholder="*职业行业，最多5项"
+          <div v-show="registerStep === 'step2'" class="step2">
+            <div class="head">
+              <div class="icon"></div>
+              <div class="info">
+                <p class="title">创建公司信息</p>
+                <p class="subtitle">向大家介绍一下自己吧</p>
+              </div>
+            </div>
+            <div class="body">
+              <el-form-item prop="company_name">
+                <el-input v-model="registerHHData.company_name" placeholder="*完整公司名称"></el-input>
+              </el-form-item>
+              <div class="top img-box-wrap">
+                <div class="right">
+                  <el-upload action="#" :before-upload="onBeforeUploadheadimgurl6">
+                    <div class="img">
+                      <img :src="headimgurl6" alt />
+                    </div>
+                    <div class="upload-btns">*上传公司logo</div>
+                    <p class="tips">200K以内</p>
+                  </el-upload>
+                </div>
+                <div class="right">
+                  <el-upload action="#" :before-upload="onBeforeUploadheadimgurl7">
+                    <div class="img">
+                      <img :src="headimgurl7" alt />
+                    </div>
+                    <div class="upload-btns">*上传营业执照</div>
+                    <p class="tips">500K以内</p>
+                  </el-upload>
+                </div>
+              </div>
+              <el-form-item prop="institution">
+                <el-input v-model="registerHHData.institution" placeholder="*营业执照编号和组织机构代码"></el-input>
+              </el-form-item>
+              <div class="box">
+                <div class="left2">
+                  <el-form-item prop="company_short_name">
+                    <el-input v-model="registerHHData.company_short_name" placeholder="*公司简称"></el-input>
+                  </el-form-item>
+                </div>
+                <div class="right2">
+                  <el-form-item prop="employee_num">
+                    <el-select v-model="registerHHData.employee_num" placeholder="*选择人员规模">
+                      <el-option label="0-20人" value="1"></el-option>
+                      <el-option label="20-99人" value="2"></el-option>
+                      <el-option label="100-499人" value="3"></el-option>
+                      <el-option label="500-999人" value="4"></el-option>
+                      <el-option label="1000-9999人" value="5"></el-option>
+                      <el-option label="10000以上" value="6"></el-option>
+                    </el-select>
+                  </el-form-item>
+                </div>
+              </div>
+              <div class="half-box">
+                <div class="half">
+                  <el-form-item prop="industry">
+                    <el-select v-model="registerHHData.industry" placeholder="*选择公司行业">
+                      <el-option
+                        v-for="item in industryList"
+                        :label="item.name"
+                        :value="item.id"
+                        :key="item.id"
+                      ></el-option>
+                    </el-select>
+                  </el-form-item>
+                </div>
+                <div class="half">
+                  <el-form-item prop="position">
+                    <el-select v-model="registerHHData.position" placeholder="*担任职位">
+                      <el-option
+                        v-for="item in postList"
+                        :value="item.c_id"
+                        :key="item.c_id"
+                        :label="item.class_name"
+                      ></el-option>
+                    </el-select>
+                  </el-form-item>
+                </div>
+              </div>
+              <div class="next-btn-wrap2">
+                <div class="cancel-btn" @click="onPrevStep('step1')">上一步</div>
+                <div class="next-btn" @click="onNextStep('step3')">下一步</div>
+              </div>
+            </div>
+          </div>
+          <div class="step3" v-show="registerStep === 'step3'">
+            <div class="head">
+              <div class="icon"></div>
+              <div class="info">
+                <p class="title">在职证明</p>
+                <p class="subtitle">向大家介绍一下自己吧</p>
+              </div>
+            </div>
+            <div class="body">
+              <div class="box">
+                <p class="txt">有效工作证明为以下任意一种</p>
+                <p class="txt">1.名片，且带有公司全称及姓名</p>
+                <p class="txt">2.工作证，且带有公司全称及姓名</p>
+                <p class="txt">3.工作证明，且带有公司全称、姓名及公章</p>
+                <div class="wrap">
+                  <div class="download">下载工作证明范本</div>
+                  <div class="upload-wrap">
+                    <el-upload action="#" :before-upload="onBeforeUploadheadimgurl8">
+                      <div class="upload-img-wrap">
+                        <img :src="headimgurl8" alt />
+                      </div>
+                      <div class="upload-btns">上传营业执照</div>
+                    </el-upload>
+                  </div>
+                </div>
+              </div>
+              <div class="bottom-btns-wrap">
+                <div class="prev-btn" @click="onPrevStep('step2')">上一步</div>
+                <div class="end-btn" @click="onCertificationHH">开始实名认证</div>
+              </div>
+            </div>
+          </div>
+        </el-form>
+      </el-dialog>
+      <!-- 注册求职者 -->
+      <el-dialog
+        :modal-append-to-body="false"
+        width="460px"
+        :visible.sync="resigerJobSeeker"
+        class="register-model"
+      >
+        <el-form
+          :model="resigerJobSee"
+          :rules="resigerJobSeekerRules"
+          ref="resigerJobSeeWrap"
+          class="register-jobwant"
+        >
+          <div v-show="registerStep === 'step1'" class="step1">
+            <div class="head">
+              <div class="icon"></div>
+              <div class="title-wrap">
+                <p class="title">您的基本信息</p>
+                <p class="subtitle">完善基本信息后会遇到更多对你感兴趣的HR\猎头</p>
+              </div>
+            </div>
+            <div class="body">
+              <div class="box">
+                <div class="left">
+                  <el-form-item prop="nickname">
+                    <el-input v-model="resigerJobSee.nickname" placeholder="*姓名"></el-input>
+                  </el-form-item>
+                  <el-radio-group prop="sex" v-model="resigerJobSee.sex">
+                    <el-radio label="1">男</el-radio>
+                    <el-radio label="2">女</el-radio>
+                  </el-radio-group>
+                </div>
+                <div class="right">
+                  <el-upload action="#" :before-upload="onBeforeUploadHeadImage">
+                    <div class="img-wrap">
+                      <img :src="headimgurl" alt />
+                    </div>
+                  </el-upload>
+                </div>
+              </div>
+              <el-form-item prop="birthday">
+                <el-date-picker
+                  v-model="resigerJobSee.birthday"
+                  value-format="timestamp"
+                  placeholder="*选择出生年月日"
+                ></el-date-picker>
+              </el-form-item>
+              <el-form-item prop="jobs_tart">
+                <el-date-picker
+                  value-format="timestamp"
+                  v-model="resigerJobSee.jobs_tart"
+                  placeholder="*参加工作时间"
+                ></el-date-picker>
+              </el-form-item>
+              <el-form-item prop="qiuzzt">
+                <el-select v-model="resigerJobSee.qiuzzt" placeholder="*当前求职状态">
+                  <el-option label="不在职" value="1"></el-option>
+                  <el-option label="正在找工作/在职" value="2"></el-option>
+                  <el-option label="打算近期换工作" value="3"></el-option>
+                </el-select>
+              </el-form-item>
+              <div class="bottom-btns">
+                <div class="upload-resume">
+                  <el-upload
+                    action="#"
+                    :limit="1"
+                    :show-file-list="false"
+                    :before-upload="onBeforeUploadResume"
                   >
-                    <el-option
-                      v-for="item in industryList"
-                      :label="item.name"
-                      :value="item.id"
-                      :key="item.id"
-                    ></el-option>
+                    <div class="upload-resume-btns">上传简历</div>
+                  </el-upload>
+                </div>
+                <div class="next-btn" @click="onNextStep('step2')">下一步</div>
+              </div>
+            </div>
+          </div>
+          <div v-show="registerStep === 'step2'" class="step2">
+            <div class="head">
+              <div class="icon"></div>
+              <div class="title-wrap">
+                <p class="title">您的学历信息</p>
+                <p class="subtitle">完善学历信息您将被送到更多HR\猎头眼前</p>
+              </div>
+            </div>
+            <div class="body">
+              <el-form-item prop="school_name">
+                <el-input v-model="resigerJobSee.school_name" placeholder="*学校名称"></el-input>
+              </el-form-item>
+              <el-form-item prop="edu">
+                <el-select v-model="resigerJobSee.edu" placeholder="*选择学历">
+                  <el-option label="初中及以下" value="1"></el-option>
+                  <el-option label="中专/技校" value="2"></el-option>
+                  <el-option label="高中" value="3"></el-option>
+                  <el-option label="大专" value="4"></el-option>
+                  <el-option label="本科" value="5"></el-option>
+                  <el-option label="硕士" value="6"></el-option>
+                  <el-option label="博士" value="7"></el-option>
+                </el-select>
+              </el-form-item>
+              <el-radio-group prop="school_type" v-model="resigerJobSee.school_type">
+                <el-radio label="1">全日制</el-radio>
+                <el-radio label="2">非全日制</el-radio>
+              </el-radio-group>
+              <el-form-item prop="major">
+                <el-input v-model="resigerJobSee.major" placeholder="*所学专业"></el-input>
+              </el-form-item>
+              <div class="box">
+                <el-form-item prop="graduation_time">
+                  <el-date-picker
+                    value-format="yyyy-MM-dd"
+                    type="date"
+                    v-model="resigerJobSee.graduation_time"
+                    placeholder="*选择毕业时间"
+                  ></el-date-picker>
+                </el-form-item>
+              </div>
+              <div class="bottom-btns">
+                <div class="prev-btns" @click="onPrevStep('step1')">上一步</div>
+                <div class="next-btns" @click="onNextStep('step3')">下一步</div>
+              </div>
+            </div>
+          </div>
+          <div v-show="registerStep === 'step3'" class="step3">
+            <div class="head">
+              <div class="icon"></div>
+              <div class="title-wrap">
+                <p class="title">您期望的职位</p>
+                <p class="subtitle">提出您现在的条件</p>
+              </div>
+            </div>
+            <div class="body">
+              <el-form-item prop="gangwei">
+                <el-select v-model="resigerJobSee.gangwei" placeholder="*选择期望的职位">
+                  <el-option
+                    v-for="item in postList"
+                    :value="item.c_id"
+                    :key="item.c_id"
+                    :label="item.class_name"
+                  ></el-option>
+                </el-select>
+              </el-form-item>
+              <div class="box">
+                <el-form-item prop="qiwxz">
+                  <el-select v-model="resigerJobSee.qiwxz" placeholder="薪资要求">
+                    <el-option label="3K以下" :value="1"></el-option>
+                    <el-option label="3-5K" :value="2"></el-option>
+                    <el-option label="5-10K" :value="3"></el-option>
+                    <el-option label="10-15K" :value="4"></el-option>
+                    <el-option label="15-20K" :value="5"></el-option>
+                    <el-option label="20-30K" :value="6"></el-option>
+                    <el-option label="30-50K" :value="7"></el-option>
+                    <el-option label="50K以上" :value="8"></el-option>
                   </el-select>
                 </el-form-item>
               </div>
-              <div class="right">
-                <el-upload action="#" :before-upload="onBeforeUploadheadimgurl5">
-                  <div class="img">
-                    <img :src="headimgurl5" alt />
-                  </div>
-                  <div class="upload-btns">*上传半身照</div>
-                </el-upload>
-                <el-form-item prop="op_years">
-                  <el-input v-model="registerHHData.op_years" placeholder="*职业年限"></el-input>
-                </el-form-item>
+              <el-form-item prop="industry">
+                <el-select v-model="resigerJobSee.industry" placeholder="*选择期望的行业">
+                  <el-option
+                    v-for="item in industryList"
+                    :key="item.id"
+                    :label="item.name"
+                    :value="item.id"
+                  ></el-option>
+                </el-select>
+              </el-form-item>
+              <div class="half-box">
                 <el-form-item prop="city">
                   <el-cascader
-                    v-model="registerHHData.city"
-                    placeholder="*选择所在地"
+                    v-model="resigerJobSee.city"
+                    placeholder="*选择期望的工作地点"
                     :options="addressList"
                     :props="{
                       value: 'name',
@@ -315,406 +631,106 @@
                   </el-cascader>
                 </el-form-item>
               </div>
-            </div>
-            <el-form-item prop="en_name">
-              <el-input v-model="registerHHData.en_name" placeholder="*英文名字，第一个字母大写"></el-input>
-            </el-form-item>
-            <div class="next-btn-wrap">
-              <div class="next-btn" @click="onNextStep('step2')">下一步</div>
-            </div>
-          </div>
-        </div>
-        <div v-show="registerStep === 'step2'" class="step2">
-          <div class="head">
-            <div class="icon"></div>
-            <div class="info">
-              <p class="title">创建公司信息</p>
-              <p class="subtitle">向大家介绍一下自己吧</p>
-            </div>
-          </div>
-          <div class="body">
-            <el-form-item prop="company_name">
-              <el-input v-model="registerHHData.company_name" placeholder="*完整公司名称"></el-input>
-            </el-form-item>
-            <div class="top img-box-wrap">
-              <div class="right">
-                <el-upload action="#" :before-upload="onBeforeUploadheadimgurl6">
-                  <div class="img">
-                    <img :src="headimgurl6" alt />
-                  </div>
-                  <div class="upload-btns">*上传公司logo</div>
-                  <p class="tips">200K以内</p>
-                </el-upload>
-              </div>
-              <div class="right">
-                <el-upload action="#" :before-upload="onBeforeUploadheadimgurl7">
-                  <div class="img">
-                    <img :src="headimgurl7" alt />
-                  </div>
-                  <div class="upload-btns">*上传营业执照</div>
-                  <p class="tips">500K以内</p>
-                </el-upload>
-              </div>
-            </div>
-            <el-form-item prop="institution">
-              <el-input v-model="registerHHData.institution" placeholder="*营业执照编号和组织机构代码"></el-input>
-            </el-form-item>
-            <div class="box">
-              <div class="left2">
-                <el-form-item prop="company_short_name">
-                  <el-input v-model="registerHHData.company_short_name" placeholder="*公司简称"></el-input>
-                </el-form-item>
-              </div>
-              <div class="right2">
-                <el-form-item prop="employee_num">
-                  <el-select v-model="registerHHData.employee_num" placeholder="*选择人员规模">
-                    <el-option label="0-20人" value="1"></el-option>
-                    <el-option label="20-99人" value="2"></el-option>
-                    <el-option label="100-499人" value="3"></el-option>
-                    <el-option label="500-999人" value="4"></el-option>
-                    <el-option label="1000-9999人" value="5"></el-option>
-                    <el-option label="10000以上" value="6"></el-option>
-                  </el-select>
-                </el-form-item>
-              </div>
-            </div>
-            <div class="half-box">
-              <div class="half">
-                <el-form-item prop="industry">
-                  <el-select v-model="registerHHData.industry" placeholder="*选择公司行业">
-                    <el-option
-                      v-for="item in industryList"
-                      :label="item.name"
-                      :value="item.id"
-                      :key="item.id"
-                    ></el-option>
-                  </el-select>
-                </el-form-item>
-              </div>
-              <div class="half">
-                <el-form-item prop="position">
-                  <el-select v-model="registerHHData.position" placeholder="*担任职位">
-                    <el-option
-                      v-for="item in postList"
-                      :value="item.c_id"
-                      :key="item.c_id"
-                      :label="item.class_name"
-                    ></el-option>
-                  </el-select>
-                </el-form-item>
-              </div>
-            </div>
-            <div class="next-btn-wrap2">
-              <div class="cancel-btn" @click="onPrevStep('step1')">上一步</div>
-              <div class="next-btn" @click="onNextStep('step3')">下一步</div>
-            </div>
-          </div>
-        </div>
-        <div class="step3" v-show="registerStep === 'step3'">
-          <div class="head">
-            <div class="icon"></div>
-            <div class="info">
-              <p class="title">在职证明</p>
-              <p class="subtitle">向大家介绍一下自己吧</p>
-            </div>
-          </div>
-          <div class="body">
-            <div class="box">
-              <p class="txt">有效工作证明为以下任意一种</p>
-              <p class="txt">1.名片，且带有公司全称及姓名</p>
-              <p class="txt">2.工作证，且带有公司全称及姓名</p>
-              <p class="txt">3.工作证明，且带有公司全称、姓名及公章</p>
-              <div class="wrap">
-                <div class="download">下载工作证明范本</div>
-                <div class="upload-wrap">
-                  <el-upload action="#" :before-upload="onBeforeUploadheadimgurl8">
-                    <div class="upload-img-wrap">
-                      <img :src="headimgurl8" alt />
-                    </div>
-                    <div class="upload-btns">上传营业执照</div>
-                  </el-upload>
-                </div>
-              </div>
-            </div>
-            <div class="bottom-btns-wrap">
-              <div class="prev-btn" @click="onPrevStep('step2')">上一步</div>
-              <div class="end-btn" @click="onCertificationHH">开始实名认证</div>
-            </div>
-          </div>
-        </div>
-      </el-form>
-    </el-dialog>
-    <!-- 注册求职者 -->
-    <el-dialog
-      :modal-append-to-body="false"
-      width="460px"
-      :visible.sync="resigerJobSeeker"
-      class="register-model"
-    >
-      <el-form
-        :model="resigerJobSee"
-        :rules="resigerJobSeekerRules"
-        ref="resigerJobSeeWrap"
-        class="register-jobwant"
-      >
-        <div v-show="registerStep === 'step1'" class="step1">
-          <div class="head">
-            <div class="icon"></div>
-            <div class="title-wrap">
-              <p class="title">您的基本信息</p>
-              <p class="subtitle">完善基本信息后会遇到更多对你感兴趣的HR\猎头</p>
-            </div>
-          </div>
-          <div class="body">
-            <div class="box">
-              <div class="left">
-                <el-form-item prop="nickname">
-                  <el-input v-model="resigerJobSee.nickname" placeholder="*姓名"></el-input>
-                </el-form-item>
-                <el-radio-group prop="sex" v-model="resigerJobSee.sex">
-                  <el-radio label="1">男</el-radio>
-                  <el-radio label="2">女</el-radio>
-                </el-radio-group>
-              </div>
-              <div class="right">
-                <el-upload action="#" :before-upload="onBeforeUploadHeadImage">
-                  <div class="img-wrap">
-                    <img :src="headimgurl" alt />
-                  </div>
-                </el-upload>
-              </div>
-            </div>
-            <el-form-item prop="birthday">
-              <el-date-picker
-                v-model="resigerJobSee.birthday"
-                value-format="timestamp"
-                placeholder="*选择出生年月日"
-              ></el-date-picker>
-            </el-form-item>
-            <el-form-item prop="jobs_tart">
-              <el-date-picker
-                value-format="timestamp"
-                v-model="resigerJobSee.jobs_tart"
-                placeholder="*参加工作时间"
-              ></el-date-picker>
-            </el-form-item>
-            <el-form-item prop="qiuzzt">
-              <el-select v-model="resigerJobSee.qiuzzt" placeholder="*当前求职状态">
-                <el-option label="不在职" value="1"></el-option>
-                <el-option label="正在找工作/在职" value="2"></el-option>
-                <el-option label="打算近期换工作" value="3"></el-option>
-              </el-select>
-            </el-form-item>
-            <div class="bottom-btns">
-              <div class="upload-resume">
-                <el-upload
-                  action="#"
-                  :limit="1"
-                  :show-file-list="false"
-                  :before-upload="onBeforeUploadResume"
-                >
-                  <div class="upload-resume-btns">上传简历</div>
-                </el-upload>
-              </div>
-              <div class="next-btn" @click="onNextStep('step2')">下一步</div>
-            </div>
-          </div>
-        </div>
-        <div v-show="registerStep === 'step2'" class="step2">
-          <div class="head">
-            <div class="icon"></div>
-            <div class="title-wrap">
-              <p class="title">您的学历信息</p>
-              <p class="subtitle">完善学历信息您将被送到更多HR\猎头眼前</p>
-            </div>
-          </div>
-          <div class="body">
-            <el-form-item prop="school_name">
-              <el-input v-model="resigerJobSee.school_name" placeholder="*学校名称"></el-input>
-            </el-form-item>
-            <el-form-item prop="edu">
-              <el-select v-model="resigerJobSee.edu" placeholder="*选择学历">
-                <el-option label="初中及以下" value="1"></el-option>
-                <el-option label="中专/技校" value="2"></el-option>
-                <el-option label="高中" value="3"></el-option>
-                <el-option label="大专" value="4"></el-option>
-                <el-option label="本科" value="5"></el-option>
-                <el-option label="硕士" value="6"></el-option>
-                <el-option label="博士" value="7"></el-option>
-              </el-select>
-            </el-form-item>
-            <el-radio-group prop="school_type" v-model="resigerJobSee.school_type">
-              <el-radio label="1">全日制</el-radio>
-              <el-radio label="2">非全日制</el-radio>
-            </el-radio-group>
-            <el-form-item prop="major">
-              <el-input v-model="resigerJobSee.major" placeholder="*所学专业"></el-input>
-            </el-form-item>
-            <div class="box">
-              <el-form-item prop="graduation_time">
-                <el-date-picker
-                  value-format="yyyy-MM-dd"
-                  type="date"
-                  v-model="resigerJobSee.graduation_time"
-                  placeholder="*选择毕业时间"
-                ></el-date-picker>
+              <el-form-item prop="gertc">
+                <el-input
+                  type="textarea"
+                  v-model="resigerJobSee.gertc"
+                  class="personal-info"
+                  placeholder="个人优势简单描述，在个人简历详细修改"
+                ></el-input>
               </el-form-item>
-            </div>
-            <div class="bottom-btns">
-              <div class="prev-btns" @click="onPrevStep('step1')">上一步</div>
-              <div class="next-btns" @click="onNextStep('step3')">下一步</div>
-            </div>
-          </div>
-        </div>
-        <div v-show="registerStep === 'step3'" class="step3">
-          <div class="head">
-            <div class="icon"></div>
-            <div class="title-wrap">
-              <p class="title">您期望的职位</p>
-              <p class="subtitle">提出您现在的条件</p>
+              <div class="bottom-btns">
+                <div class="prev-btns" @click="onPrevStep('step2')">上一步</div>
+                <div class="next-btns" @click="onNextStep('step4')">下一步</div>
+              </div>
             </div>
           </div>
-          <div class="body">
-            <el-form-item prop="gangwei">
-              <el-select v-model="resigerJobSee.gangwei" placeholder="*选择期望的职位">
-                <el-option
-                  v-for="item in postList"
-                  :value="item.c_id"
-                  :key="item.c_id"
-                  :label="item.class_name"
-                ></el-option>
-              </el-select>
-            </el-form-item>
-            <div class="box">
-              <el-form-item prop="qiwxz">
-                <el-input v-model.number="resigerJobSee.qiwxz" maxlength="9" placeholder="*期望月薪"></el-input>
+          <div v-show="registerStep === 'step4'" class="step4">
+            <div class="head">
+              <div class="icon"></div>
+              <div class="title-wrap">
+                <p class="title">您最近的一份工作经历</p>
+                <p class="subtitle">填写工作经历，我们会找到适合您的工作</p>
+              </div>
+            </div>
+            <div class="body">
+              <el-form-item prop="company">
+                <el-input v-model="resigerJobSee.company" placeholder="*公司全称"></el-input>
               </el-form-item>
-            </div>
-            <el-form-item prop="industry">
-              <el-select v-model="resigerJobSee.industry" placeholder="*选择期望的行业">
-                <el-option
-                  v-for="item in industryList"
-                  :key="item.id"
-                  :label="item.name"
-                  :value="item.id"
-                ></el-option>
-              </el-select>
-            </el-form-item>
-            <div class="half-box">
-              <el-form-item prop="city">
-                <el-cascader
-                  v-model="resigerJobSee.city"
-                  placeholder="*选择期望的工作地点"
-                  :options="addressList"
-                  :props="{
-                      value: 'name',
-                      label: 'name',
-                      children: 'data_list'
-                    }"
-                  value="name"
-                  label="name"
-                  children="data_list"
-                >
-                  <template slot-scope="{ node, data }">
-                    <span>{{ data.name }}</span>
-                  </template>
-                </el-cascader>
+              <el-form-item prop="post">
+                <el-select v-model="resigerJobSee.post" placeholder="*选择担任职位">
+                  <el-option
+                    v-for="item in postList"
+                    :value="item.c_id"
+                    :key="item.c_id"
+                    :label="item.class_name"
+                  ></el-option>
+                </el-select>
               </el-form-item>
-            </div>
-            <el-form-item prop="gertc">
-              <el-input
-                type="textarea"
-                v-model="resigerJobSee.gertc"
-                class="personal-info"
-                placeholder="个人优势简单描述，在个人简历详细修改"
-              ></el-input>
-            </el-form-item>
-            <div class="bottom-btns">
-              <div class="prev-btns" @click="onPrevStep('step2')">上一步</div>
-              <div class="next-btns" @click="onNextStep('step4')">下一步</div>
-            </div>
-          </div>
-        </div>
-        <div v-show="registerStep === 'step4'" class="step4">
-          <div class="head">
-            <div class="icon"></div>
-            <div class="title-wrap">
-              <p class="title">您最近的一份工作经历</p>
-              <p class="subtitle">填写工作经历，我们会找到适合您的工作</p>
-            </div>
-          </div>
-          <div class="body">
-            <el-form-item prop="company">
-              <el-input v-model="resigerJobSee.company" placeholder="*公司全称"></el-input>
-            </el-form-item>
-            <el-form-item prop="post">
-              <el-select v-model="resigerJobSee.post" placeholder="*选择担任职位">
-                <el-option
-                  v-for="item in postList"
-                  :value="item.c_id"
-                  :key="item.c_id"
-                  :label="item.class_name"
-                ></el-option>
-              </el-select>
-            </el-form-item>
-            <el-form-item prop="skills">
-              <el-input v-model="resigerJobSee.skills" placeholder="*职位技能"></el-input>
-              <!-- <el-autocomplete
+              <el-form-item prop="skills">
+                <el-input v-model="resigerJobSee.skills" placeholder="*职位技能"></el-input>
+                <!-- <el-autocomplete
                 v-model="resigerJobSee.skills"
                 :fetch-suggestions="onSkill"
                 placeholder="*职位技能"
-              ></el-autocomplete>-->
-            </el-form-item>
-            <div class="box">
-              <el-form-item prop="money">
-                <el-input v-model.number="resigerJobSee.money" maxlength="9" placeholder="*税前月薪"></el-input>
+                ></el-autocomplete>-->
               </el-form-item>
-              <el-form-item prop="sh_money">
-                <el-input v-model.number="resigerJobSee.sh_money" maxlength="9" placeholder="*税后月薪"></el-input>
+              <div class="box">
+                <el-form-item prop="money">
+                  <el-input v-model.number="resigerJobSee.money" maxlength="9" placeholder="*税前月薪"></el-input>
+                </el-form-item>
+                <el-form-item prop="sh_money">
+                  <el-input
+                    v-model.number="resigerJobSee.sh_money"
+                    maxlength="9"
+                    placeholder="*税后月薪"
+                  ></el-input>
+                </el-form-item>
+              </div>
+              <div class="box">
+                <el-form-item prop="starttime">
+                  <el-date-picker
+                    value-format="timestamp"
+                    v-model="resigerJobSee.starttime"
+                    placeholder="*选择入职时间"
+                  ></el-date-picker>
+                </el-form-item>
+                <el-form-item prop="endtime">
+                  <el-date-picker
+                    value-format="timestamp"
+                    v-model="resigerJobSee.endtime"
+                    placeholder="*选择入职时间"
+                  ></el-date-picker>
+                </el-form-item>
+              </div>
+              <el-form-item prop="content">
+                <el-input
+                  type="textarea"
+                  v-model="resigerJobSee.content"
+                  placeholder="工作内容简单描述，在个人简历详情修改"
+                  class="personal-info"
+                ></el-input>
               </el-form-item>
-            </div>
-            <div class="box">
-              <el-form-item prop="starttime">
-                <el-date-picker
-                  value-format="timestamp"
-                  v-model="resigerJobSee.starttime"
-                  placeholder="*选择入职时间"
-                ></el-date-picker>
-              </el-form-item>
-              <el-form-item prop="endtime">
-                <el-date-picker
-                  value-format="timestamp"
-                  v-model="resigerJobSee.endtime"
-                  placeholder="*选择入职时间"
-                ></el-date-picker>
-              </el-form-item>
-            </div>
-            <el-form-item prop="content">
-              <el-input
-                type="textarea"
-                v-model="resigerJobSee.content"
-                placeholder="工作内容简单描述，在个人简历详情修改"
-                class="personal-info"
-              ></el-input>
-            </el-form-item>
-            <div class="box">
-              <el-upload action="#" :show-file-list="false" :before-upload="onBeforeUploadResume">
-                <div class="upload-btns">上传简历</div>
-              </el-upload>
-            </div>
-            <div class="bottom-btns">
-              <div class="prev-btns" @click="onPrevStep('step3')">上一步</div>
-              <div class="next-btns" @click="onSubmitJobsee">完成</div>
+              <div class="box">
+                <el-upload action="#" :show-file-list="false" :before-upload="onBeforeUploadResume">
+                  <div class="upload-btns">上传简历</div>
+                </el-upload>
+              </div>
+              <div class="bottom-btns">
+                <div class="prev-btns" @click="onPrevStep('step3')">上一步</div>
+                <div class="next-btns" @click="onSubmitJobsee">完成</div>
+              </div>
             </div>
           </div>
-        </div>
-      </el-form>
-    </el-dialog>
+        </el-form>
+      </el-dialog>
+    </div>
   </div>
 </template>
 
 <script>
-import SlideVerify from '../assets/js/jq-slideVerify.js'
+// import SlideVerify from '../assets/js/jq-slideVerify.js'
+import '../assets/js/verify.js'
 import {
   sendTelVcode,
   login,
@@ -750,7 +766,7 @@ export default {
       postList: [],
       addressList: [],
       industryList: [],
-      resiger: false,
+      resiger: true,
       resigerHr: false,
       resigerHeadhunt: false,
       resigerJobSeeker: false,
@@ -1130,8 +1146,7 @@ export default {
         qiwxz: [
           {
             required: true,
-            message: '',
-            type: 'number'
+            message: ''
           }
         ],
         gangwei: [
@@ -1184,16 +1199,28 @@ export default {
   },
   mounted: function() {
     var that = this
-    // var SlideVerifyPlug = window.slideVerifyPlug
-    var slideVerify = new SlideVerify('#verify-wrap', {
-      wrapWidth: '100%', //设置 容器的宽度 ，默认为 350 ，也可不用设，你自己css 定义好也可以，插件里面会取一次这个 容器的宽度
-      initText: '按住滑块拖动到最右侧', //设置  初始的 显示文字
-      sucessText: '验证通过', //设置 验证通过 显示的文字
-      getSucessState: function(res) {
-        if (res) {
-          that.sendMsgFlag = true
-        }
-        //当验证完成的时候 会 返回 res 值 true，只留了这个应该够用了
+    // // var SlideVerifyPlug = window.slideVerifyPlug
+    // var slideVerify = new SlideVerify('#verify-wrap', {
+    //   wrapWidth: '100%', //设置 容器的宽度 ，默认为 350 ，也可不用设，你自己css 定义好也可以，插件里面会取一次这个 容器的宽度
+    //   initText: '按住滑块拖动到最右侧', //设置  初始的 显示文字
+    //   sucessText: '验证通过', //设置 验证通过 显示的文字
+    //   getSucessState: function(res) {
+    //     if (res) {
+    //       that.sendMsgFlag = true
+    //     }
+    //     //当验证完成的时候 会 返回 res 值 true，只留了这个应该够用了
+    //   }
+    // })
+    $('#verify-wrap').slideVerify({
+      type: 1, //类型
+      vOffset: 5, //误差量，根据需求自行调整
+      barSize: {
+        width: '640px',
+        height: '48px'
+      },
+      ready: function() {},
+      success: function() {
+        that.sendMsgFlag = true
       }
     })
   },
@@ -1491,10 +1518,200 @@ export default {
 </script>
 
 <style lang="scss">
-@import '../assets/css/login.css';
-body {
+@import '../assets/css/verify.css';
+.login-wrap {
+  position: fixed;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
   background: url('../assets/img/login-bg.png') no-repeat 0 0 fixed;
   background-size: cover;
+  z-index: 0;
+}
+.window {
+  height: 520px;
+  width: 760px;
+  position: fixed;
+  left: 50%;
+  top: 50%;
+  transform: translate3d(-50%, -50%, 0);
+  background: #fff;
+  border-radius: 15px;
+  padding: 40px 60px;
+  z-index: 100;
+}
+
+.window > p:first-child {
+  font-size: 20px;
+  line-height: 20px;
+  color: #ff7272;
+  margin-bottom: 30px;
+  text-align: left;
+}
+
+.window > ul {
+  width: 100%;
+  height: 36px;
+  line-height: 36px;
+  border-bottom: 2px solid #d0d0d0;
+  margin-bottom: 50px;
+}
+
+.window > ul li {
+  float: left;
+  margin-right: 59px;
+  font-size: 18px;
+  color: #999;
+  position: relative;
+  cursor: pointer;
+}
+
+.window > ul li.cur::before {
+  position: absolute;
+  bottom: 0;
+  left: 8px;
+  width: calc(100% - 16px);
+  height: 3px;
+  background: #ff7272;
+  content: ' ';
+}
+
+.window > ul li.cur {
+  color: #ff7272;
+}
+
+.window > .one > div {
+  display: flex;
+  width: 100%;
+  height: 50px;
+  border: 1px solid #999;
+  border-radius: 4px;
+  margin-bottom: 30px;
+}
+
+.window > .one > div > img {
+  float: left;
+  height: 22px;
+  width: 20px;
+  margin: 14px 20px;
+}
+
+.window > .one > div > input {
+  flex: 1;
+  height: 48px;
+  border: none;
+  line-height: 48px;
+  text-decoration: none;
+  box-sizing: border-box;
+  outline: none;
+  float: left;
+  padding: 0;
+  border-radius: 5px;
+}
+
+.window > .one > div:nth-child(2) {
+  background: #e5e5e5;
+  border: none;
+  font-size: 16px;
+  line-height: 48px;
+  color: #aaa;
+  text-align: center;
+  position: relative;
+}
+.verify-wrap .verify-move-block > i {
+  display: none;
+}
+.verify-wrap .drag-btn {
+  height: 50px;
+  background-size: 50px 40px;
+}
+.verify-wrap .drag-progress {
+  height: 50px;
+}
+
+.verify-wrap .fix-tips,
+.verify-msg {
+  line-height: 50px;
+  height: 50px;
+}
+
+.verify-wrap .verify-msg {
+  height: 50px;
+}
+
+.window > .one > div:nth-child(2) > div > img {
+  height: 22px;
+  width: 20px;
+  display: block;
+  margin: 14px auto;
+}
+
+.window > .one > div:nth-child(3) > div {
+  float: right;
+  height: 20px;
+  line-height: 20px;
+  font-size: 18px;
+  color: #ff7272;
+  width: 137px;
+  border-left: 1px solid #999;
+  margin-top: 15px;
+  text-align: center;
+}
+
+.window > .one > div:nth-child(4) {
+  display: block;
+  background: #ff7272;
+  height: 50px;
+  color: #fff;
+  line-height: 50px;
+  text-align: center;
+  font-size: 18px;
+  border-radius: 4px;
+  margin-bottom: 15px;
+  border: none;
+}
+
+.window > .one > p:nth-child(5) {
+  height: 16px;
+  text-align: center;
+  width: 100%;
+}
+
+.window > .one > p:nth-child(5) > input {
+  height: 14px;
+  width: 14px;
+}
+
+.window > .one > p:nth-child(5) > span {
+  font-size: 16px;
+  line-height: 16px;
+  color: #666;
+}
+
+.window > .one > p:nth-child(5) > span > a {
+  color: #677dda;
+}
+
+.two {
+  height: auto;
+  width: 100%;
+  overflow: hidden;
+}
+
+.two > p {
+  font-size: 18px;
+  line-height: 18px;
+  width: 100%;
+  text-align: center;
+  color: #424a5e;
+}
+
+.two > img {
+  display: block;
+  margin: 0 auto;
+  height: 265px;
+  width: 265px;
 }
 .vcode-wrap {
   position: relative;

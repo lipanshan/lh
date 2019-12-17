@@ -137,115 +137,60 @@
               </el-select>
             </div>
           </div>
-          <div class="clear-search-select">清空条件选项</div>
+          <div class="clear-search-select" @click="onResetSearch">清空条件选项</div>
         </div>
       </div>
     </div>
     <div class="part-main">
       <div class="content">
         <div class="work-list">
-          <ul>
-            <li>
-              <div>
-                <p>
-                  <span>数据挖掘</span>
-                  <span>20-40k 13薪</span>
+          <ul v-show="workList.length">
+            <li v-for="item in workList" :key="item.id">
+              <div class="left">
+                <p class="title">
+                  <span>{{item.job_title}}</span>
+                  <span
+                    class="color"
+                  >{{item.salary_above}}k-{{item.salary_below}}k {{item.month_money}}薪</span>
                 </p>
-                <p>
-                  <span>北京 海淀区 上地</span>
-                  <span>3-5年</span>
-                  <span>本科</span>
-                </p>
-              </div>
-              <div>
-                <p>醉库</p>
-                <p>
-                  <span>互联网</span>
-                  <span>A轮</span>
-                  <span>20-99人</span>
+                <p class="subtitle">
+                  <span>{{item.province}} {{item.city}} {{item.district}}</span>
+                  <span>{{item.work_year | filterWorkYear}}</span>
+                  <span>{{item.education | filterEdu}}</span>
                 </p>
               </div>
-              <div>
-                <p>
-                  <img src alt />
-                  <span>王先生</span> |
-                  <span>研发总监</span>
-                </p>
-                <p>发于11月4号</p>
-              </div>
-            </li>
-            <li>
-              <div>
-                <p>
-                  <span>数据挖掘</span>
-                  <span>20-40k 13薪</span>
-                </p>
-                <p>
-                  <span>北京 海淀区 上地</span>
-                  <span>3-5年</span>
-                  <span>本科</span>
+              <div class="center">
+                <p class="title">{{item.company_name}}</p>
+                <p class="subtitle">
+                  <span>{{item.description}}</span>
+                  <span>{{item.comkind | filterComkind}}</span>
+                  <span>{{item.filterCompanySize}}</span>
                 </p>
               </div>
-              <div>
-                <p>醉库</p>
-                <p>
-                  <span>互联网</span>
-                  <span>A轮</span>
-                  <span>20-99人</span>
+              <div class="right">
+                <p class="title">
+                  <span class="point"></span>
+                  <span class="name"></span> |
+                  <span class="post"></span>
                 </p>
+                <p class="subtitle time"></p>
               </div>
-              <div>
-                <p>
-                  <img src alt />
-                  <span>王先生</span> |
-                  <span>研发总监</span>
-                </p>
-                <p>发于11月4号</p>
-              </div>
-            </li>
-            <li>
-              <div>
-                <p>
-                  <span>数据挖掘</span>
-                  <span>20-40k 13薪</span>
-                </p>
-                <p>
-                  <span>北京 海淀区 上地</span>
-                  <span>3-5年</span>
-                  <span>本科</span>
-                </p>
-              </div>
-              <div>
-                <p>醉库</p>
-                <p>
-                  <span>互联网</span>
-                  <span>A轮</span>
-                  <span>20-99人</span>
-                </p>
-              </div>
-              <div>
-                <p>
-                  <img src alt />
-                  <span>王先生</span> |
-                  <span>研发总监</span>
-                </p>
-                <p>发于11月4号</p>
-              </div>
+              <div class="btns" @click="onContact(item)">立即沟通</div>
             </li>
           </ul>
-          <div class="list-nav">
-            <div class="box">
-              <div><</div>
-              <div>1</div>
-              <div>2</div>
-              <div>3</div>
-              <div>...</div>
-              <div>></div>
-            </div>
+          <div v-if="!workList.length" class="post-list-nothing">
+            <img src="../assets/img/nothing_icon@2x.png" alt />
+            <p>暂无职位信息</p>
           </div>
+          <el-pagination
+            v-show="workList.length"
+            layout="prev, pager, next"
+            @current-change="onPageChange"
+            :total="pageData.allCount"
+          ></el-pagination>
         </div>
         <div class="right-regist">
-          <div>
+          <div class="go-regist" @click="onGoRegist">
             <p>各大行业职位任你选</p>
             <div>
               <img src="../assets/img/mobile.png" alt />
@@ -264,7 +209,7 @@
             <div>
               <img src="../assets/img/email.png" alt />
               <input type="text" placeholder="请输入" />
-              <div>发送验证码</div>
+              <div @click="onSendVcode">发送验证码</div>
             </div>
             <div>登陆/注册</div>
             <div>
@@ -374,24 +319,50 @@ export default {
       curCity: 0,
       curDistrict: 0,
       curCityName: '',
-      curDistrictName: ''
+      curDistrictName: '',
+      workList: [
+        // {
+        //   id: 1,
+        //   job_title: 'PHP开发',
+        //   salary_above: 5,
+        //   salary_below: 20,
+        //   province: '北京市',
+        //   city: '北京市',
+        //   district: '朝阳区',
+        //   education: 3,
+        //   work_year: 1,
+        //   description: '',
+        //   recruiting_num: 0,
+        //   sortid: 1,
+        //   month_money: 12,
+        //   company_name: '北京智慧小喇叭',
+        //   employee_num: '4',
+        //   comkind: 4
+        // }
+      ],
+      pageData: {
+        pageNum: 1,
+        allCount: 0
+      },
+      sendData: {}
     }
   },
   created() {
     this.initAddressList()
     this.initIndustryList()
     this.initPostList()
+    this.initList()
   },
   mounted() {
-    // this.box = this.getEle('#box') //容器
-    // this.bgColor = this.getEle('.bgColor') //背景色
-    // this.txt = this.getEle('.txt') //文本
-    // this.slider = this.getEle('.slider') //滑块
-    // this.icon = this.getEle('.slider>i')
-    // this.successMoveDistance = this.box.offsetWidth - this.slider.offsetWidth //解锁需要滑动的距离
-    // // downX //用于存放鼠标按下时的位置
-    // // isSuccess = false //是否解锁成功的标志，默认不成功
-    // this.slider.onmousedown = this.mousedownHandler
+    this.box = this.getEle('#box') //容器
+    this.bgColor = this.getEle('.bgColor') //背景色
+    this.txt = this.getEle('.txt') //文本
+    this.slider = this.getEle('.slider') //滑块
+    this.icon = this.getEle('.slider>i')
+    this.successMoveDistance = this.box.offsetWidth - this.slider.offsetWidth //解锁需要滑动的距离
+    // downX //用于存放鼠标按下时的位置
+    // isSuccess = false //是否解锁成功的标志，默认不成功
+    this.slider.onmousedown = this.mousedownHandler
   },
   methods: {
     getEle: function(selector) {
@@ -451,10 +422,32 @@ export default {
       this.slider.onmousedown = null
       document.onmousemove = null
     },
+    initList() {
+      console.log(this.$route.query, this.$route.query.search === undefined)
+      if (this.$route.query.search === undefined) {
+        return
+      }
+      this.search.key_name = this.$route.query.search
+      console.log(this.search)
+      this.onSearchJob()
+    },
     initAddressList() {
+      const formatterAddress = node => {
+        for (let i = 0; i < node.length; i++) {
+          if (!node[i].data_list) {
+            continue
+          }
+          if (node[i].grade === 2) {
+            // 此处不展示地区-只展示-省、市
+            node[i].data_list = undefined
+            continue
+          }
+          formatterAddress(node[i].data_list)
+        }
+      }
       getAllAddress().then(res => {
         if (res.code === 200) {
-          formatterAddressData(res.data)
+          formatterAddress(res.data)
           this.addressList = res.data
         }
       })
@@ -482,17 +475,14 @@ export default {
       this.districtList = data.data_list
       this.curDistrict = 0 // 初始化地区-不限
       this.curDistrictName = ''
-      this.search.city.splice(0, this.search.city.length, data.cid)
+      // this.search.city.splice(0, this.search.city.length, data.cid)
     },
     onSelectDistrict(data) {
       this.curDistrict = data.cid
       this.curDistrictName = data.name
-      if (this.search.city.length >= 1) {
-        this.search.city.splice(1, 1, data.cid)
-      }
+      this.search.city = [this.curCity, data.cid]
     },
     onChangeCity(data) {
-      console.log(data)
       if (data.length) {
         this.curCity = data[0]
         const itemData = this.addressList.find(item => {
@@ -523,18 +513,114 @@ export default {
         return pre
       }, {})
       // 对地区特殊处理
-      if (this.search.city.length > 1) {
-        sendData.city = this.search.city[0]
-        sendData.district = this.search.city[1]
-      } else if (this.search.city.length === 1) {
+      if (this.search.city.length) {
+        sendData.province = this.search.city[0]
         sendData.city = this.search.city[0]
       }
+      if (this.search.city.length > 1) {
+        sendData.city = this.search.city[1]
+      }
+      if (this.search.city.length > 2) {
+        sendData.district = this.search.city[2]
+      }
+      this.sendData.page = 1 // 每次搜索初始化页码
       searchAllJob(sendData).then(res => {
-        console.log(res)
         if (res.code === 200) {
-          console.log(res)
+          this.workList = res.data
+          this.pageData.allCount = res.pagelist.count_num
+          this.pageData.pageNum = res.pagelist.page
+          this.sendData = sendData // 记录当前查询条件，翻页使用
+        } else if (res.code === 40001) {
+          this.workList = []
         }
       })
+    },
+    onPageChange(pageNum) {
+      this.sendData.page = pageNum
+      searchAllJob(this.sendData).then(res => {
+        if (res.code === 200) {
+          this.workList = res.data
+          this.pageData.allCount = res.pagelist.count_num
+          this.pageData.pageNum = res.pagelist.page
+          this.sendData = sendData // 记录当前查询条件，翻页使用
+        } else if (res.code === 40001) {
+          this.workList = []
+        }
+      })
+    },
+    onContact(data) {
+      console.log(data)
+    },
+    onResetSearch() {
+      this.search = {
+        key_name: '',
+        job_category: '',
+        district: '',
+        city: [],
+        industry: '',
+        post: '',
+        work_year: '',
+        education: '',
+        money_extent: '',
+        comkind: '',
+        employee_num: ''
+      }
+    },
+    onSendVcode() {},
+    onGoRegist() {
+      this.$router.push('/login')
+    }
+  },
+  filters: {
+    filterEdu(num) {
+      const map = {
+        0: '不限',
+        1: '初中',
+        2: '中专、技校',
+        3: '高中',
+        4: '大专',
+        5: '本科',
+        6: '研究生',
+        7: '博士'
+      }
+      return map[num]
+    },
+    filterWorkYear(num) {
+      const map = {
+        0: '不限',
+        1: '在校生',
+        2: '应届生',
+        3: '一年以下',
+        4: '1-3年',
+        5: '3-5年',
+        6: '5-10年',
+        7: '10年以上'
+      }
+      return map[num]
+    },
+    filterCompanySize(num) {
+      const map = {
+        1: '0-20人',
+        2: '20-99人',
+        3: '100-499人',
+        4: '500-999人',
+        5: '1000-9999人',
+        6: '10000以上'
+      }
+      return map[num]
+    },
+    filterComkind(num) {
+      const map = {
+        1: '未融资',
+        2: '天使轮',
+        3: 'A轮',
+        4: 'B轮',
+        5: 'C轮',
+        6: 'D轮以上',
+        7: '上市公司',
+        8: '不需要融资'
+      }
+      return map[num]
     }
   }
 }
@@ -769,89 +855,116 @@ export default {
 
   .part-main {
     width: 100%;
+    min-width: 1280px;
     height: auto;
     background: #f3f5f6;
   }
 
   .part-main .content {
+    display: flex;
     width: 1250px;
-    height: auto;
     overflow: hidden;
     margin: 0 auto;
   }
 
   .part-main .content .work-list {
-    width: 860px;
-    height: auto;
-    float: left;
+    flex: 1;
+    margin-right: 20px;
     margin-top: 38px;
-  }
-
-  .part-main .content .work-list li {
-    height: 113px;
-    width: 100%;
-    border-bottom: 1px solid #f2f2f5;
-    background: #fff;
-    padding: 0 40px;
-    cursor: pointer;
-  }
-
-  .part-main .content .work-list li > div {
-    float: left;
-    width: 33.33%;
-    height: 100%;
-    padding: 34px 0 27px;
-  }
-
-  .part-main .content .work-list li > div:nth-child(3) {
-    text-align: right;
-  }
-
-  .part-main .content .work-list li > div:nth-child(2) {
-    text-align: center;
-  }
-
-  .part-main .content .work-list li > div:nth-child(3) p:nth-child(1) {
-    color: #9fa3b0;
-  }
-
-  .part-main .content .work-list li > div:nth-child(3) p:nth-child(1) span {
-    color: #414a60;
-  }
-
-  .part-main .content .work-list li > div p {
-    font-size: 17px;
-    height: 26px;
-    line-height: 26px;
-  }
-
-  .part-main .content .work-list li > div:first-child p:first-child {
-    font-size: 20px;
-    font-size: #333;
-  }
-
-  .part-main
-    .content
-    .work-list
-    li
-    > div:first-child
-    p:first-child
-    span:nth-child(2) {
-    color: #f06358;
-    margin-left: 10px;
-  }
-
-  .part-main .content .work-list li > div p:nth-child(2),
-  .part-main .content .work-list li > div p:nth-child(2) > span {
-    font-size: 14px;
-    color: #9fa3b0;
+    & > ul {
+      background: #fff;
+      & > li {
+        position: relative;
+        padding: 20px 30px 20px 40px;
+        display: flex;
+        justify-content: space-between;
+        border-bottom: 1px solid #9fa3b0;
+        &:hover {
+          & > .right {
+            visibility: hidden;
+            overflow: hidden;
+          }
+          & > .btns {
+            display: block;
+          }
+        }
+        & > .left {
+          .title {
+            display: flex;
+            font-size: 22px;
+            line-height: 42px;
+            color: #333333;
+            .color {
+              margin-left: 5px;
+              margin-right: 5px;
+              color: #f06358ff;
+            }
+          }
+          .subtitle {
+            font-size: 14px;
+            line-height: 34px;
+            color: #9fa3b0;
+            display: flex;
+            & > span {
+              display: block;
+              margin-right: 10px;
+            }
+          }
+        }
+        & > .center {
+          @extend .left;
+          .subtitle {
+            justify-content: center;
+          }
+        }
+        & > .right {
+          @extend .left;
+          .title {
+            align-items: center;
+            & > span {
+              margin-right: 10px;
+            }
+          }
+          .subtitle {
+            justify-content: flex-end;
+          }
+          .point {
+            width: 26px;
+            height: 26px;
+            background-color: #edbc4a;
+            border-radius: 50%;
+          }
+        }
+        & > .btns {
+          display: none;
+          position: absolute;
+          top: 50%;
+          right: 40px;
+          transform: translateY(-50%);
+          width: 150px;
+          height: 50px;
+          font-size: 22px;
+          line-height: 50px;
+          color: #fff;
+          text-align: center;
+          background: #f06358ff;
+          z-index: 10;
+          border-radius: 0;
+          cursor: pointer;
+        }
+      }
+    }
   }
 
   .right-regist {
+    height: 0;
+    overflow: hidden;
     width: 370px;
     height: auto;
     float: right;
     margin-top: 38px;
+    background: url(../assets/img/go_regist.png) no-repeat 0 0;
+    background-size: 370px 515px;
   }
 
   /* .right-regist>div {
@@ -1128,6 +1241,7 @@ export default {
     background: #fff;
     border-bottom: 1px solid #f2f2f5;
     margin-bottom: 19px;
+    text-align: center;
   }
 
   .list-nav .box {
@@ -1229,6 +1343,67 @@ export default {
     text-align: center;
     float: left;
     margin-top: 20px;
+  }
+  .el-pagination {
+    text-align: center;
+    margin-top: 8px;
+    margin-bottom: 48px;
+    padding-top: 24px;
+    padding-bottom: 24px;
+    width: 100%;
+    background: #fff;
+    .el-pager li {
+      width: 38px;
+      height: 32px;
+      line-height: 32px;
+      color: #414a60ff;
+      &.active {
+        background: #f06358ff;
+        color: #fff;
+      }
+    }
+    .btn-next {
+      margin-left: 20px;
+      width: 39px;
+      height: 34px;
+      background: url(../assets/img/page-right@2x.png) no-repeat 0 0;
+      background-size: 39px 34px;
+      & > i {
+        display: none;
+      }
+    }
+    .btn-prev {
+      margin-right: 20px;
+      width: 39px;
+      height: 34px;
+      background: url(../assets/img/page-left@2x.png) no-repeat 0 0;
+      background-size: 39px 34px;
+      & > i {
+        display: none;
+      }
+    }
+  }
+  .post-list-nothing {
+    margin-top: 20px;
+    height: 738px;
+    position: relative;
+    background: #fff;
+    & > img {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate3d(-50%, -50%, 0);
+      width: 360px;
+      height: 256px;
+    }
+    & > p {
+      @extend img;
+      margin-top: 256px;
+      padding-top: 10px;
+      font-size: 20px;
+      line-height: 40px;
+      text-align: center;
+    }
   }
 }
 </style>

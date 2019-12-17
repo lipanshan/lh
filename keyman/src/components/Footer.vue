@@ -5,7 +5,7 @@
         <span class="col1">企业服务</span>
         <span class="col2">使用与帮助</span>
         <span class="col3">联系我们</span>
-        <!-- <img class="col4" src="../assets/img/gjrc.png" alt /> -->
+        <img class="col4 footer-title" src="../assets/img/gjrc.png" alt />
       </p>
       <p>
         <span class="col1">用户搜索</span>
@@ -80,6 +80,13 @@ export default {
       }
       .col4 {
         text-align: right;
+        &.footer-title {
+          margin-top: 9px;
+          flex: 0 0 118px;
+          display: block;
+          width: 118px;
+          height: 22px;
+        }
       }
       &.title-row {
         font-size: 16px;

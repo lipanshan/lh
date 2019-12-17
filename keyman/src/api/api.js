@@ -70,6 +70,9 @@ export function getAllAddress() {
 
 export const formatterAddressData = node => {
   for (let i = 0; i < node.length; i++) {
+    // if (node[i].grade != undefined && node[i].grade === 2) {
+
+    // }
     if (!node[i].data_list) {
       continue
     }
@@ -326,12 +329,42 @@ export function uploadResumeProject(data) {
   })
 }
 
-// 首页搜索、全职搜索 
+// 首页搜索、全职搜索
 
 const HOME_PAGE_SERARCH_URL = 'api/apidate/all_job_list'
 
 export function searchAllJob(data) {
   return axios.post(HOME_PAGE_SERARCH_URL, data).then((res) => {
+    return Promise.resolve(JSON.parse(res))
+  })
+}
+
+// 公开页面-猎头列表1
+
+const HH_LIST1_URL = 'api/apidate/headhunter'
+
+export function getHHList1(data) {
+  return axios.post(HH_LIST1_URL, data).then((res) => {
+    return Promise.resolve(JSON.parse(res))
+  })
+}
+
+// 公开页面-猎头列表1
+
+const HH_LIST2_URL = 'api/apidate/headhunter_list'
+
+export function getHHList2(data) {
+  return axios.post(HH_LIST2_URL, data).then((res) => {
+    return Promise.resolve(JSON.parse(res))
+  })
+}
+
+// 公开页面-获取咨询
+
+const CONSULT_DATA_URL = 'api/apidate/content_list'
+
+export function getConsult(data) {
+  return axios.post(CONSULT_DATA_URL, data).then((res) => {
     return Promise.resolve(JSON.parse(res))
   })
 }

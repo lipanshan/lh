@@ -4,8 +4,8 @@
       <div class="context">
         <div class="slogen">你身边可靠的职业发展伙伴</div>
         <div class="seach">
-          <input type="text" />
-          <div class="confirm">搜索</div>
+          <input v-model="search" type="text" />
+          <div @click="toSearchPage" class="confirm">搜索</div>
         </div>
       </div>
     </div>
@@ -143,7 +143,8 @@ export default {
       c: null,
       j_work: [],
       q_work: [],
-      hotWork: []
+      hotWork: [],
+      search: ''
     }
   },
   created() {
@@ -194,6 +195,14 @@ export default {
     jump_q() {
       this.$router.push({
         path: '/fulltime'
+      })
+    },
+    toSearchPage() {
+      this.$router.push({
+        path: '/fulltime',
+        query: {
+          search: this.search
+        }
       })
     }
   },
@@ -377,7 +386,7 @@ export default {
     border-bottom: 1px solid #ebebeb;
     font-size: 0;
     & > .post-item {
-      width: 426px;
+      width: 415px;
       display: inline-block;
       vertical-align: top;
       padding: 10px 0;
