@@ -5,6 +5,7 @@
 import axios from 'axios'
 import CryptoJS from './aes.js'
 import qs from 'qs'
+import router from '@/router/index'
 axios.defaults.baseURL = process.env.VUE_APP_API_URL
 axios.defaults.headers.post['Content-Type'] = 'application/x-www-form-urlencoded'
 axios.interceptors.request.use((config) => {
@@ -51,8 +52,9 @@ axios.interceptors.response.use((response) => {
   } else {
     res = decrypt(response)
   }
-  if (res.code === 40003) { // token 验证失败
+  if (JSON.parse(res).code === 40003 || JSON.parse(res).code === 40011) { // token 验证失败/未注册 提示用户重新登录、注册
     window.localStorage.removeItem('keyMan')
+    router.replace('/login')
   }
   return Promise.resolve(res)
 }, (err) => {

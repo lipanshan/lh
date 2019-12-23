@@ -29,9 +29,6 @@ export default {
 </script>
 
 <style lang="scss">
-body {
-  background: #eef0f5;
-}
 .job-chart {
   .top-btns {
     padding-top: 30px;

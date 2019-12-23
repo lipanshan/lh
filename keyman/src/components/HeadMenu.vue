@@ -71,7 +71,6 @@ export default {
 </script>
 
 <style lang="scss">
-// @import '../assets/css/index.css';
 .public-header {
   padding-left: 107px;
   padding-right: 107px;

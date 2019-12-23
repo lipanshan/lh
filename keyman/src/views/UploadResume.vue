@@ -619,8 +619,7 @@ export default {
 <style lang="scss">
 .upload-resume {
   .hr-info {
-    height: auto;
-    width: 1240px;
+    max-width: 1240px;
     margin: 40px auto;
     background: #fff;
   }

@@ -24,10 +24,10 @@ export default {
   width: 100%;
   min-width: 1280px;
   height: 694px;
-  background: url(../assets/img/app_page_bg@2x.png) no-repeat center 0;
+  background: url(../assets/img/app_page_bg@2x.png) no-repeat center 0 #fff;
   background-size: cover;
   &::before {
-    content: "";
+    content: '';
     position: absolute;
     top: 0;
     right: 0;
@@ -40,11 +40,14 @@ export default {
     position: absolute;
     left: 50%;
     top: 50%;
-    transform: translate3d(-50%, -50%, 0);
+    width: 816px;
+    height: 376px;
+    margin-left: -408px;
+    margin-top: -188px;
     display: flex;
     align-items: flex-end;
     z-index: 10;
-    &>div {
+    & > div {
       background: #fff;
     }
     .side {

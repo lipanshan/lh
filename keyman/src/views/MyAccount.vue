@@ -37,7 +37,10 @@
                     <span class="point"></span>
                     <el-input type="textarea" v-model="word.content"></el-input>
                     <span class="btns-group">
-                      <span class="save" @click="onSaveWord(word)">保存</span>
+                      <!-- 编辑-保存 -->
+                      <span class="save" v-if="!word.create" @click="onSaveEditorWord(word)">保存</span>
+                      <!-- 新建-保存 -->
+                      <span class="save" v-if="word.create" @click="onSaveWord(word)">保存</span>
                     </span>
                   </div>
                 </div>
@@ -67,19 +70,20 @@
           v-show="tag === 'tel'"
           class="tel-form"
           label-width="148px"
+          ref="telWrap"
         >
           <el-form-item label="当前绑定手机号">
-            <div class="tel">{{telData.mobil}}</div>
+            <div class="tel">{{curMobile}}</div>
           </el-form-item>
-          <el-form-item label="更改绑定手机号">
+          <el-form-item prop="mobil" label="更改绑定手机号">
             <el-input v-model="telData.mobil"></el-input>
           </el-form-item>
           <el-form-item label="图片验证码">
-            <div class="verify-wrap" id="verify-wrap"></div>
+            <div class="verify-wrap" id="verifyWrap"></div>
           </el-form-item>
-          <el-form-item label="短信验证码">
-            <el-input v-model="telData.phoneCode">
-              <span slot="append" class="get-vcode">获取验证码</span>
+          <el-form-item prop="code" label="短信验证码">
+            <el-input v-model="telData.code">
+              <span slot="append" class="get-vcode" @click="sendMsg">获取验证码</span>
             </el-input>
           </el-form-item>
           <div class="split-line"></div>
@@ -132,54 +136,14 @@
       class="cettification-wrap"
       :visible.sync="certificationVisible"
     >
-      <el-form :model="certificationData" :rules="certificationRules" ref="certificationWrap">
-        <div class="head">
-          <div class="icon"></div>
-          <div class="info">
-            <p class="title">请完成实名认证</p>
-            <p class="subtitle">根据工信部、公安部相关文件执行,信息发布需要实名认证</p>
-          </div>
-        </div>
-        <div class="body">
-          <div class="half">
-            <el-form-item prop="truename">
-              <el-input v-model="certificationData.truename" placeholder="*输入姓名"></el-input>
-            </el-form-item>
-            <el-radio-group v-model="certificationData.sex">
-              <el-radio :label="1">男</el-radio>
-              <el-radio :label="2">女</el-radio>
-            </el-radio-group>
-          </div>
-          <el-form-item prop="number">
-            <el-input v-model="certificationData.number" maxlength="18" placeholder="*输入身份证号"></el-input>
-          </el-form-item>
-          <div class="idcard-wrap">
-            <div class="upload-img-wrap up">
-              <el-upload action="#" :before-upload="onBeforeUploadIdcardUp">
-                <div class="img-wrap">
-                  <img :src="idcardUp" alt />
-                </div>
-              </el-upload>
-            </div>
-            <div class="upload-img-wrap down">
-              <el-upload action="#" :before-upload="onBeforeUploadIdcardDown">
-                <div class="img-wrap">
-                  <img :src="idcardDown" alt />
-                </div>
-              </el-upload>
-            </div>
-          </div>
-          <div class="action-wrap">
-            <span class="certication-btn" @click="onCertifiction">开始认证</span>
-          </div>
-        </div>
-      </el-form>
+      <Certificate @onhide="onHideCerModel"></Certificate>
     </el-dialog>
   </div>
 </template>
 
 <script>
-import SlideVerify from '../assets/js/jq-slideVerify.js'
+import Certificate from '@/components/Certificate'
+import '../assets/js/verify.js'
 import { mapGetters } from 'vuex'
 import {
   modifyAccountInfo,
@@ -189,7 +153,8 @@ import {
   getCertStatus,
   addWord,
   editorWord,
-  deleteWord
+  deleteWord,
+  sendTelVcode
 } from '@/api/api'
 const WORDS_LEN = 3 //创建常用语条数
 const AVATAR_SIZE = 1000 * 200 // 头像大小200k
@@ -199,6 +164,7 @@ export default {
   data() {
     return {
       tag: 'info',
+      curMobile: '',
       avatarUrl: '',
       words: [
         // {
@@ -207,8 +173,6 @@ export default {
         //   id: new Data().getTime()
         // }
       ],
-      idcardUp: '',
-      idcardDown: '',
       dialogVisible: false,
       infoData: {
         member_id: '',
@@ -245,16 +209,18 @@ export default {
         ]
       },
       telData: {
+        member_id: '',
+        token: '',
         mobil: '',
         vcode: false,
-        phoneCode: '',
+        code: '',
         wx_user: '',
         email: ''
       },
       telRules: {
         mobil: [
           {
-            required: false,
+            required: true,
             message: ''
           }
         ],
@@ -264,9 +230,9 @@ export default {
             message: ''
           }
         ],
-        phoneCode: [
+        code: [
           {
-            required: false,
+            required: true,
             message: ''
           }
         ],
@@ -286,35 +252,6 @@ export default {
       imgVcode: false,
       msgVcode: false,
       certificationVisible: false,
-      certificationData: {
-        member_id: '',
-        truename: '',
-        token: '',
-        sex: '',
-        q_pic: '',
-        h_pic: '',
-        uploadFileSign: ['q_pic', 'h_pic']
-      },
-      certificationRules: {
-        truename: [
-          {
-            required: true,
-            message: ''
-          }
-        ],
-        sex: [
-          {
-            required: true,
-            message: ''
-          }
-        ],
-        number: [
-          {
-            required: true,
-            message: ''
-          }
-        ]
-      },
       certificationStatus: 0
     }
   },
@@ -329,7 +266,7 @@ export default {
     this.initCertiStatus()
   },
   mounted() {
-    this.tag === 'tel' && this.initImageVcode()
+    this.initImageVcode()
   },
   methods: {
     initAccountInfo() {
@@ -337,7 +274,6 @@ export default {
         member_id: this.getMemberId,
         token: this.getToken
       }).then(res => {
-        // console.log(res)
         if (res.code === 200) {
           const keys = Object.keys(this.infoData)
           for (let i = 0; i < keys.length; i++) {
@@ -347,6 +283,9 @@ export default {
           for (let i = 0; i < keys2.length; i++) {
             this.telData[keys2[i]] = res.data.user_list[keys2[i]]
           }
+
+          // 初始化当前绑定手机号
+          this.curMobile = res.data.user_list.mobil
           this.avatarUrl = res.data.user_list.headimgurl // 用户头像
           this.words = res.data.cy_sentences.map(item => {
             item.isEdit = false
@@ -356,12 +295,17 @@ export default {
       })
     },
     initImageVcode() {
-      const slideVerify = new SlideVerify('#verify-wrap', {
-        // wrapWidth: '100%', //设置 容器的宽度 ，默认为 350 ，也可不用设，你自己css 定义好也可以，插件里面会取一次这个 容器的宽度
-        initText: '按住滑块拖动到最右侧', //设置  初始的 显示文字
-        sucessText: '验证通过', //设置 验证通过 显示的文字
-        getSucessState: res => {
-          this.imgVcode = res
+      var that = this
+      $('#verifyWrap').slideVerify({
+        type: 1, //类型
+        vOffset: 5, //误差量，根据需求自行调整
+        barSize: {
+          width: '350px',
+          height: '48px'
+        },
+        ready: function() {},
+        success: function() {
+          that.imgVcode = true
         }
       })
     },
@@ -371,10 +315,14 @@ export default {
         token: this.getToken
       }).then(res => {
         if (res.code === 200) {
+          console.log(res)
           this.certificationStatus = res.data.status
           if (res.data.status !== 1) {
             this.dialogVisible = true
           }
+        } else if (res.code === 40001) {
+          // 没有数据也需要认证
+          this.dialogVisible = true
         } else {
           // this.$message.error(res.message)
         }
@@ -382,9 +330,6 @@ export default {
     },
     onTagChange(val) {
       this.tag = val
-      if (val === 'tel') {
-        this.initImageVcode()
-      }
     },
     sendMsg: function() {
       if (this.imgVcode) {
@@ -392,6 +337,7 @@ export default {
           phone_number: this.telData.mobil,
           templateCode: MESSAGE_TEMPETE
         }).then(res => {
+          console.log(res)
           if (res.code === 200) {
             this.msgVcode = true
           } else {
@@ -421,15 +367,6 @@ export default {
       for (let i = 0; i < this.words.length; i++) {
         if (this.words[i].id === word.id) {
           this.words[i].isEdit = true
-          editorWord({
-            member_id: this.getMemberId,
-            token: this.getToken,
-            id: word.id
-          }).then(res => {
-            if (res.code !== 200) {
-              this.$message.error(res.message)
-            }
-          })
           return
         }
       }
@@ -451,6 +388,25 @@ export default {
         }
       }
     },
+    onSaveEditorWord(word) {
+      for (let i = 0; i < this.words.length; i++) {
+        if (this.words[i].id === word.id) {
+          editorWord({
+            member_id: this.getMemberId,
+            token: this.getToken,
+            id: word.id,
+            content: word.content
+          }).then(res => {
+            if (res.code !== 200) {
+              this.$message.error(res.message)
+            } else {
+              this.words[i].isEdit = false
+            }
+          })
+          return
+        }
+      }
+    },
     onSaveWord(word) {
       for (let i = 0; i < this.words.length; i++) {
         if (this.words[i].id === word.id) {
@@ -466,6 +422,8 @@ export default {
           }).then(res => {
             if (res.code !== 200) {
               this.$message.error(res.message)
+            } else {
+              this.words[i].create = false
             }
           })
           return
@@ -477,6 +435,7 @@ export default {
         return
       }
       this.words.push({
+        create: true,
         isEdit: true,
         content: '',
         id: `${new Date().getTime()}`
@@ -486,6 +445,7 @@ export default {
       this.infoData.member_id = this.getMemberId
       this.infoData.token = this.getToken
       modifyAccountInfo(this.infoData).then(res => {
+        console.log(res)
         if (res.code !== 200) {
           this.$message.error(res.message)
         }
@@ -495,9 +455,21 @@ export default {
       // 此处还有待查证
       this.telData.member_id = this.getMemberId
       this.telData.token = this.getToken
-      modifyAccountTel(this.telData).then(res => {
-        if (res.code !== 200) {
-          this.$message.error(res.message)
+      const sendData = {}
+      const keys = Object.keys(this.telData)
+      for (let i = 0; i < keys.length; i++) {
+        if (keys[i] === 'vcode') {
+          continue
+        }
+        sendData[keys[i]] = this.telData[keys[i]]
+      }
+      this.$refs.telWrap.validate(valid => {
+        if (valid) {
+          modifyAccountTel(sendData).then(res => {
+            if (res.code !== 200) {
+              this.$message.error(res.message)
+            }
+          })
         }
       })
     },
@@ -505,32 +477,8 @@ export default {
       this.dialogVisible = false
       this.certificationVisible = true
     },
-    onCertifiction() {
-      this.certificationData.member_id = this.getMemberId
-      this.certificationData.token = this.getToken
-      this.$refs.certificationWrap.validate(valid => {
-        if (valid) {
-          certificationUser(this.certificationData).then(res => {
-            if (res.code === 200) {
-              this.certificationVisible = false
-            } else {
-              this.$message.error(res.message)
-            }
-          })
-        } else {
-          this.$message.error('请检查表单是否填写完成')
-        }
-      })
-    },
-    onBeforeUploadIdcardUp(file) {
-      this.onPreviewImg(file, 'idcardUp')
-      this.certificationData.q_pic = file
-      return false
-    },
-    onBeforeUploadIdcardDown(file) {
-      this.onPreviewImg(file, 'idcardDown')
-      this.certificationData.h_pic = file
-      return false
+    onHideCerModel() {
+      this.certificationVisible = false
     }
   },
   filters: {
@@ -543,24 +491,17 @@ export default {
       return map[num]
     }
   },
-  watch: {
-    //   words: {
-    //     deep: true,
-    //     handler(nVal, oVal) {
-    //       // 创建短语-同步到infoData
-    //       this.infoData.words = this.words.map(item => item.word).join(',')
-    //     }
-    //   }
+  watch: {},
+  components: {
+    Certificate
   }
 }
 </script>
 
 <style lang="scss">
-body {
-  background-color: #eff1f5ff;
-}
+@import '../assets/css/verify.css';
 .my-account {
-  width: 1240px;
+  max-width: 1240px;
   height: auto;
   background: #fff;
   margin: 40px auto;
@@ -1001,6 +942,14 @@ body {
     .el-form-item__error {
       display: none;
     }
+  }
+  .verify-move-block {
+    & > i {
+      display: none;
+    }
+  }
+  .el-form-item__error {
+    display: none;
   }
 }
 </style>

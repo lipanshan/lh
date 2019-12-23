@@ -95,7 +95,7 @@ export default {
     height: 496px;
     width: 100%;
     background: url('../assets/img/banner-news.png') no-repeat 0 -60px;
-    background: cover;
+    background-size: cover;
     position: relative;
   }
 }

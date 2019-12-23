@@ -319,13 +319,15 @@
           <img src="../assets/img/no-data.png" alt />
           <div class="tips">
             <span>暂无人才</span>
-            <router-link to="/user" class="add-people" tag="span">添加人才</router-link>
+            <!-- <router-link to="/user" class="add-people" tag="span">添加人才</router-link> -->
           </div>
         </div>
       </div>
       <el-pagination
+        v-show="!(!peopleList.length && peopleListPagination.currentPage === 1)"
         layout="prev, pager, next"
         @current-change="onPageChange"
+        :page-size="20"
         :total="peopleListPagination.allCount"
       ></el-pagination>
     </div>
@@ -460,11 +462,17 @@ export default {
         if (res.code === 200) {
           this.peopleList = res.data
           this.peopleListPagination.allCount = res.pagelist.count_num
+        } else if (
+          this.peopleListPagination.currentPage === 1 &&
+          res.code === 40001
+        ) {
+          this.peopleList = []
         }
       })
     },
     onPageChange(pageNum) {
       this.peopleListPagination.currentPage = pageNum
+      this.initPeopleList(pageNum)
     },
     switchMore() {
       this.isShowMore = !this.isShowMore
@@ -495,7 +503,8 @@ export default {
       })
     },
     onSearch() {
-
+      this.peopleListPagination.currentPage = 1
+      this.initPeopleList()
     }
   },
   filters: {
@@ -523,12 +532,9 @@ export default {
 </script>
 
 <style lang="scss">
-body {
-  background: #eff1f5ff;
-}
 .my-people-bank {
-  width: 1240px;
-  margin: 0 auto;
+  max-width: 1240px;
+  margin: 34px auto;
   .my-people-form {
     padding-top: 28px;
     padding-left: 44px;
@@ -589,8 +595,9 @@ body {
     padding-top: 24px;
     display: flex;
     align-items: center;
+    justify-content: space-between;
     .col {
-      margin-right: 48px;
+      margin-right: 15px;
       & > h2 {
         font-size: 18px;
         line-height: 34px;
@@ -607,18 +614,18 @@ body {
           background-color: #aaaaaaff;
         }
       }
-      &:nth-child(1) {
-        width: 328px;
-      }
-      &:nth-child(2) {
-        width: 272px;
-      }
-      &:nth-child(3) {
-        width: 260px;
-      }
-      &:nth-child(4) {
-        width: 186px;
-      }
+      // &:nth-child(1) {
+      //   width: 328px;
+      // }
+      // &:nth-child(2) {
+      //   width: 272px;
+      // }
+      // &:nth-child(3) {
+      //   width: 260px;
+      // }
+      // &:nth-child(4) {
+      //   width: 186px;
+      // }
       &:nth-child(5) {
         margin-top: 30px;
       }
@@ -667,6 +674,7 @@ body {
   .row3 {
     .col {
       flex: 1;
+      justify-content: space-between;
       .el-checkbox__label {
         padding: 9px;
       }
@@ -1016,7 +1024,7 @@ body {
     margin-top: 10px;
     position: relative;
     display: block;
-    width: 1240px;
+    max-width: 1240px;
     height: 740px;
     background: #fff;
     .nothing-box {

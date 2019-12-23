@@ -145,7 +145,7 @@
       <div class="content">
         <div class="work-list">
           <ul v-show="workList.length">
-            <li v-for="item in workList" :key="item.id">
+            <li v-for="item in workList" :key="item.id" @click="onSeePostDetail(item)">
               <div class="left">
                 <p class="title">
                   <span>{{item.job_title}}</span>
@@ -167,11 +167,12 @@
                   <span>{{item.filterCompanySize}}</span>
                 </p>
               </div>
+              <!-- 暂时没有这些字段 -->
               <div class="right">
                 <p class="title">
                   <span class="point"></span>
-                  <span class="name"></span> |
-                  <span class="post"></span>
+                  <!-- <span class="name">{{item.nickname}}</span> -->
+                  <!-- <span class="post">{{item.}}</span> -->
                 </p>
                 <p class="subtitle time"></p>
               </div>
@@ -186,37 +187,12 @@
             v-show="workList.length"
             layout="prev, pager, next"
             @current-change="onPageChange"
+            :page-size="20"
             :total="pageData.allCount"
           ></el-pagination>
         </div>
         <div class="right-regist">
-          <div class="go-regist" @click="onGoRegist">
-            <p>各大行业职位任你选</p>
-            <div>
-              <img src="../assets/img/mobile.png" alt />
-              <span>+86</span>
-              <img src="../assets/img/down2.png" alt />
-              <input type="text" placeholder="请输入" />
-            </div>
-            <div id="box" onselectstart="return false;">
-              <div class="bgColor"></div>
-              <div class="txt">请按住滑块, 拖动到最右边</div>
-              <!--给i标签添加上相应字体图标的类名即可-->
-              <div class="slider">
-                <img src="../assets/img/next.png" alt />
-              </div>
-            </div>
-            <div>
-              <img src="../assets/img/email.png" alt />
-              <input type="text" placeholder="请输入" />
-              <div @click="onSendVcode">发送验证码</div>
-            </div>
-            <div>登陆/注册</div>
-            <div>
-              <input type="checkbox" style="background: #fff;" />
-              <span>我已同意用户协议及隐私政策</span>
-            </div>
-          </div>
+          <div class="go-regist" @click="onGoRegist"></div>
           <div class="upload">
             <div>上传简历一键注册</div>
           </div>
@@ -246,8 +222,13 @@
               </li>
             </ul>
           </div>
-          <img class="gg" src="../assets/img/5.png" alt />
-          <img class="gg" style="margin-bottom: 20px" src="../assets/img/5.png" alt />
+          <img class="gg advert_img" src="../assets/img/fulltime1.png" alt />
+          <img
+            class="gg advert-img"
+            style="margin-bottom: 20px"
+            src="../assets/img/fulltime2.png"
+            alt
+          />
         </div>
       </div>
     </div>
@@ -274,10 +255,14 @@
         </div>
       </div>
     </div>
+    <el-dialog :visible.sync="showDetail" :model-append-to-body="false" width="1240px">
+      <PostDetail :show="true" :isLogined="false" :detail="curPost"></PostDetail>
+    </el-dialog>
   </div>
 </template>
 
 <script>
+import PostDetail from '@/components/PostDetailInfo'
 import {
   getAllAddress,
   formatterAddressData,
@@ -331,7 +316,7 @@ export default {
         //   district: '朝阳区',
         //   education: 3,
         //   work_year: 1,
-        //   description: '',
+        //   description: 'dasdasddddddddddddddddd',
         //   recruiting_num: 0,
         //   sortid: 1,
         //   month_money: 12,
@@ -344,7 +329,9 @@ export default {
         pageNum: 1,
         allCount: 0
       },
-      sendData: {}
+      sendData: {},
+      curPost: {},
+      showDetail: false
     }
   },
   created() {
@@ -354,15 +341,15 @@ export default {
     this.initList()
   },
   mounted() {
-    this.box = this.getEle('#box') //容器
-    this.bgColor = this.getEle('.bgColor') //背景色
-    this.txt = this.getEle('.txt') //文本
-    this.slider = this.getEle('.slider') //滑块
-    this.icon = this.getEle('.slider>i')
-    this.successMoveDistance = this.box.offsetWidth - this.slider.offsetWidth //解锁需要滑动的距离
-    // downX //用于存放鼠标按下时的位置
-    // isSuccess = false //是否解锁成功的标志，默认不成功
-    this.slider.onmousedown = this.mousedownHandler
+    // this.box = this.getEle('#box') //容器
+    // this.bgColor = this.getEle('.bgColor') //背景色
+    // this.txt = this.getEle('.txt') //文本
+    // this.slider = this.getEle('.slider') //滑块
+    // this.icon = this.getEle('.slider>i')
+    // this.successMoveDistance = this.box.offsetWidth - this.slider.offsetWidth //解锁需要滑动的距离
+    // // downX //用于存放鼠标按下时的位置
+    // // isSuccess = false //是否解锁成功的标志，默认不成功
+    // this.slider.onmousedown = this.mousedownHandler
   },
   methods: {
     getEle: function(selector) {
@@ -423,12 +410,10 @@ export default {
       document.onmousemove = null
     },
     initList() {
-      console.log(this.$route.query, this.$route.query.search === undefined)
       if (this.$route.query.search === undefined) {
         return
       }
       this.search.key_name = this.$route.query.search
-      console.log(this.search)
       this.onSearchJob()
     },
     initAddressList() {
@@ -530,7 +515,7 @@ export default {
           this.pageData.allCount = res.pagelist.count_num
           this.pageData.pageNum = res.pagelist.page
           this.sendData = sendData // 记录当前查询条件，翻页使用
-        } else if (res.code === 40001) {
+        } else if (res.code === 40001 && this.sendData.page === 1) {
           this.workList = []
         }
       })
@@ -543,13 +528,16 @@ export default {
           this.pageData.allCount = res.pagelist.count_num
           this.pageData.pageNum = res.pagelist.page
           this.sendData = sendData // 记录当前查询条件，翻页使用
-        } else if (res.code === 40001) {
+        } else if (res.code === 40001 && this.sendData.page === 1) {
           this.workList = []
         }
       })
     },
     onContact(data) {
       console.log(data)
+      this.$router.push({
+        path: '/user/jobchart'
+      })
     },
     onResetSearch() {
       this.search = {
@@ -565,10 +553,53 @@ export default {
         comkind: '',
         employee_num: ''
       }
+      this.districtList = []
+      this.cityFlag = true
+      this.curCity = 0
+      this.curDistrict = 0
+      this.curCityName = ''
+      this.curDistrictName = ''
     },
     onSendVcode() {},
     onGoRegist() {
       this.$router.push('/login')
+    },
+    onSeePostDetail(data) {
+      const nData = {
+        url: data.headimgurl,
+        menber_id: data.member_id,
+        job_name: data.job_title,
+        salary_above: data.salary_above,
+        salary_below: data.salary_below,
+        nickname: data.nickname,
+        rank: null,
+        type: null,
+        city: `${data.province} ${data.city} ${data.district}`,
+        work_year: data.work_year,
+        education: data.education,
+        company_name: data.company_name,
+        employee_num: data.employee_num,
+        comkind: data.comkind,
+        logo: '',
+        website: '',
+        profile: '',
+        id: 1,
+        headimgurl: data.headimgurl,
+        age: 0,
+        data_list: [
+          {
+            company_name: data.company_name,
+            employee_num: data.employee_num,
+            comkind: data.comkind,
+            salary_above: data.salary_above,
+            salary_below: data.salary_below,
+            logo: ''
+          }
+        ]
+      }
+      console.log(data)
+      this.showDetail = true
+      this.curPost = nData
     }
   },
   filters: {
@@ -622,7 +653,12 @@ export default {
       }
       return map[num]
     }
-  }
+  },
+  components: {
+    PostDetail
+  },
+  showDetail: false,
+  curPost: {}
 }
 </script>
 
@@ -633,6 +669,7 @@ export default {
     height: auto;
     min-width: 1280px;
     width: 100%;
+    background: #fff;
   }
 
   .seach-box {
@@ -640,13 +677,15 @@ export default {
     width: 1280px;
     margin: 0 auto;
     .search-row {
-      width: 1150px;
+      .el-input__inner {
+        display: inline-block;
+      }
     }
     & > .el-input {
       border-color: #f06358;
       .el-input-group__prepend {
         position: relative;
-        vertical-align: top;
+        vertical-align: middle;
         padding: 0;
         width: 140px;
         border: none;
@@ -894,6 +933,10 @@ export default {
             font-size: 22px;
             line-height: 42px;
             color: #333333;
+            width: 260px;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
             .color {
               margin-left: 5px;
               margin-right: 5px;
@@ -908,21 +951,40 @@ export default {
             & > span {
               display: block;
               margin-right: 10px;
+              max-width: 110px;
+              white-space: nowrap;
+              overflow: hidden;
+              text-overflow: ellipsis;
             }
           }
         }
         & > .center {
           @extend .left;
+          .title,
           .subtitle {
             justify-content: center;
+            max-width: 260px;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
           }
         }
         & > .right {
           @extend .left;
+          justify-content: flex-end;
           .title {
             align-items: center;
+            max-width: 260px;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            justify-content: flex-end;
             & > span {
               margin-right: 10px;
+              max-width: 110px;
+              white-space: nowrap;
+              overflow: hidden;
+              text-overflow: ellipsis;
             }
           }
           .subtitle {
@@ -959,12 +1021,10 @@ export default {
   .right-regist {
     height: 0;
     overflow: hidden;
-    width: 370px;
+    width: 324px;
     height: auto;
     float: right;
     margin-top: 38px;
-    background: url(../assets/img/go_regist.png) no-repeat 0 0;
-    background-size: 370px 515px;
   }
 
   /* .right-regist>div {
@@ -973,8 +1033,9 @@ export default {
 
   .right-regist > div:first-child {
     width: 100%;
-    height: 513px;
-    background: #f06358ff;
+    height: 450px;
+    background: url(../assets/img/go_regist.png) no-repeat 0 0;
+    background-size: 324px 450px;
     overflow: hidden;
   }
 
@@ -1052,7 +1113,7 @@ export default {
     background-color: lightblue;
   }
 
-  .txt {
+  .slide-txt {
     position: absolute;
     width: 100%;
     height: 55px;
@@ -1234,6 +1295,9 @@ export default {
     width: 100%;
     height: 209px;
   }
+  .advert-img {
+    margin-top: 20px;
+  }
 
   .list-nav {
     width: 100%;
@@ -1384,7 +1448,6 @@ export default {
     }
   }
   .post-list-nothing {
-    margin-top: 20px;
     height: 738px;
     position: relative;
     background: #fff;
@@ -1404,6 +1467,12 @@ export default {
       line-height: 40px;
       text-align: center;
     }
+  }
+  .el-dialog__header {
+    padding: 0;
+  }
+  .el-dialog__body {
+    padding: 0;
   }
 }
 </style>

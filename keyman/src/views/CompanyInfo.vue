@@ -1,87 +1,6 @@
 <template>
   <div class="company-info">
-    <!-- <div class="company">
-      <ul>
-        <li @click="onTagSwitch('baseInfo')" :class="{'cur': tag === 'baseInfo'}">基本信息</li>
-        <li @click="onTagSwitch('intro')" :class="{'cur': tag === 'intro'}">公司介绍</li>
-        <li @click="onTagSwitch('welfare')" :class="{'cur': tag === 'welfare'}">公司福利</li>
-        <li @click="onTagSwitch('album')" :class="{'cur': tag === 'album'}">公司相册</li>
-      </ul>
-      <div v-show="tag === 'baseInfo'" class="jb">
-        <p>公司基本信息</p>
-        <p>丰富的公司介绍，能获得更多求职者的青睐， 为你的职位带来更多查看与沟通</p>
-        <div>
-          <span>公司简称</span>
-          <input type="text" />
-          <span>重新认证</span>
-        </div>
-        <div>
-          <span>公司logo</span>
-          <img src="../assets/img/xcx.png" alt />
-        </div>
-        <div>
-          <span>所在行业</span>
-          <input type="text" />
-        </div>
-        <div>
-          <span>融资阶段</span>
-          <input type="text" />
-        </div>
-        <div>
-          <span>人员规模</span>
-          <input type="text" />
-        </div>
-        <div>
-          <span>公司官网</span>
-          <input type="text" />
-        </div>
-        <div class="btn">保存修改</div>
-      </div>
-      <div v-show="tag === 'intro'" class="js">
-        <p>公司介绍</p>
-        <p>丰可以简单介绍一下公司发展状况、服务领域、主要产品等信息</p>
-        <textarea name id cols="30" rows="10"></textarea>
-        <div>提交</div>
-      </div>
-      <div v-show="tag === 'welfare'" class="fl">
-        <p>公司福利</p>
-        <p>丰可以简单介绍一下公司发展状况、服务领域、主要产品等信息</p>
-        <div>
-          <span>福利名称</span>
-          <input style="width: 128px;" type="text" />
-          <span style="font-size: 14px;color:#9FA3B0">6字之内</span>
-        </div>
-        <div>
-          <span>福利说明</span>
-          <input type="text" />
-          <span class="btn">确认添加</span>
-        </div>
-        <div>
-          <span>五险一金</span>
-          <span>五险一金</span>
-          <span>五险一金</span>
-        </div>
-        <div class="btn">保存修改</div>
-      </div>
-      <div v-show="tag === 'album'" class="xc">
-        <p>公司福利</p>
-        <p>丰可以简单介绍一下公司发展状况、服务领域、主要产品等信息</p>
-        <div>
-          <img src="../assets/img/img_upLoad.png" alt />
-          <img src="../assets/img/img_upLoad.png" alt />
-          <img src="../assets/img/img_upLoad.png" alt />
-          <img src="../assets/img/img_upLoad.png" alt />
-          <img src="../assets/img/img_upLoad.png" alt />
-        </div>
-      </div>
-    </div>-->
     <div class="company">
-      <!-- <ul>
-        <li class="cur" @click="tab_index">基本信息</li>
-        <li @click="tab_index">公司介绍</li>
-        <li @click="tab_index">公司福利</li>
-        <li @click="tab_index">公司相册</li>
-      </ul>-->
       <ul>
         <li @click="onTagSwitch('baseInfo')" :class="{'cur': tag === 'baseInfo'}">基本信息</li>
         <li @click="onTagSwitch('intro')" :class="{'cur': tag === 'intro'}">公司介绍</li>
@@ -94,7 +13,7 @@
         <div>
           <span>公司简称</span>
           <input type="text" v-model="company_name" />
-          <span>重新认证</span>
+          <span class="recertification" @click="onReCertification">重新认证</span>
         </div>
         <div>
           <span>公司logo</span>
@@ -189,10 +108,21 @@
         <span class="btn" @click="xc_submit">保存修改</span>
       </div>
     </div>
+    <!-- 实名认证 -->
+    <el-dialog
+      title
+      width="460px"
+      :modal-append-to-body="false"
+      class="cettification-wrap"
+      :visible.sync="certificationVisible"
+    >
+      <Certificate @onhide="onHideCerModel"></Certificate>
+    </el-dialog>
   </div>
 </template>
 
 <script>
+import Certificate from '@/components/Certificate'
 import axios from '../api/axios'
 import { mapGetters } from 'vuex'
 var url = 'http://www.wzgwebsite.top/'
@@ -229,7 +159,8 @@ export default {
       urlimg4: '',
       urlimg5: '',
       urlimg6: '',
-      baseLogo: ''
+      baseLogo: '',
+      certificationVisible: false
     }
   },
   computed: {
@@ -245,7 +176,6 @@ export default {
       reads.readAsDataURL(f)
       reads.onload = function(e) {
         document.getElementById('show').src = e.target.result
-        // that.hasImg = true;
       }
       that.baseLogo = f
     })
@@ -255,8 +185,6 @@ export default {
       reads.readAsDataURL(f)
       reads.onload = function(e) {
         that.urlimg1 = e.target.result
-        // document.querySelector('.img1').src = e.target.result
-        // that.hasImg = true;
       }
       that.img1 = f
     })
@@ -266,8 +194,6 @@ export default {
       reads.readAsDataURL(f)
       reads.onload = function(e) {
         that.urlimg2 = e.target.result
-        // document.querySelector('.img2').src = e.target.result
-        // that.hasImg = true;
       }
       that.img2 = f
     })
@@ -276,9 +202,7 @@ export default {
       var f = document.getElementById('img3').files[0]
       reads.readAsDataURL(f)
       reads.onload = function(e) {
-        // document.querySelector('.img3').src = e.target.result
         that.urlimg3 = e.target.result
-        // that.hasImg = true;
       }
       that.img3 = f
     })
@@ -288,9 +212,6 @@ export default {
       reads.readAsDataURL(f)
       reads.onload = function(e) {
         that.urlimg4 = e.target.result
-        // document.querySelector('.img4').src = e.target.result
-        // that.hasImg = true;
-        // that.img4 = { file: this.result }
       }
       that.img4 = f
     })
@@ -300,9 +221,6 @@ export default {
       reads.readAsDataURL(f)
       reads.onload = function(e) {
         that.urlimg5 = e.target.result
-        // document.querySelector('.img5').src = this.result
-        // that.hasImg = true;
-        // that.img5 = { file: this.result }
       }
       that.img5 = f
     })
@@ -312,9 +230,6 @@ export default {
       reads.readAsDataURL(f)
       reads.onload = function(e) {
         that.urlimg6 = e.target.result
-        // document.querySelector('.img6').src = this.result
-        // that.hasImg = true;
-        // that.img6 = { file: this.result }
       }
       that.img6 = f
     })
@@ -327,23 +242,11 @@ export default {
         return Promise.resolve(JSON.parse(res))
       })
       .then(function(res) {
-        console.log(res)
         if (res.code == 200) {
           that.trades_list = res.data
           that.get_data()
         }
       })
-    // $.ajax({
-    //   url: url + 'api/apidate/industry_list?status=1',
-    //   dataType: 'json',
-    //   success: function(res) {
-    //     // console.log(res)
-    //     if (res.code == 200) {
-    //       that.trades_list = res.data
-    //       that.get_data()
-    //     }
-    //   }
-    // })
   },
   methods: {
     onTagSwitch(val) {
@@ -398,115 +301,9 @@ export default {
             that.urlimg4 = res.data.imgurl4
             that.urlimg5 = res.data.imgurl5
             that.urlimg6 = res.data.imgurl6
-
-            // $(that.trades_list).each(function (k, v) {
-            //     console.log(v.id)
-            //     if (v.id == that.cur_trades) {
-            //         $('#tradesSelect option:nth-child(' + k + 1 + ')').attr('selected', true);
-            //     }
-            // })
-            // $(that.finance).each(function (k, v) {
-            //     console.log(v)
-            //     if (v == that.company_finance) {
-            //         $('#financeSelect option:nth-child(' + k + 1 + ')').attr('selected', true);
-            //     }
-            // })
-            // $(that.people).each(function (k, v) {
-            //     console.log(v)
-            //     if (v == that.company_people) {
-            //         $('#peopleSelect option:nth-child(' + k + 1 + ')').attr('selected', true);
-            //     }
-            // })
           }
         })
-      // $.ajax({
-      //   url: url + 'api/apidate/company_list',
-      //   dataType: 'json',
-      //   type: 'post',
-      //   data: {
-      //     status: 1,
-      //     member_id: 45,
-      //     token: 'fca7c3c53cc59c0453b8d5c6bfa5956b'
-      //   },
-      //   success: function(res) {
-      //     console.log(res)
-      //     if (res.code == 200) {
-      //       that.info = res.data
-      //       that.id = res.data.id
-      //       that.company_name = res.data.company_name
-      //       $('#show').attr('src', res.data.logo)
-      //       that.cur_trades = res.data.industry
-      //       that.company_finance = res.data.comkind
-      //       that.company_people = res.data.employee_num
-      //       that.website = res.data.website
-      //       that.company_production = res.data.profile
-      //       that.flArr = res.data.temptation.split(',')
-      //       if (res.data.imgurl1) {
-      //         $('.img1').attr('src', 'res.data.imgurl1')
-      //       } else if (res.data.imgurl2) {
-      //         $('.img2').attr('src', 'res.data.imgurl2')
-      //       } else if (res.data.imgurl3) {
-      //         $('.img3').attr('src', 'res.data.imgurl3')
-      //       } else if (res.data.imgurl4) {
-      //         $('.img4').attr('src', 'res.data.imgurl4')
-      //       } else if (res.data.imgurl5) {
-      //         $('.img5').attr('src', 'res.data.imgurl5')
-      //       } else if (res.data.imgurl6) {
-      //         $('.img6').attr('src', 'res.data.imgurl6')
-      //       }
-
-      //       // $(that.trades_list).each(function (k, v) {
-      //       //     console.log(v.id)
-      //       //     if (v.id == that.cur_trades) {
-      //       //         $('#tradesSelect option:nth-child(' + k + 1 + ')').attr('selected', true);
-      //       //     }
-      //       // })
-      //       // $(that.finance).each(function (k, v) {
-      //       //     console.log(v)
-      //       //     if (v == that.company_finance) {
-      //       //         $('#financeSelect option:nth-child(' + k + 1 + ')').attr('selected', true);
-      //       //     }
-      //       // })
-      //       // $(that.people).each(function (k, v) {
-      //       //     console.log(v)
-      //       //     if (v == that.company_people) {
-      //       //         $('#peopleSelect option:nth-child(' + k + 1 + ')').attr('selected', true);
-      //       //     }
-      //       // })
-      //     }
-      //   }
-      // })
     },
-    // tab_index: function(e) {
-    //   $(e.target)
-    //     .addClass('cur')
-    //     .siblings('li')
-    //     .removeClass('cur')
-    //   if ($(e.target).index() == 0) {
-    //     $('.jb')
-    //       .show()
-    //       .siblings('div')
-    //       .hide()
-    //   } else if ($(e.target).index() == 1) {
-    //     $('.js')
-    //       .show()
-    //       .siblings('div')
-    //       .hide()
-    //   } else if ($(e.target).index() == 2) {
-    //     $('.fl')
-    //       .show()
-    //       .siblings('div')
-    //       .hide()
-    //   } else if ($(e.target).index() == 3) {
-    //     $('.xc')
-    //       .show()
-    //       .siblings('div')
-    //       .hide()
-    //   }
-    // },
-    // jump_account: function(e) {
-    //   window.location.href = 'hr_account.html'
-    // },
     base_submit: function(e) {
       var that = this
       // var formData = new FormData();
@@ -541,7 +338,7 @@ export default {
         .then(function(res) {
           // console.log(res)
           if (res.code == 200) {
-            alert('修改成功')
+            that.$message(res.message)
             that.get_data()
             that.tag = 'intro'
             // $('.js')
@@ -552,6 +349,8 @@ export default {
             //   .addClass('cur')
             //   .siblings('li')
             //   .removeClass('cur')
+          } else {
+            that.$message.error(res.message)
           }
         })
       // $.ajax({
@@ -602,7 +401,7 @@ export default {
         .then(function(res) {
           console.log(res)
           if (res.code == 200) {
-            alert('修改成功')
+            that.$message(res.message)
             that.get_data()
             that.tag = 'welfare'
             // $('.fl')
@@ -613,6 +412,8 @@ export default {
             //   .addClass('cur')
             //   .siblings('li')
             //   .removeClass('cur')
+          } else {
+            that.$message.error(res.message)
           }
         })
       // $.ajax({
@@ -648,7 +449,8 @@ export default {
         this.flArr.push(this.fl_name)
         this.fl_name = ''
       } else {
-        alert('请填写福利名称')
+        // alert('请填写福利名称')
+        this.$message.error('请填写福利名称')
       }
     },
     remove_fl: function(e) {
@@ -669,9 +471,10 @@ export default {
         .then(function(res) {
           // console.log(res)
           if (res.code == 200) {
-            alert('修改成功')
+            // alert('修改成功')
+            that.$message(res.message)
             that.get_data()
-            this.tag = 'album'
+            that.tag = 'album'
             // $('.xc')
             //   .show()
             //   .siblings('div')
@@ -738,51 +541,12 @@ export default {
         .then(function(res) {
           console.log(res)
           if (res.code == 200) {
-            alert('保存成功')
+            // alert('保存成功')
+            that.$message(res.message)
             that.get_data()
             that.tag = 'baseInfo'
-            // $('.jb')
-            //   .show()
-            //   .siblings('div')
-            //   .hide()
-            // $('.company>ul>li:nth-child(1)')
-            //   .addClass('cur')
-            //   .siblings('li')
-            //   .removeClass('cur')
           }
         })
-      // $.ajax({
-      //   url: url + 'api/apidate/edit_company_imgur',
-      //   dataType: 'json',
-      //   type: 'post',
-      //   data: {
-      //     status: 1,
-      //     member_id: 47,
-      //     token: '8ed3a7ac4a8abaf8fc577f4154345b16',
-      //     id: that.id,
-      //     imgurl1: that.img1,
-      //     imgurl2: that.img2,
-      //     imgurl3: that.img3,
-      //     imgurl4: that.img4,
-      //     imgurl5: that.img5,
-      //     imgurl6: that.img6
-      //   },
-      //   success: function(res) {
-      //     // console.log(res)
-      //     if (res.code == 200) {
-      //       alert('保存成功')
-      //       that.get_data()
-      //       $('.jb')
-      //         .show()
-      //         .siblings('div')
-      //         .hide()
-      //       $('.company>ul>li:nth-child(1)')
-      //         .addClass('cur')
-      //         .siblings('li')
-      //         .removeClass('cur')
-      //     }
-      //   }
-      // })
     },
     get_trades: function(e) {
       this.company_trades = $('#tradesSelect')
@@ -798,6 +562,12 @@ export default {
       this.company_people = $('#peopleSelect')
         .find('option:selected')
         .val()
+    },
+    onReCertification() {
+      this.certificationVisible = true
+    },
+    onHideCerModel() {
+      this.certificationVisible = true
     }
   },
   filters: {
@@ -877,22 +647,297 @@ export default {
           return '10000以上'
       }
     }
+  },
+  components: {
+    Certificate
   }
 }
 </script>
 
 <style lang="scss">
-@import '../assets/css/company.css';
-.company > ul > li {
-  cursor: pointer;
-}
-.company {
-  .btn {
-    padding: 0 !important;
+.company-info {
+  .company {
+    max-width: 1240px;
+    height: auto;
+    background: #fff;
+    margin: 40px auto;
   }
-  .pic-wrap {
-    & > div {
-      background: url(../assets/img/img_upLoad.png) no-repeat 0 0;
+
+  .company > ul {
+    height: 50px;
+    width: 100%;
+    background: #49444b;
+    overflow: hidden;
+  }
+
+  .company > ul li {
+    width: 220px;
+    height: 50px;
+    line-height: 50px;
+    text-align: center;
+    float: left;
+    color: #fff;
+    cursor: pointer;
+  }
+
+  .company > ul li.cur {
+    background: #fe7271;
+  }
+
+  .company > .jb {
+    padding: 30px 70px;
+  }
+
+  .company > .jb > p:first-child {
+    font-size: 18px;
+    line-height: 20px;
+    margin-bottom: 9px;
+    color: #24272e;
+  }
+
+  .company > .jb > p:nth-child(2) {
+    font-size: 12px;
+    line-height: 14px;
+    color: #9fa3b0;
+    margin-bottom: 18px;
+  }
+
+  .company > .jb > div {
+    height: 40px;
+    width: 100%;
+    margin-bottom: 14px;
+  }
+
+  .company > .jb > div > span {
+    float: left;
+    line-height: 40px;
+    font-size: 16px;
+  }
+
+  .company > .jb > div:nth-child(4) {
+    height: 84px;
+    position: relative;
+  }
+
+  .company > .jb > div:nth-child(4) > img {
+    float: left;
+    height: 84px;
+    width: 84px;
+    margin-left: 16px;
+  }
+
+  .company > .jb > div:nth-child(4) > input {
+    position: absolute;
+    top: 0;
+    left: 67px;
+    height: 84px;
+    width: 84px;
+    opacity: 0;
+  }
+
+  .company > .jb > div > span:nth-child(3) {
+    padding-left: 32px;
+    font-size: 14px;
+    color: #fe7271;
+    text-decoration: underline;
+  }
+
+  .company > .jb > div > span:nth-child(3):hover {
+    cursor: pointer;
+  }
+
+  .company > .jb > div > input,
+  .company > .jb > div > select {
+    border: 1px solid #e3e7ed;
+    float: left;
+    height: 40px;
+    width: 570px;
+    margin-left: 16px;
+    cursor: pointer;
+  }
+
+  .company > .jb > .btn {
+    font-size: 14px;
+    line-height: 40px;
+    text-align: center;
+    width: 197px;
+    color: #fff;
+    background: #fe7271;
+    margin-left: 80px;
+  }
+
+  .company > .js {
+    height: 358px;
+    width: 100%;
+    padding: 30px 70px;
+  }
+
+  .company > .js p:first-child,
+  .company > .xc p:first-child,
+  .company > .fl p:first-child {
+    font-size: 18px;
+    line-height: 20px;
+    margin-bottom: 9px;
+    color: #24272e;
+  }
+
+  .company > .js p:nth-child(2),
+  .company > .xc p:nth-child(2),
+  .company > .fl p:nth-child(2) {
+    font-size: 12px;
+    line-height: 14px;
+    color: #9fa3b0;
+    margin-bottom: 18px;
+  }
+
+  .company > .js textarea {
+    height: 170px;
+    width: 100%;
+    resize: none;
+    outline: none;
+    border: 1px solid #e3e7ed;
+    margin-bottom: 20px;
+  }
+
+  .company > .js div {
+    float: right;
+    width: 100px;
+    height: 40px;
+    text-align: center;
+    background: #fe7271;
+    color: #fff;
+    line-height: 40px;
+    cursor: pointer;
+  }
+
+  .company > .fl {
+    height: 462px;
+    width: 100%;
+    padding: 30px 70px;
+  }
+
+  .company > .fl > div {
+    height: 40px;
+    width: 100%;
+    margin-bottom: 14px;
+  }
+
+  .company > .fl > div span {
+    line-height: 40px;
+    font-size: 16px;
+    margin-right: 16px;
+    float: left;
+  }
+
+  .company > .fl > div input {
+    height: 40px;
+    border: 1px solid #e3e7ed;
+    width: 400px;
+    float: left;
+    margin-right: 11px;
+  }
+
+  .company > .fl > div .btn {
+    cursor: pointer;
+    font-size: 14px;
+    height: 30px;
+    width: 100px;
+    text-align: center;
+    line-height: 30px;
+    margin-top: 5px;
+    background: #fe7271;
+    color: #fff;
+    float: left;
+  }
+
+  .company > .fl > div:nth-child(5) {
+    height: 170px;
+    width: 100%;
+    padding: 18px 20px;
+    border: 1px solid #e3e7ed;
+  }
+
+  .company > .fl > div:nth-child(5) span {
+    padding: 0 20px;
+    line-height: 30px;
+    height: 30px;
+    background: #fe7271;
+    width: auto;
+    color: #fff;
+    border-radius: 15px;
+    cursor: pointer;
+  }
+
+  .company > .fl > .btn {
+    float: right;
+    width: 100px;
+    height: 40px;
+    text-align: center;
+    background: #fe7271;
+    color: #fff;
+    line-height: 40px;
+    cursor: pointer;
+  }
+
+  .company > .xc {
+    height: 522px;
+    width: 100%;
+    padding: 30px 27px;
+    position: relative;
+  }
+
+  .company > .xc > div > div {
+    width: 270px;
+    height: 167px;
+    float: left;
+    margin-right: 34px;
+    margin-bottom: 30px;
+    position: relative;
+  }
+
+  .company > .xc > div img,
+  .company > .xc > div input {
+    height: 100%;
+    width: 100%;
+  }
+
+  .company > .xc > div input {
+    position: absolute;
+    left: 0;
+    top: 0;
+    opacity: 0;
+    cursor: pointer;
+  }
+
+  .company > .xc img:nth-child(4),
+  .company > .xc img:nth-child(8) {
+    margin-right: 0;
+  }
+
+  .company > .xc .btn {
+    width: 100px;
+    height: 40px;
+    text-align: center;
+    background: #fe7271;
+    color: #fff;
+    line-height: 40px;
+    cursor: pointer;
+    position: absolute;
+    right: 70px;
+    bottom: 33px;
+  }
+  .recertification,
+  .company > ul > li {
+    cursor: pointer;
+  }
+  .company {
+    .btn {
+      padding: 0 !important;
+    }
+    .pic-wrap {
+      & > div {
+        background: url(../assets/img/img_upLoad.png) no-repeat 0 0;
+      }
     }
   }
 }

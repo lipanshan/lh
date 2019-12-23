@@ -71,7 +71,7 @@ body {
   background: #eff1f5ff;
 }
 .layout {
-  min-width: 1462px;
+  min-width: 1280px;
   width: 100%;
   & > .content {
     display: flex;
@@ -85,7 +85,7 @@ body {
         height: 60px;
         & > .content {
           margin: 0 auto;
-          width: 1240px;
+          max-width: 1240px;
           display: flex;
           & > .icon {
             margin-top: 19px;

@@ -103,8 +103,9 @@
         </div>
       </div>
       <el-pagination
-        v-show="postList.length"
+        v-show="!(!postList.length && this.currentPageNum === 1)"
         layout="prev, pager, next"
+        :page-size="20"
         @current-change="onPageChange"
         :total="allPostCount"
       ></el-pagination>
@@ -318,17 +319,27 @@
                 <div v-show="editorOrSee === 'editor'" class="editor-post">
                   <el-form :model="detailData" :rules="detailRules" label-position="top">
                     <el-form-item label="薪资结构">
-                      <el-input
-                        v-model.number="detailData.salary_above"
-                        maxlength="9"
-                        placeholder="薪资最小值"
-                      ></el-input>
+                      <el-select v-model="detailData.salary_above" placeholder="薪资最小值">
+                        <el-option label="3K以下" :value="1"></el-option>
+                        <el-option label="3-5K" :value="2"></el-option>
+                        <el-option label="5-10K" :value="3"></el-option>
+                        <el-option label="10-15K" :value="4"></el-option>
+                        <el-option label="15-20K" :value="5"></el-option>
+                        <el-option label="20-30K" :value="6"></el-option>
+                        <el-option label="30-50K" :value="7"></el-option>
+                        <el-option label="50K以上" :value="8"></el-option>
+                      </el-select>
                       <span class="to">至</span>
-                      <el-input
-                        v-model.number="detailData.salary_below"
-                        maxlength="9"
-                        placeholder="薪资最大值"
-                      ></el-input>
+                      <el-select v-model="detailData.salary_below" placeholder="薪资最大值">
+                        <el-option label="3K以下" :value="1"></el-option>
+                        <el-option label="3-5K" :value="2"></el-option>
+                        <el-option label="5-10K" :value="3"></el-option>
+                        <el-option label="10-15K" :value="4"></el-option>
+                        <el-option label="15-20K" :value="5"></el-option>
+                        <el-option label="20-30K" :value="6"></el-option>
+                        <el-option label="30-50K" :value="7"></el-option>
+                        <el-option label="50K以上" :value="8"></el-option>
+                      </el-select>
                     </el-form-item>
                     <el-form-item label="职位详情">
                       <el-input type="textarea" v-model="detailData.zwxq"></el-input>
@@ -837,14 +848,14 @@ export default {
         if (res.code === 200) {
           this.postList = res.data.reverse()
           this.allPostCount = res.pagelist.count_num
-        } else if (res.code === 40001) {
+        } else if (res.code === 40001 && this.currentPageNum === 1) {
           this.postList = []
         }
       })
     },
     onPageChange(pageNum) {
-      this.initPostList(pageNum)
       this.currentPageNum = pageNum
+      this.initPostList(pageNum)
     },
     onDetail(data) {
       if (data.status === 0) {
@@ -1173,8 +1184,17 @@ export default {
       return map[num]
     },
     filterSalary(num) {
-      const str = `${num}`
-      return str.length > 3 ? `${str.slice(0, -3)}K` : '1K'
+      const map = {
+        1: '3K以下',
+        2: '3-5K',
+        3: '5-10K',
+        4: '10-15K',
+        5: '15-20K',
+        6: '20-30K',
+        7: '30-50K',
+        8: '50K以上'
+      }
+      return map[num]
     },
     filterMonthMoney(num) {
       return num > 0 ? `${num}薪` : ''
@@ -1184,11 +1204,8 @@ export default {
 </script>
 
 <style lang="scss">
-body {
-  background: #eff1f5ff;
-}
 .my-post {
-  width: 1240px;
+  max-width: 1240px;
   margin: 0 auto;
   .operation {
     margin-top: 36px;
@@ -1203,7 +1220,7 @@ body {
     .create-resume {
       margin-right: 24px;
       display: block;
-      padding: 0 20px;
+      padding: 0 16px;
       font-size: 16px;
       line-height: 30px;
       border: 1px solid #fe7177ff;
@@ -1337,6 +1354,7 @@ body {
               margin-left: 10px;
               color: #4799cc;
               cursor: pointer;
+              white-space: nowrap;
             }
           }
           & > .subtitle {

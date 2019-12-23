@@ -53,7 +53,8 @@ const routes = [
     component: () => import('@/views/Login'),
     beforeEnter(to, from, next) {
       const flag = window.localStorage.getItem('keyMan')
-      if (flag) {
+      const userType = JSON.parse(flag)
+      if (flag && userType && userType.userType) {
         next({ path: '/user' })
       } else {
         next()

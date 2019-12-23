@@ -3,6 +3,12 @@
     <div class="banner">
       <div class="context">
         <div class="slogen">你身边可靠的职业发展伙伴</div>
+        <div class="radio-group-wrap">
+          <el-radio-group v-model="workType">
+            <el-radio :label="1">兼职</el-radio>
+            <el-radio :label="0">全职</el-radio>
+          </el-radio-group>
+        </div>
         <div class="seach">
           <input v-model="search" type="text" />
           <div @click="toSearchPage" class="confirm">搜索</div>
@@ -25,7 +31,13 @@
             </div>
           </div>
           <div class="post-list" v-show="j_work.length">
-            <div class="post-item" v-for="(x, index) in j_work" :key="index" :data-id="x.id">
+            <div
+              class="post-item"
+              @click="onSeePostDetail(x)"
+              v-for="(x, index) in j_work"
+              :key="index"
+              :data-id="x.id"
+            >
               <p>
                 <span class="name">{{x.job_title}}</span>
                 <span class="money">{{x.salary_above}}k-{{x.salary_below}}k</span>
@@ -54,7 +66,13 @@
             </div>
           </div>
           <div class="post-list" v-show="q_work.length">
-            <div class="post-item" v-for="(x, index) in q_work" :key="index" :data-id="x.id">
+            <div
+              class="post-item"
+              @click="onSeePostDetail(x)"
+              v-for="(x, index) in q_work"
+              :key="index"
+              :data-id="x.id"
+            >
               <p>
                 <span class="name">{{x.job_title}}</span>
                 <span class="money">{{x.salary_above}}k-{{x.salary_below}}k</span>
@@ -101,37 +119,41 @@
       <div class="advert-box">
         <div class="img-row">
           <div class="img-wrap order-2">
-            <img src="../assets/img/1.png" alt />
+            <img src="../assets/img/home_advert_3.jpg" alt />
           </div>
           <div class="img-wrap order-1">
-            <img src="../assets/img/4.png" alt />
+            <img src="../assets/img/home_advert_2.png" alt />
           </div>
         </div>
         <div class="img-row">
           <div class="img-wrap order-2">
-            <img src="../assets/img/2.png" alt />
+            <img src="../assets/img/home_advert_3.jpg" alt />
           </div>
           <div class="img-wrap order-1">
-            <img src="../assets/img/3.png" alt />
+            <img src="../assets/img/home_advert_1.png" alt />
           </div>
         </div>
         <div class="img-row">
           <div class="img-wrap order-1">
-            <img src="../assets/img/5.png" alt />
+            <img src="../assets/img/home_advert_1.png" alt />
           </div>
           <div class="img-wrap order-1">
-            <img src="../assets/img/5.png" alt />
+            <img src="../assets/img/home_advert_1.png" alt />
           </div>
           <div class="img-wrap order-1">
-            <img src="../assets/img/5.png" alt />
+            <img src="../assets/img/home_advert_1.png" alt />
           </div>
         </div>
       </div>
     </div>
+    <el-dialog :visible.sync="showDetail" :model-append-to-body="false" width="1240px">
+      <PostDetail :show="true" :isLogined="false" :detail="curPost"></PostDetail>
+    </el-dialog>
   </div>
 </template>
 
 <script>
+import PostDetail from '@/components/PostDetailInfo'
 import $ from 'jquery'
 const url = 'http://www.wzgwebsite.top/'
 export default {
@@ -144,7 +166,10 @@ export default {
       j_work: [],
       q_work: [],
       hotWork: [],
-      search: ''
+      search: '',
+      workType: 0,
+      showDetail: false,
+      curPost: {}
     }
   },
   created() {
@@ -198,13 +223,61 @@ export default {
       })
     },
     toSearchPage() {
-      this.$router.push({
-        path: '/fulltime',
-        query: {
-          search: this.search
-        }
-      })
+      if (this.workType === 0) {
+        this.$router.push({
+          path: '/fulltime',
+          query: {
+            search: this.search
+          }
+        })
+      } else {
+        this.$router.push({
+          path: '/parttime',
+          query: {
+            search: this.search
+          }
+        })
+      }
+    },
+    onSeePostDetail(data) {
+      // console.log(data)
+      // // 接口字段不对应
+      // const nData = {
+      //   job_name: data.juo,
+      //   salary_above: 5,
+      //   salary_below: 20,
+      //   nickname: '张三',
+      //   rank: null,
+      //   type: null,
+      //   city: '北京市',
+      //   work_year: 1,
+      //   education: 3,
+      //   company_name: '北京智慧小喇叭',
+      //   employee_num: '4',
+      //   comkind: 4,
+      //   logo: '',
+      //   website: '',
+      //   profile: '',
+      //   id: 1,
+      //   headimgurl: '/uploads/admin/1563244624666.jpg',
+      //   age: 18,
+      //   data_list: [
+      //     {
+      //       company_name: '北京智慧小喇叭',
+      //       employee_num: '4',
+      //       comkind: 4,
+      //       salary_above: 5,
+      //       salary_below: 20,
+      //       logo: ''
+      //     }
+      //   ]
+      // }
+      // this.curPost = data
+      // this.showDetail = true
     }
+  },
+  components: {
+    PostDetail
   },
   filters: {
     education: function(e) {
@@ -254,6 +327,7 @@ export default {
 <style lang="scss">
 .home-page {
   background: #f3f5f6;
+  padding-bottom: 50px;
   .banner {
     position: relative;
     height: 0;
@@ -266,7 +340,10 @@ export default {
       position: absolute;
       left: 50%;
       top: 50%;
-      transform: translate3d(-50%, -50%, 0);
+      width: 850px;
+      height: 232px;
+      margin-left: -425px;
+      margin-top: -116px;
       z-index: 10;
     }
   }
@@ -275,12 +352,34 @@ export default {
     font-size: 70px;
     color: #fff;
     text-align: center;
+    white-space: nowrap;
   }
 
   .banner .seach {
-    margin-top: 70px;
+    margin-top: 20px;
     width: 850px;
     height: 70px;
+  }
+  .radio-group-wrap {
+    margin-top: 50px;
+    text-align: left;
+    .el-radio__label {
+      font-size: 20px;
+      color: #fff;
+    }
+    .el-radio__inner {
+      background: transparent;
+      border-color: #fff;
+    }
+    .el-radio.is-checked {
+      .el-radio__label {
+        color: #fff;
+      }
+      .el-radio__inner {
+        background-color: #fff;
+        border-color: transparent;
+      }
+    }
   }
 
   .banner .seach input {
@@ -386,7 +485,9 @@ export default {
     border-bottom: 1px solid #ebebeb;
     font-size: 0;
     & > .post-item {
-      width: 415px;
+      // width: 415px;
+      min-width: 415px;
+      width: 33.3333%;
       display: inline-block;
       vertical-align: top;
       padding: 10px 0;
@@ -479,11 +580,11 @@ export default {
 
   .advert {
     // display: none;
-    width: 100%;
-    min-width: 1280px;
+    margin-left: auto;
+    margin-right: auto;
+    width: 1280px;
     height: auto;
     background: #f3f5f6;
-    margin-bottom: 10px;
   }
   .advert-box {
     & > .img-row {
@@ -528,5 +629,11 @@ export default {
   //   height: 485px;
   //   height: 209px;
   // }
+  .el-dialog__header {
+    padding: 0;
+  }
+  .el-dialog__body {
+    padding: 0;
+  }
 }
 </style>
