@@ -161,7 +161,7 @@
 import PostDetail from '@/components/PostDetailInfo'
 import $ from 'jquery'
 import { searchTimeAllJob, getAllAddress } from '@/api/api'
-const url = 'http://www.wzgwebsite.top/'
+const url = process.env.VUE_APP_API_URL
 export default {
   name: 'PartTime',
   data() {

@@ -26,6 +26,10 @@
         <span class="img changstatus"></span>
         <span>切换身份</span>
       </div>
+      <div class="exit" @click="onExit">
+        <span class="img exit"></span>
+        <span>退出登录</span>
+      </div>
       <img src="../assets/img/weixinx@2x.png" alt />
       <p class="qcode-title">小程序</p>
     </div>
@@ -33,13 +37,13 @@
 </template>
 
 <script>
-import { mapGetters } from 'vuex'
+import { mapGetters, mapMutations } from 'vuex'
 export default {
   name: 'LeftMenu',
   props: {
     title: {
       type: String,
-      default: '关键人才'
+      default: ''
     }
   },
   data() {
@@ -100,17 +104,36 @@ export default {
       avatar: 'getAvatar',
       nickname: 'getNickname'
     })
+  },
+  methods: {
+    onExit() {
+      this.syncSetToken('')
+      this.syncSetUsetType('')
+      this.syncSetMemberId('')
+      this.syncSetAvatar('')
+      this.syncSetNickname('')
+      window.localStorage.removeItem('keyMan')
+      this.$router.replace('/')
+    },
+    ...mapMutations([
+      'syncSetToken',
+      'syncSetUsetType',
+      'syncSetMemberId',
+      'syncSetAvatar',
+      'syncSetNickname'
+    ])
   }
 }
 </script>
 
 <style lang="scss" scoped>
 .menu {
-  min-height: 1020px;
+  min-height: 760px;
+  height: 100%;
   background: #49434b;
   .menu-title {
     font-size: 22px;
-    line-height: 60px;
+    line-height: 54px;
     color: #fff;
     text-align: center;
     white-space: nowrap;
@@ -121,6 +144,7 @@ export default {
   }
   .menu-list {
     background: #49434b;
+    padding-bottom: 50px;
     .user-avatar {
       margin: 0 auto 0;
       padding-top: 40px;
@@ -159,7 +183,7 @@ export default {
       position: relative;
       display: flex;
       align-items: center;
-      padding-left: 54px;
+      padding-left: 20px;
       & > span {
         display: block;
         padding-top: 15px;
@@ -204,7 +228,7 @@ export default {
         }
         &.myliver {
           background: url(../assets/img/email2.png) no-repeat center center;
-          background-size: 18px 18px;
+          background-size: 18px 13px;
         }
         &.myresume {
           background: url(../assets/img/myresume.png) no-repeat 0 0;
@@ -215,7 +239,8 @@ export default {
           background-size: 18px 18px;
         }
         &.companyinfo {
-          background: url(../assets/img/company_info.png) no-repeat center center;
+          background: url(../assets/img/company_info.png) no-repeat center
+            center;
           background-size: 18px 18px;
         }
       }
@@ -277,8 +302,8 @@ export default {
             background-size: 18px 18px;
           }
           &.companyinfo {
-            background: url(../assets/img/company_info_hover.png) no-repeat center
-              center;
+            background: url(../assets/img/company_info_hover.png) no-repeat
+              center center;
             background-size: 18px 18px;
           }
         }
@@ -286,7 +311,7 @@ export default {
     }
     & > .line {
       margin: 50px auto;
-      width: 180px;
+      width: 80%;
       height: 2px;
       background: #666666ff;
     }

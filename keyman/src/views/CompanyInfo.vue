@@ -125,7 +125,7 @@
 import Certificate from '@/components/Certificate'
 import axios from '../api/axios'
 import { mapGetters } from 'vuex'
-var url = 'http://www.wzgwebsite.top/'
+var url = process.env.VUE_APP_API_URL
 export default {
   name: 'CompanyInfo',
   data() {

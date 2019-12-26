@@ -1,7 +1,11 @@
 <template>
   <div class="layout">
     <div class="content">
-      <LeftMenu class="left-menu"></LeftMenu>
+      <div class="left-menu">
+        <vue-scroll :ops="vueScrollOps">
+          <LeftMenu :title="topTitle"></LeftMenu>
+        </vue-scroll>
+      </div>
       <div class="right-container">
         <div class="top-nav">
           <div class="content">
@@ -17,33 +21,48 @@
         <router-view :jobchart="postList"></router-view>
       </div>
     </div>
-    <Footer></Footer>
   </div>
 </template>
 
 <script>
 import LeftMenu from '@/views/LeftMenu'
-import Footer from '@/components/Footer'
+import { mapGetters } from 'vuex'
 export default {
   name: 'Layout',
   data() {
     return {
-      postList: []
+      postList: [],
+      vueScrollOps: {
+        vuescroll: {},
+        scrollPanel: {},
+        rail: {
+          background: '#DCDFE6'
+        },
+        bar: {
+          background: '#DCDFE6'
+        }
+      }
     }
   },
   computed: {
+    topTitle() {
+      if (this.getUserType > 1) {
+        return '搜人才'
+      }
+      return '关键人才'
+    },
     name() {
       return this.$route.name
-    }
+    },
+    ...mapGetters(['getUserType'])
   },
   components: {
-    LeftMenu,
-    Footer
+    LeftMenu
   },
   filters: {
     filterName(n) {
       const nameMap = {
-        undefined: '搜简历',
+        undefined: '搜人才',
         mydelivery: '我的投递',
         mypost: '我的职位',
         jobchart: '职聊',
@@ -74,15 +93,20 @@ body {
   min-width: 1280px;
   width: 100%;
   & > .content {
-    display: flex;
+    padding-left: 160px;
     .left-menu {
-      width: 200px;
+      position: fixed;
+      top: 0;
+      left: 0;
+      z-index: 200;
+      bottom: 0;
+      width: 160px;
     }
     .right-container {
-      flex: 1;
+      width: 100%;
       & > .top-nav {
         background: #f5f5f5ff;
-        height: 60px;
+        height: 54px;
         & > .content {
           margin: 0 auto;
           max-width: 1240px;

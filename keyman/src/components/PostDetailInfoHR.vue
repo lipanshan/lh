@@ -20,178 +20,193 @@
           <div>{{detailData.city}} {{ detailData.work_year | filterWorkYear}} {{detailData.education | filterEdu}}</div>
           <div>{{detailData.company_name}} {{detailData.employee_num | filterCompanySize}} {{detailData.comkind | filterComkind}}</div>
         </div>
-        <div>
+        <span class="right-btns-group">
+          <span class="btns-row">
+            <span class="share">分享至微信</span>
+            <span class="submit-resume" @click="onHandResumes(detailData)">投递简历</span>
+          </span>
+          <span class="btns-row">
+            <span class="perfect-btns">完善在线简历</span>
+            <span class="add-btns">新增附件简历</span>
+          </span>
+        </span>
+        <!-- <div>
           <div>
             <img src="../assets/img/wx2.png" alt />
             <div>分享至微信</div>
-            <div v-show="detailTag === 'post' && isLogined" class="post-switch">
-              <span v-show="editorOrSee === 'editor'" @click="onEditorSee('see')" class="save">保存</span>
-              <span
-                v-show="editorOrSee === 'see'"
-                @click="onEditorSee('editor')"
-                class="editor"
-              >编辑职位</span>
+            <div class="post-switch">
+              <span class="editor" @click="onHandResumes(detailData)">投递简历</span>
             </div>
           </div>
-        </div>
+        </div>-->
       </div>
     </div>
     <div class="detail-info">
-      <ul>
-        <li :class="{'cur': detailTag === 'post'}" @click="onSwitchTag('post')">职位</li>
-        <li :class="{'cur': detailTag === 'company'}" @click="onSwitchTag('company')">公司</li>
-        <li :class="{'cur': detailTag === 'info'}" @click="onSwitchTag('info')">猎头信息</li>
-      </ul>
-      <div class="detail-content">
-        <div v-show="detailTag === 'post'" class="post">
-          <div v-show="editorOrSee === 'editor'" class="editor-post">
-            <el-form :model="detailData" :rules="detailRules" label-position="top">
-              <el-form-item label="薪资结构">
-                <el-select v-model="detailData.salary_above" placeholder="薪资最小值">
-                  <el-option label="3K以下" :value="1"></el-option>
-                  <el-option label="3-5K" :value="2"></el-option>
-                  <el-option label="5-10K" :value="3"></el-option>
-                  <el-option label="10-15K" :value="4"></el-option>
-                  <el-option label="15-20K" :value="5"></el-option>
-                  <el-option label="20-30K" :value="6"></el-option>
-                  <el-option label="30-50K" :value="7"></el-option>
-                  <el-option label="50K以上" :value="8"></el-option>
-                </el-select>
+      <div class="detail-content-wrap">
+        <div class="detail-content">
+          <ul>
+            <li :class="{'cur': detailTag === 'post'}" @click="onSwitchTag('post')">职位</li>
+            <li :class="{'cur': detailTag === 'company'}" @click="onSwitchTag('company')">公司</li>
+            <li :class="{'cur': detailTag === 'info'}" @click="onSwitchTag('info')">猎头信息</li>
+          </ul>
+          <div v-show="detailTag === 'post'" class="post">
+            <div v-show="editorOrSee === 'editor'" class="editor-post">
+              <el-form :model="detailData" :rules="detailRules" label-position="top">
+                <el-form-item label="薪资结构">
+                  <el-select v-model="detailData.salary_above" placeholder="薪资最小值">
+                    <el-option label="3K以下" :value="1"></el-option>
+                    <el-option label="3-5K" :value="2"></el-option>
+                    <el-option label="5-10K" :value="3"></el-option>
+                    <el-option label="10-15K" :value="4"></el-option>
+                    <el-option label="15-20K" :value="5"></el-option>
+                    <el-option label="20-30K" :value="6"></el-option>
+                    <el-option label="30-50K" :value="7"></el-option>
+                    <el-option label="50K以上" :value="8"></el-option>
+                  </el-select>
 
-                <span class="to">至</span>
-                <el-select v-model="detailData.salary_below" placeholder="薪资最大值">
-                  <el-option label="3K以下" :value="1"></el-option>
-                  <el-option label="3-5K" :value="2"></el-option>
-                  <el-option label="5-10K" :value="3"></el-option>
-                  <el-option label="10-15K" :value="4"></el-option>
-                  <el-option label="15-20K" :value="5"></el-option>
-                  <el-option label="20-30K" :value="6"></el-option>
-                  <el-option label="30-50K" :value="7"></el-option>
-                  <el-option label="50K以上" :value="8"></el-option>
-                </el-select>
-              </el-form-item>
-              <el-form-item label="职位详情">
-                <el-input type="textarea" v-model="detailData.zwxq"></el-input>
-              </el-form-item>
-              <el-form-item label="职位点评">
-                <el-input type="textarea" v-model="detailData.comment"></el-input>
-              </el-form-item>
-            </el-form>
-          </div>
-          <div v-show="editorOrSee === 'see'" class="see-post">
-            <div class="box">
-              <div class="title">薪资结构</div>
-              <p
-                class="txt"
-              >{{detailData.salary_above | filterSalary}}{{detailData.salary_below | filterSalary}}</p>
+                  <span class="to">至</span>
+                  <el-select v-model="detailData.salary_below" placeholder="薪资最大值">
+                    <el-option label="3K以下" :value="1"></el-option>
+                    <el-option label="3-5K" :value="2"></el-option>
+                    <el-option label="5-10K" :value="3"></el-option>
+                    <el-option label="10-15K" :value="4"></el-option>
+                    <el-option label="15-20K" :value="5"></el-option>
+                    <el-option label="20-30K" :value="6"></el-option>
+                    <el-option label="30-50K" :value="7"></el-option>
+                    <el-option label="50K以上" :value="8"></el-option>
+                  </el-select>
+                </el-form-item>
+                <el-form-item label="职位详情">
+                  <el-input type="textarea" v-model="detailData.zwxq"></el-input>
+                </el-form-item>
+                <el-form-item label="职位点评">
+                  <el-input type="textarea" v-model="detailData.comment"></el-input>
+                </el-form-item>
+              </el-form>
             </div>
-            <div class="box">
-              <div class="title">职位详情</div>
-              <p class="txt">{{ detailData.zwxq }}</p>
-            </div>
-            <div class="box">
-              <div class="title">职位点评</div>
-              <p v-if="detailData.comment" class="txt">{{detailData.comment}}</p>
-            </div>
-          </div>
-        </div>
-        <div v-show="detailTag === 'company'" class="company">
-          <div class="company-info">
-            <div class="address-img">
-              <img src alt />
-            </div>
-            <div class="intro-wrap">
-              <div class="avatar-wrap">
-                <div class="avatar">
-                  <img :src="detailCompanyData.logo" alt />
-                </div>
-                <div class="info-wrap">
-                  <p class="name">{{detailCompanyData.company_name}}</p>
-                  <p
-                    class="info"
-                  >{{detailCompanyData.employee_num | filterCompanySize}}{{detailCompanyData.comkind | filterComkind}}</p>
-                  <a
-                    :href="detailCompanyData.website"
-                    class="url"
-                    target="_blank"
-                  >{{detailCompanyData.website}}</a>
-                </div>
+            <div v-show="editorOrSee === 'see'" class="see-post">
+              <div class="box">
+                <div class="title">薪资结构</div>
+                <p
+                  class="txt"
+                >{{detailData.salary_above | filterSalary}}{{detailData.salary_below | filterSalary}}</p>
               </div>
-              <p class="intro">{{detailCompanyData.profile}}</p>
+              <div class="box">
+                <div class="title">职位详情</div>
+                <p class="txt">{{ detailData.zwxq }}</p>
+              </div>
+              <div class="box">
+                <div class="title">职位点评</div>
+                <p v-if="detailData.comment" class="txt">{{detailData.comment}}</p>
+              </div>
             </div>
           </div>
-          <div class="recruit-list">
-            <p class="title">招聘职位</p>
-            <ul v-if="detailCompanyData.data_list" class="list">
-              <li
-                v-for="(item, index) in detailCompanyData.data_list"
-                :key="index"
-                class="recruit-item"
-              >
-                <div class="info">
-                  <p class="name">
-                    {{item.company_name}}
-                    <span
-                      class="wages"
-                    >{{item.salary_above | filterSalary}}-{{item.salary_below |filterSalary}}</span>
-                  </p>
-                  <p
-                    class="intro"
-                  >{{item.employee_num | filterCompanySize}} {{item.comkind | filterComkind}}</p>
-                  <p
-                    class="intro"
-                  >{{item.company_name}} {{item.employee_num | filterCompanySize}} {{item.comkind | filterComkind}}</p>
+          <div v-show="detailTag === 'company'" class="company">
+            <div class="company-info">
+              <div class="address-img">
+                <img src alt />
+              </div>
+              <div class="intro-wrap">
+                <div class="avatar-wrap">
+                  <div class="avatar">
+                    <img :src="detailCompanyData.logo" alt />
+                  </div>
+                  <div class="info-wrap">
+                    <p class="name">{{detailCompanyData.company_name}}</p>
+                    <p
+                      class="info"
+                    >{{detailCompanyData.employee_num | filterCompanySize}}{{detailCompanyData.comkind | filterComkind}}</p>
+                    <a
+                      :href="detailCompanyData.website"
+                      class="url"
+                      target="_blank"
+                    >{{detailCompanyData.website}}</a>
+                  </div>
                 </div>
-                <div class="avatar">
-                  <img :src="item.logo" alt />
-                </div>
-              </li>
-            </ul>
+                <p class="intro">{{detailCompanyData.profile}}</p>
+              </div>
+            </div>
+            <div class="recruit-list">
+              <p class="title">招聘职位</p>
+              <ul v-if="detailCompanyData.data_list" class="list">
+                <li
+                  v-for="(item, index) in detailCompanyData.data_list"
+                  :key="index"
+                  class="recruit-item"
+                >
+                  <div class="info">
+                    <p class="name">
+                      {{item.company_name}}
+                      <span
+                        class="wages"
+                      >{{item.salary_above | filterSalary}}-{{item.salary_below |filterSalary}}</span>
+                    </p>
+                    <p
+                      class="intro"
+                    >{{item.employee_num | filterCompanySize}} {{item.comkind | filterComkind}}</p>
+                    <p
+                      class="intro"
+                    >{{item.company_name}} {{item.employee_num | filterCompanySize}} {{item.comkind | filterComkind}}</p>
+                  </div>
+                  <div class="avatar">
+                    <img :src="item.logo" alt />
+                  </div>
+                </li>
+              </ul>
+            </div>
+          </div>
+          <div v-show="detailTag === 'info'" class="info">
+            <div class="info-top">
+              <div class="avatar">
+                <img :src="detailInfoData.headimgurl" alt />
+              </div>
+              <div class="intro">
+                <p class="name">{{detailInfoData.nickname}}昵称</p>
+                <p class="txt">{{detailInfoData.age}}</p>
+                <p class="txt">{{detailInfoData.work_year | filterWorkYear}}</p>
+                <p class="txt">{{detailInfoData.comkind | filterComkind}}</p>
+                <p class="txt">
+                  <span class="icon"></span>
+                </p>
+              </div>
+            </div>
+            <div class="recruit-list">
+              <p class="title">招聘职位</p>
+              <ul v-show="detailInfoData.data_list" class="list">
+                <li
+                  v-for="(item, index) in detailInfoData.data_list"
+                  :key="index"
+                  class="recruit-item"
+                >
+                  <div class="info">
+                    <p class="name">
+                      {{item.company_name}}
+                      <span
+                        class="wages"
+                      >{{item.salary_above | filterSalary}}-{{item.salary_below |filterSalary}}</span>
+                    </p>
+                    <p
+                      class="intro"
+                    >{{item.employee_num | filterCompanySize}} {{item.comkind | filterComkind}}</p>
+                    <p
+                      class="intro"
+                    >{{item.company_name}} {{item.employee_num | filterCompanySize}} {{item.comkind | filterComkind}}</p>
+                  </div>
+                  <div class="avatar">
+                    <img :src="item.logo" alt />
+                  </div>
+                </li>
+              </ul>
+            </div>
           </div>
         </div>
-        <div v-show="detailTag === 'info'" class="info">
-          <div class="info-top">
-            <div class="avatar">
-              <img :src="detailInfoData.headimgurl" alt />
-            </div>
-            <div class="intro">
-              <p class="name">{{detailInfoData.nickname}}昵称</p>
-              <p class="txt">{{detailInfoData.age}}</p>
-              <p class="txt">{{detailInfoData.work_year | filterWorkYear}}</p>
-              <p class="txt">{{detailInfoData.comkind | filterComkind}}</p>
-              <p class="txt">
-                <span class="icon"></span>
-              </p>
-            </div>
-          </div>
-          <div class="recruit-list">
-            <p class="title">招聘职位</p>
-            <ul v-show="detailInfoData.data_list" class="list">
-              <li
-                v-for="(item, index) in detailInfoData.data_list"
-                :key="index"
-                class="recruit-item"
-              >
-                <div class="info">
-                  <p class="name">
-                    {{item.company_name}}
-                    <span
-                      class="wages"
-                    >{{item.salary_above | filterSalary}}-{{item.salary_below |filterSalary}}</span>
-                  </p>
-                  <p
-                    class="intro"
-                  >{{item.employee_num | filterCompanySize}} {{item.comkind | filterComkind}}</p>
-                  <p
-                    class="intro"
-                  >{{item.company_name}} {{item.employee_num | filterCompanySize}} {{item.comkind | filterComkind}}</p>
-                </div>
-                <div class="avatar">
-                  <img :src="item.logo" alt />
-                </div>
-              </li>
-            </ul>
-          </div>
+        <div class="job-recomment-wrap">
+          <jobRecomment
+            @onMore="onGetMorePost"
+            :list="[detail]"
+            @onPostDetail="onSeeRecommentPost"
+            @onJumpMorePost="onJumpMorePosts"
+          ></jobRecomment>
         </div>
       </div>
     </div>
@@ -199,6 +214,7 @@
 </template>
 
 <script>
+import jobRecomment from '@/components/JobRecomment'
 import { mapGetters } from 'vuex'
 import { getDetailPost, getDetailCompany, getDetailHH } from '@/api/api'
 export default {
@@ -416,6 +432,18 @@ export default {
           this.$message.error(`获取猎头信息失败：${res.message}`)
         }
       })
+    },
+    onGetMorePost(data) {
+      console.log(data)
+    },
+    onJumpMorePosts() {
+      console.log('跳转更多详情页面')
+    },
+    onSeeRecommentPost(data) {
+      console.log(data, '相似职位详情')
+    },
+    onHandResumes(data) {
+      console.log(data, '投简历')
     }
   },
   filters: {
@@ -485,6 +513,9 @@ export default {
     filterMonthMoney(num) {
       return num > 0 ? `${num}薪` : ''
     }
+  },
+  components: {
+    jobRecomment
   }
 }
 </script>
@@ -493,6 +524,7 @@ export default {
 // 职位详情--开始
 .detail-box {
   margin: 0 auto 0;
+  background: #eff1f5;
 }
 
 .detail-box > .head {
@@ -642,31 +674,6 @@ export default {
   border-radius: 12px;
   margin-right: 14px;
 }
-.detail-box > .head > div:nth-child(2) > div:nth-child(3) {
-  // height: 115px;
-}
-.detail-box > .head > div:nth-child(2) > div:nth-child(3) > div:first-child {
-  position: relative;
-  margin-top: 52px;
-  margin-right: 18px;
-  display: flex;
-  padding-top: 64px;
-  justify-content: center;
-  width: 180px;
-  cursor: pointer;
-}
-.detail-box
-  > .head
-  > div:nth-child(2)
-  > div:nth-child(3)
-  > div:first-child
-  > img:first-child {
-  display: inline-block;
-  height: 16px;
-  width: 16px;
-  margin-right: 6px;
-  margin-top: 15px;
-}
 .detail-box
   > .head
   > div:nth-child(2)
@@ -726,17 +733,18 @@ export default {
 }
 
 .detail-info {
-  background: #fff;
+  margin-top: 20px;
+  background: #eff1f5;
   overflow: hidden;
 }
-.detail-info > ul {
+.detail-info ul {
   height: 46px;
   width: 100%;
   border-bottom: 1px solid #a5a5a5;
   overflow: hidden;
   padding-left: 6px;
 }
-.detail-info > ul li {
+.detail-info ul li {
   line-height: 45px;
   height: 45px;
   font-size: 15px;
@@ -744,7 +752,7 @@ export default {
   float: left;
   cursor: pointer;
 }
-.detail-info > ul li.cur {
+.detail-info ul li.cur {
   color: #fd877d;
   border-bottom: 2px solid #fd877d;
 }
@@ -793,24 +801,21 @@ export default {
         }
       }
     }
-    .post-switch {
-      position: absolute;
-      left: 0;
-      top: 0;
-      width: 180px;
-      height: 46px;
-      background: #ff7272;
-      text-align: center;
-      font-size: 18px;
-      line-height: 46px;
-      color: #fff;
-      & > span {
-        display: block;
-      }
+  }
+  .detail-content-wrap {
+    display: flex;
+    justify-content: space-between;
+    .job-recomment-wrap {
+      flex: 0 0 426px;
+      width: 426px;
+      margin-left: 20px;
+      background: #fff;
     }
   }
   .detail-content {
+    flex: 1;
     min-height: 500px;
+    background: #fff;
     & > .post {
       & > .see-post {
         & > .box {
@@ -943,7 +948,7 @@ export default {
             }
           }
           .intro {
-            width: 526px;
+            width: 426px;
             padding-top: 10px;
             font-size: 14px;
             line-height: 20px;
@@ -1055,6 +1060,69 @@ export default {
               background-size: 32px 26px;
             }
           }
+        }
+      }
+    }
+  }
+  .right-btns-group {
+    .btns-row {
+      display: flex;
+      padding-top: 30px;
+      .share {
+        position: relative;
+        padding-left: 24px;
+        font-size: 18px;
+        line-height: 46px;
+        color: #fff;
+        &::before {
+          content: '';
+          position: absolute;
+          left: 0;
+          top: 15px;
+          width: 16px;
+          height: 16px;
+          background: url(../assets/img/wx2.png) no-repeat 0 0;
+          background-size: 16px 16px;
+        }
+      }
+      .submit-resume {
+        margin-left: 30px;
+        display: block;
+        width: 150px;
+        height: 46px;
+        font-size: 18px;
+        line-height: 46px;
+        text-align: center;
+        color: #fff;
+        background: #ff7272;
+        cursor: pointer;
+      }
+      .perfect-btns {
+        position: relative;
+        flex: 1;
+        display: block;
+        padding-left: 32px;
+        font-size: 16px;
+        line-height: 36px;
+        color: #ff7272;
+        cursor: pointer;
+        &::before {
+          content: '';
+          position: absolute;
+          top: 10px;
+          left: 0;
+          width: 12px;
+          height: 12px;
+          background: url(../assets/img/wanshanjianli@2x.png) no-repeat 0 0;
+          background-size: 12px 12px;
+        }
+      }
+      .add-btns {
+        @extend .perfect-btns;
+        &::before {
+          content: '';
+          background: url(../assets/img/add_resume.png) no-repeat 0 0;
+          background-size: 12px 12px;
         }
       }
     }

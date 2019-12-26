@@ -219,6 +219,7 @@
     <!-- 编辑管求职意向 -->
     <el-dialog width="440px" :modal-append-to-body="false" :visible.sync="dialogVisibleEditor">
       <div class="title">求职期望</div>
+      <div class="strong-title">编辑求职期望</div>
       <div class="subtitle">创建求职期望，向您推荐期望职位最多3个</div>
       <el-form
         :model="jobIntentionData"
@@ -789,9 +790,15 @@ export default {
   .jobintention-form {
     padding-left: 30px;
     padding-right: 30px;
+    padding-top: 42px;
+    .el-form-item {
+      margin-bottom: 12px;
+    }
     .el-form-item__label {
       width: 100%;
       text-align: left;
+      color: #afb4b6;
+      font-size: 12px;
       &::before {
         content: '';
         display: none;
@@ -1101,7 +1108,21 @@ export default {
       border-top-left-radius: 6px;
       border-top-right-radius: 6px;
     }
-
+    .strong-title {
+      padding: 34px 30px 0;
+      font-size: 18px;
+      line-height: 24px;
+      color: #333333;
+      text-align: left;
+      font-weight: bold;
+    }
+    & > .subtitle {
+      padding: 0 30px;
+      font-size: 14px;
+      line-height: 20px;
+      color: #afb4b6;
+      text-align: left;
+    }
     .intention-wrap {
       padding: 10px 30px;
       & > h2 {

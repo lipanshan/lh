@@ -24,7 +24,11 @@
               <div class="left-babel">
                 <div>热招兼职</div>
                 <ul>
-                  <li v-for="(x, index) in hotWork" :key="index">{{x.class_name}}</li>
+                  <li
+                    v-for="(x, index) in hotWork"
+                    :key="index"
+                    @click="onSeePostDetail(x)"
+                  >{{x.class_name}}</li>
                 </ul>
               </div>
               <div @click="jump_j">查看更多兼职></div>
@@ -155,7 +159,7 @@
 <script>
 import PostDetail from '@/components/PostDetailInfo'
 import $ from 'jquery'
-const url = 'http://www.wzgwebsite.top/'
+const url = process.env.VUE_APP_API_URL
 export default {
   name: 'HomePage',
   data() {
@@ -214,12 +218,14 @@ export default {
   methods: {
     jump_j() {
       this.$router.push({
-        path: '/parttime'
+        path: '/parttime',
+        query: { search: '' }
       })
     },
     jump_q() {
       this.$router.push({
-        path: '/fulltime'
+        path: '/fulltime',
+        query: { search: '' }
       })
     },
     toSearchPage() {
@@ -403,6 +409,7 @@ export default {
     color: #fff;
     float: left;
     cursor: pointer;
+    user-select: none;
   }
 
   .main {
